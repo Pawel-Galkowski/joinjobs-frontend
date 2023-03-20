@@ -1,0 +1,11 @@
+{
+    "plugins": [
+      ["module-resolver", {
+        "root": ["./"],
+        "alias": {
+          "stylesheets": "./src/stylesheets",
+          "actions": "./src/actions"
+        }
+      }]
+    ]
+  }
