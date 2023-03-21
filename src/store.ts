@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit'
 import {
   authReducer,
   profileReducer,
   postReducer,
   formReducer
-} from './reducers';
+} from './reducers'
 
 export const store = configureStore({
   reducer: {

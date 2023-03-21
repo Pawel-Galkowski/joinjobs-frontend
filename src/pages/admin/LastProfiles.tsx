@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import Spinner from '../../components/spinner/Spinner';
-import { deleteUserAccount } from '../../actions/profile';
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import Spinner from '../../components/spinner/Spinner'
+import { deleteUserAccount } from '../../actions/profile'
 
 interface User {
   _id: number
@@ -27,13 +27,11 @@ const AdminProfiles: React.FC<Props> = ({
     company
   }
 }) =>
-  loading
-? (
+  loading ? (
     <Spinner />
-  )
-: (
-    <div className="profile-admin bg-white">
-      <img src={avatar} alt="avatar" className="round-img" />
+  ) : (
+    <div className='profile-admin bg-white'>
+      <img src={avatar} alt='avatar' className='round-img' />
       <div>
         <h2>{name}</h2>
         <p>
@@ -48,15 +46,15 @@ const AdminProfiles: React.FC<Props> = ({
         </p>
         <Link
           to={`/profile/${_id}`}
-          className="btn btn-primary"
-          target="_blank"
+          className='btn btn-primary'
+          target='_blank'
         >
           View Profile
         </Link>
         <button
-          className="btn btn-danger"
+          className='btn btn-danger'
           onClick={() => deleteUserAccount(_id)}
-          type="button"
+          type='button'
         >
           Delete User
         </button>

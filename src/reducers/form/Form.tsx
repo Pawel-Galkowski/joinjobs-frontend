@@ -16,7 +16,7 @@ import {
   REMOVE_COMPANY,
   GET_RESPONSE,
   REMOVE_RESPONSE
-} from '../../actions/types';
+} from '../../actions/types'
 // import { InitialState } from '../reducers';
 // import { Props } from './types';
 

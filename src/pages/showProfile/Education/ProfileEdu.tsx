@@ -1,14 +1,14 @@
-import Moment from 'react-moment';
+import Moment from 'react-moment'
 
 const ProfileEdu: React.FC<any> = ({
   education: { school, degree, from, to, fieldofstudy, description }
 }) => {
   return (
     <div>
-      <h3 className="text-dark">{school}</h3>
+      <h3 className='text-dark'>{school}</h3>
       <p>
-        <Moment format="YYYY/MM/DD">{from}</Moment> -
-        {!to ? ' Now' : <Moment format="YYYY/MM/DD">{to}</Moment>}
+        <Moment format='YYYY/MM/DD'>{from}</Moment> -
+        {!to ? ' Now' : <Moment format='YYYY/MM/DD'>{to}</Moment>}
       </p>
       <p>
         <strong>Field of study: </strong>
@@ -18,8 +18,7 @@ const ProfileEdu: React.FC<any> = ({
         <strong>Degree: </strong>
         {degree}
       </p>
-      {description === '' ? null
-: (
+      {description === '' ? null : (
         <p>
           <strong>Description: </strong> {description}
         </p>

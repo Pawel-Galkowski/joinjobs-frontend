@@ -1,8 +1,13 @@
 // import { FC } from 'react';
-import { SET_ALERT, REMOVE_ALERT } from '../../actions/types';
-// import { Props } from './types';
+import { SET_ALERT, REMOVE_ALERT } from '../../actions/types'
+// import { Props } from './types';'
 
-export const Alert = (state: any, action: any) => {
+interface Props {
+  state: any
+  action: any
+}
+
+export const Alert: React.FC<Props> = ({ state, action }) => {
   const { type, payload } = action
 
   switch (type) {

@@ -13,7 +13,7 @@ interface Match {
 }
 
 interface Props {
-  match: Match
+  match?: Match
 }
 
 const CreateForm: React.FC<Props> = ({ match }) => {
@@ -22,7 +22,7 @@ const CreateForm: React.FC<Props> = ({ match }) => {
     title: '',
     skills: '',
     body: '',
-    question: '',
+    question: ''
   })
 
   const onSubmit = () => {
@@ -30,15 +30,15 @@ const CreateForm: React.FC<Props> = ({ match }) => {
       // eslint-disable-next-line no-alert
       alert('You need to add at least one question')
     } else {
-      const fullObject = {
-        questions: formData,
-        body: {
-          title: newData.title,
-          skills: newData.skills,
-          body: newData.body,
-        },
-      }
-      addCompanyForm(match.params.company, fullObject)
+      match &&
+        addCompanyForm(match.params.company, {
+          questions: formData,
+          body: {
+            title: newData.title,
+            skills: newData.skills,
+            body: newData.body
+          }
+        })
     }
   }
 
@@ -52,7 +52,7 @@ const CreateForm: React.FC<Props> = ({ match }) => {
   const onChange = (e: any) => {
     setData({
       ...newData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     })
   }
 
@@ -63,14 +63,17 @@ const CreateForm: React.FC<Props> = ({ match }) => {
         title: newData.title,
         skills: newData.skills,
         body: newData.body,
-        question: '',
+        question: ''
       })
     }
   }
 
   return (
     <div className='paddingSection'>
-      <Link to={`/api/forms/${match.params.company}`} className='btn btn-light'>
+      <Link
+        to={`/api/forms/${match ? match.params.company : ''}`}
+        className='btn btn-light'
+      >
         Back to forms
       </Link>
       <div className='marginTop-2'>
@@ -167,4 +170,3 @@ const CreateForm: React.FC<Props> = ({ match }) => {
 }
 
 export default connect(null, { addCompanyForm })(CreateForm)
-

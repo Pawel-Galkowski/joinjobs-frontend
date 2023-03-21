@@ -1,16 +1,16 @@
 interface User {
   _id: number
-  role: 'admin' | 'user';
+  role: 'admin' | 'user'
 }
 
 interface Auth {
   isAuthenticated: boolean
   loading: boolean
-  user: User // User
+  user: User
 }
 
 interface Profile {
-  profile: any // Profile
+  profile: any
 }
 
 export interface Props {

@@ -1,17 +1,14 @@
-import React from 'react';
-import Moment from 'react-moment';
+import Moment from 'react-moment'
 
-function ProfileExp ({
-  experience: { title, company, from, to, location, description }
-}: {
+const ProfileExp: React.FC<{
   experience: any
-}) {
+}> = ({ experience: { title, company, from, to, location, description } }) => {
   return (
     <div>
-      <h3 className="text-dark">{company}</h3>
+      <h3 className='text-dark'>{company}</h3>
       <p>
-        <Moment format="YYYY/MM/DD">{from}</Moment> -
-        {!to ? ' Now' : <Moment format="YYYY/MM/DD">{to}</Moment>}
+        <Moment format='YYYY/MM/DD'>{from}</Moment> -
+        {!to ? ' Now' : <Moment format='YYYY/MM/DD'>{to}</Moment>}
       </p>
       <p>
         <strong>Position: </strong>
@@ -21,8 +18,7 @@ function ProfileExp ({
         <strong>Location: </strong>
         {location}
       </p>
-      {description === '' ? null
-: (
+      {description === '' ? null : (
         <p>
           <strong>Description: </strong> {description}
         </p>

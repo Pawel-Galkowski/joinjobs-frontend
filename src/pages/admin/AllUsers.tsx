@@ -1,23 +1,33 @@
-import { connect } from 'react-redux';
-import { deleteUserAccount } from '../../actions/profile';
-import Spinner from '../../components/spinner/Spinner';
+import { connect } from 'react-redux'
+import { deleteUserAccount } from '../../actions/profile'
+import Spinner from '../../components/spinner/Spinner'
 
-function AdminUsers ({
+interface Usrs {
+  confirmed: boolean
+  _id: number
+  name: string
+  email: string
+  date: string
+  role: 'admin' | 'user'
+  loading?: boolean
+}
+
+interface Props {
+  usrs: Usrs
+}
+
+const AdminUsers: React.FC<Props> = ({
   usrs: { confirmed, _id, name, email, date, role, loading }
-}: {
-  usrs: any
-}) {
-  return loading
-? (
+}) => {
+  return loading ? (
     <Spinner />
-  )
-: (
-    <div className="bg-white padding2 margin-2ud">
+  ) : (
+    <div className='bg-white padding2 margin-2ud'>
       <h3>
         <strong>{name} -</strong>
         <span className={role === 'admin' ? 'dangerRole' : ''}>{role}</span>
       </h3>
-      <div className="margin-2ud">
+      <div className='margin-2ud'>
         <p>
           Email: <b>{email}</b>
         </p>
@@ -27,12 +37,10 @@ function AdminUsers ({
         <p>
           Confirmation:{' '}
           <b>
-            {confirmed
-? (
+            {confirmed ? (
               confirmed.toString()
-            )
-: (
-              <span className="dangerRole">{confirmed.toString()}</span>
+            ) : (
+              <span className='dangerRole'>{confirmed.toString()}</span>
             )}
           </b>
         </p>
@@ -41,9 +49,9 @@ function AdminUsers ({
         </p>
       </div>
       <button
-        className="btn btn-danger"
+        className='btn btn-danger'
         onClick={() => deleteUserAccount(_id)}
-        type="button"
+        type='button'
       >
         Delete Account
       </button>

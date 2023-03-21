@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { type Dispatch } from 'redux';
-import setAlert from './setAlert';
+import axios from 'axios'
+import { type Dispatch } from 'redux'
+import setAlert from './setAlert'
 import {
   FORM_ERROR,
   GET_COMPANIES,
@@ -15,8 +15,8 @@ import {
   REMOVE_FORM,
   REMOVE_COMPANY,
   REMOVE_RESPONSE
-} from './types';
-import customDispatch from './customDispatch';
+} from './types'
+import customDispatch from './customDispatch'
 
 interface CreateCompanyData {
   company: string
@@ -27,7 +27,7 @@ export const addCompany =
   (formData: CreateCompanyData) => async (dispatch: Dispatch) => {
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       }
     }
     try {
@@ -36,29 +36,29 @@ export const addCompany =
       dispatch({
         type: ADD_COMPANY,
         payload: res.data
-      });
+      })
 
       customDispatch(setAlert('Company Created', 'success'))
     } catch (err: any) {
       dispatch({
         type: FORM_ERROR,
         payload: { msg: err.statusText, status: err.status }
-      });
+      })
     }
   }
 
 export const getCompanies = () => async (dispatch: Dispatch) => {
   try {
-    const res = await axios.get('/api/forms');
+    const res = await axios.get('/api/forms')
     dispatch({
       type: GET_COMPANIES,
       payload: res.data
-    });
+    })
   } catch (err: any) {
     dispatch({
       type: FORM_ERROR,
       payload: { msg: err.statusText, status: err.status }
-    });
+    })
   }
 }
 
@@ -70,12 +70,12 @@ export const removeCompany =
       dispatch({
         type: REMOVE_COMPANY,
         payload: res.data
-      });
+      })
     } catch (err: any) {
       dispatch({
         type: FORM_ERROR,
         payload: { msg: err.statusText, status: err.status }
-      });
+      })
     }
   }
 
@@ -86,12 +86,12 @@ export const getCompanyForms =
       dispatch({
         type: GET_COMPANY,
         payload: res.data
-      });
+      })
     } catch (err: any) {
       dispatch({
         type: FORM_ERROR,
         payload: { msg: err.statusText, status: err.status }
-      });
+      })
     }
   }
 
@@ -99,7 +99,7 @@ export const addCompanyForm =
   (company: string, formData: any) => async (dispatch: Dispatch) => {
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       }
     }
     try {
@@ -108,14 +108,14 @@ export const addCompanyForm =
       dispatch({
         type: ADD_FORM,
         payload: res.data
-      });
+      })
 
       customDispatch(setAlert('Form Created', 'success'))
     } catch (err: any) {
       dispatch({
         type: FORM_ERROR,
         payload: { msg: err.statusText, status: err.status }
-      });
+      })
     }
   }
 
@@ -126,12 +126,12 @@ export const getForm =
       dispatch({
         type: GET_FORM,
         payload: res.data
-      });
+      })
     } catch (err: any) {
       dispatch({
         type: FORM_ERROR,
         payload: { msg: err.statusText, status: err.status }
-      });
+      })
     }
   }
 
@@ -143,14 +143,14 @@ export const removeForm =
       dispatch({
         type: REMOVE_FORM,
         payload: res.data
-      });
+      })
       customDispatch(setAlert('Form Removed', 'success'))
     } catch (err: any) {
       window.location.reload()
       dispatch({
         type: FORM_ERROR,
         payload: { msg: err.statusText, status: err.status }
-      });
+      })
     }
   }
 
@@ -159,31 +159,31 @@ export const addResponseToForm =
     async (dispatch: Dispatch) => {
       const config = {
         headers: {
-          "Content-Type": 'application/json',
-        },
-    };
-    try {
+          'Content-Type': 'application/json'
+        }
+      }
+      try {
         const responses = { responses: formData, file: fileData }
 
         const res = await axios.post(
         `/api/forms/res/${company}/${id}`,
         responses,
         config
-        );
+        )
 
         dispatch({
           type: ADD_RESPONSE,
           payload: res.data
         })
 
-      customDispatch(setAlert("Response send", "success"));
-    } catch (err: any) {
+        customDispatch(setAlert('Response send', 'success'))
+      } catch (err: any) {
         dispatch({
           type: FORM_ERROR,
           payload: { msg: err.statusText, status: err.status }
         })
+      }
     }
-    };
 
 export const getQuestions =
   (company: string, id: number) => async (dispatch: Dispatch) => {
@@ -192,12 +192,12 @@ export const getQuestions =
       dispatch({
         type: GET_QUESTIONS,
         payload: res.data
-      });
+      })
     } catch (err: any) {
       dispatch({
         type: FORM_ERROR,
         payload: { msg: err.statusText, status: err.status }
-      });
+      })
     }
   }
 
@@ -208,12 +208,12 @@ export const getResponses =
       dispatch({
         type: GET_RESPONSES,
         payload: responses.data
-      });
+      })
     } catch (err: any) {
       dispatch({
         type: FORM_ERROR,
         payload: { msg: err.statusText, status: err.status }
-      });
+      })
     }
   }
 
@@ -226,12 +226,12 @@ export const getOneResponse =
       dispatch({
         type: GET_RESPONSE,
         payload: responses.data
-      });
+      })
     } catch (err: any) {
       dispatch({
         type: FORM_ERROR,
         payload: { msg: err.statusText, status: err.status }
-      });
+      })
     }
   }
 
@@ -241,16 +241,16 @@ export const removeResponse =
       try {
         const res = await axios.delete(
         `/api/forms/res/${company}/${id}/${response}`
-        );
+        )
 
         dispatch({
           type: REMOVE_RESPONSE,
           payload: res.data
         })
-    } catch (err: any) {
+      } catch (err: any) {
         dispatch({
           type: FORM_ERROR,
           payload: { msg: err.statusText, status: err.status }
         })
+      }
     }
-    };

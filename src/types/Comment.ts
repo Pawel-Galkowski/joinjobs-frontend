@@ -1,8 +1,12 @@
-interface CommentSchema {
+interface User {
   _id: string
+}
+
+interface CommentSchema {
+  _id: number
   name: string
   avatar: string
-  user: null
+  user: User
   text: string
 }
 

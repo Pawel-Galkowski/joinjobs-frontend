@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { type Dispatch } from 'redux';
-import setAlert from './setAlert';
+import axios from 'axios'
+import { type Dispatch } from 'redux'
+import setAlert from './setAlert'
 import {
   GET_POSTS,
   POST_ERROR,
@@ -10,22 +10,22 @@ import {
   GET_POST,
   ADD_COMMENT,
   REMOVE_COMMENT
-} from './types';
-import customDispatch from './customDispatch';
+} from './types'
+import customDispatch from './customDispatch'
 
 export const getPosts = () => async (dispatch: Dispatch) => {
   try {
-    const res = await axios.get('/api/posts');
+    const res = await axios.get('/api/posts')
 
     dispatch({
       type: GET_POSTS,
       payload: res.data
-    });
+    })
   } catch (err: any) {
     dispatch({
       type: POST_ERROR,
       payload: { msg: err.statusText, status: err.status }
-    });
+    })
   }
 }
 
@@ -36,12 +36,12 @@ export const addLike = (id: number) => async (dispatch: Dispatch) => {
     dispatch({
       type: UPDATE_LIKES,
       payload: { id, likes: res.data }
-    });
+    })
   } catch (err: any) {
     dispatch({
       type: POST_ERROR,
       payload: { msg: err.statusText, status: err.status }
-    });
+    })
   }
 }
 
@@ -52,12 +52,12 @@ export const removeLike = (id: number) => async (dispatch: Dispatch) => {
     dispatch({
       type: UPDATE_LIKES,
       payload: { id, likes: res.data }
-    });
+    })
   } catch (err: any) {
     dispatch({
       type: POST_ERROR,
       payload: { msg: err.statusText, status: err.status }
-    });
+    })
   }
 }
 
@@ -68,21 +68,21 @@ export const deletePost = (id: number) => async (dispatch: Dispatch) => {
     dispatch({
       type: DELETE_POST,
       payload: { id }
-    });
+    })
 
     customDispatch(setAlert('Post Removed', 'success'))
   } catch (err: any) {
     dispatch({
       type: POST_ERROR,
       payload: { msg: err.statusText, status: err.status }
-    });
+    })
   }
 }
 
 export const addPost = (formData: string) => async (dispatch: Dispatch) => {
   const config = {
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     }
   }
   try {
@@ -91,14 +91,14 @@ export const addPost = (formData: string) => async (dispatch: Dispatch) => {
     dispatch({
       type: ADD_POST,
       payload: res.data
-    });
+    })
 
     customDispatch(setAlert('Post Created', 'success'))
   } catch (err: any) {
     dispatch({
       type: POST_ERROR,
       payload: { msg: err.statusText, status: err.status }
-    });
+    })
   }
 }
 
@@ -109,12 +109,12 @@ export const getPost = (id: number) => async (dispatch: Dispatch) => {
     dispatch({
       type: GET_POST,
       payload: res.data
-    });
+    })
   } catch (err: any) {
     dispatch({
       type: POST_ERROR,
       payload: { msg: err.statusText, status: err.status }
-    });
+    })
   }
 }
 
@@ -122,7 +122,7 @@ export const addComment =
   (postId: number, formData: string) => async (dispatch: Dispatch) => {
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       }
     }
     try {
@@ -135,14 +135,14 @@ export const addComment =
       dispatch({
         type: ADD_COMMENT,
         payload: res.data
-      });
+      })
 
       customDispatch(setAlert('Comment added', 'success'))
     } catch (err: any) {
       dispatch({
         type: POST_ERROR,
         payload: { msg: err.statusText, status: err.status }
-      });
+      })
     }
   }
 
@@ -154,13 +154,13 @@ export const deleteComment =
       dispatch({
         type: REMOVE_COMMENT,
         payload: commentId
-      });
+      })
 
       customDispatch(setAlert('Comment removed', 'success'))
     } catch (err: any) {
       dispatch({
         type: POST_ERROR,
         payload: { msg: err.statusText, status: err.status }
-      });
+      })
     }
   }

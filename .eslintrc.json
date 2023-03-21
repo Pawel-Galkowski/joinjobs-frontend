@@ -16,9 +16,10 @@
   },
   "plugins": ["prettier", "react"],
   "rules": {
-    "prettier/prettier": ["error"],
+    "prettier/prettier": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
     "react/react-in-jsx-scope": 0,
+    "multiline-ternary": 0,
     "react/prop-types": 0,
     "@typescript-eslint/strict-boolean-expressions": 0
   }

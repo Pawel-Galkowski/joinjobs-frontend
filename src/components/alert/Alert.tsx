@@ -1,5 +1,5 @@
-import { connect } from 'react-redux';
-import { type AlertData, type Props } from './types';
+import { connect } from 'react-redux'
+import { type AlertData, type Props } from './types'
 
 const Alert: React.FC<Props> = ({ alerts }): any =>
   alerts?.length &&

@@ -1,10 +1,10 @@
-import { useEffect, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import Spinner from '../../components/spinner/Spinner';
-import { getForm } from '../../actions/form';
-import { getProfiles } from '../../actions/profile';
-import FormResponse from './FormResponse';
+import { useEffect, Fragment } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import Spinner from '../../components/spinner/Spinner'
+import { getForm } from '../../actions/form'
+import { getProfiles } from '../../actions/profile'
+import FormResponse from './FormResponse'
 
 interface Params {
   company: string
@@ -31,7 +31,7 @@ interface Props {
   auth: Auth
   profile: Profiles
   forms: Forms
-  match: Match
+  match?: Match
 }
 
 const FormResponses: React.FC<Props> = ({
@@ -41,26 +41,24 @@ const FormResponses: React.FC<Props> = ({
   match
 }) => {
   useEffect(() => {
-    getForm(match.params.company, match.params.id)
+    match && getForm(match.params.company, match.params.id)
     getProfiles()
   }, [getForm, match, getProfiles])
 
-  return !!loading || !form
-? (
+  return !!loading || !form || !match ? (
     <Spinner />
-  )
-: (
-    <div className="paddingSection">
-      <Link to={`/api/forms/${match.params.company}`} className="btn btn-light">
+  ) : (
+    <div className='paddingSection'>
+      <Link to={`/api/forms/${match.params.company}`} className='btn btn-light'>
         Back to forms
       </Link>
-      <div className="marginTop-2">
+      <div className='marginTop-2'>
         <h1>Responses to form </h1>
         <div>
           <hr />
           <br />
           <h2>Questions:</h2>
-          <div className="sectionLeftPadding">
+          <div className='sectionLeftPadding'>
             <ol>
               {form?.questions?.map((ask: any, index: any) => (
                 <Fragment key={index}>
@@ -70,12 +68,11 @@ const FormResponses: React.FC<Props> = ({
             </ol>
           </div>
         </div>
-        <div className="sectionLeftPadding">
+        <div className='sectionLeftPadding'>
           <hr />
           <br />
           <h2>Responses:</h2>
-          {form?.responses?.length > 0
-? (
+          {form?.responses?.length > 0 ? (
             form.responses.map((formItem: any) => (
               <FormResponse
                 key={formItem._id}
@@ -84,8 +81,7 @@ const FormResponses: React.FC<Props> = ({
                 profile={profiles}
               />
             ))
-          )
-: (
+          ) : (
             <h3>No responses available</h3>
           )}
         </div>
@@ -98,8 +94,6 @@ const mapStateToProps = (state: any) => ({
   auth: state.auth,
   forms: state.forms,
   profile: state.profile
-});
+})
 
-export default connect(mapStateToProps, { getForm, getProfiles })(
-  FormResponses
-)
+export default connect(mapStateToProps, { getForm, getProfiles })(FormResponses)

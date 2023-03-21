@@ -22,19 +22,19 @@ interface Forms {
 interface Props {
   auth: any
   forms: Forms
-  match: Match
+  match?: Match
 }
 
 const CompanyForm: React.FC<Props> = ({
   auth,
   forms: { forms, loading },
-  match,
+  match
 }) => {
   useEffect(() => {
-    getCompanyForms(match.params.company)
+    match && getCompanyForms(match.params.company)
   }, [getCompanyForms, match])
 
-  return !!loading || !forms || !auth.user ? (
+  return !!loading || !forms || !auth.user || !match ? (
     <Spinner />
   ) : (
     <div className='paddingSection'>
@@ -72,8 +72,7 @@ const CompanyForm: React.FC<Props> = ({
 
 const mapStateToProps = (state: any) => ({
   forms: state.forms,
-  auth: state.auth,
+  auth: state.auth
 })
 
 export default connect(mapStateToProps, { getCompanyForms })(CompanyForm)
-

@@ -30,7 +30,7 @@ interface FormsProps {
 interface Props {
   auth: Auth
   forms: FormsProps
-  match: Match
+  match?: Match
 }
 
 const checkType = (name: string) => {
@@ -40,7 +40,7 @@ const checkType = (name: string) => {
 
 const Forms: React.FC<Props> = ({ auth, forms: { form, loading }, match }) => {
   useEffect(() => {
-    getForm(match.params.company, match.params.id)
+    match && getForm(match.params.company, match.params.id)
   }, [getForm, match])
 
   const [answer, setAnswer] = useState<any>('')
@@ -55,7 +55,7 @@ const Forms: React.FC<Props> = ({ auth, forms: { form, loading }, match }) => {
     e.preventDefault()
     setFormData([answer, ...formData])
     const arr: string[] = Object.values(answer)
-    addResponseToForm(match.params.company, match.params.id, arr, fileData)
+    match && addResponseToForm(match.params.company, match.params.id, arr, fileData)
   }
 
   const [file, setFile] = useState<any>()
@@ -77,16 +77,16 @@ const Forms: React.FC<Props> = ({ auth, forms: { form, loading }, match }) => {
       newformData.append('file', file)
       newformData.append('user', auth.user._id)
       try {
-        const res = await axios.post(
+        const res = match && await axios.post(
           `/uploads/${match.params.company}/${auth.user._id}`,
           newformData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
-            },
+              'Content-Type': 'multipart/form-data'
+            }
           }
         )
-        setFileData(res.data.filePath)
+        setFileData(res?.data.filePath)
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err)
@@ -97,7 +97,7 @@ const Forms: React.FC<Props> = ({ auth, forms: { form, loading }, match }) => {
     }
   }
 
-  return !!loading || !form ? (
+  return !!loading || !form || !match ? (
     <Spinner />
   ) : (
     <div className='paddingSection'>
@@ -147,11 +147,10 @@ const Forms: React.FC<Props> = ({ auth, forms: { form, loading }, match }) => {
 
 const mapStateToProps = (state: any) => ({
   forms: state.forms,
-  auth: state.auth,
+  auth: state.auth
 })
 
 export default connect(mapStateToProps, {
   getForm,
-  addResponseToForm,
+  addResponseToForm
 })(Forms)
-

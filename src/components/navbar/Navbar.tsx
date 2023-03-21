@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { logout } from '../../actions/auth';
-import { getCurrentProfile } from '../../actions/profile';
-import { type Props } from './types';
-import { Spinner } from '..';
+import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { logout } from '../../actions/auth'
+import { getCurrentProfile } from '../../actions/profile'
+import { type Props } from './types'
+import { Spinner } from '..'
 
 const Navbar: React.FC<Props> = ({
   auth: { isAuthenticated, loading, user },
@@ -17,7 +17,7 @@ const Navbar: React.FC<Props> = ({
   const showProfile = (
     <li>
       <Link to={`/profile/${user._id}`}>
-        <i className="fas fa-user" />
+        <i className='fas fa-user' />
         {'Profile '}
       </Link>
     </li>
@@ -28,12 +28,12 @@ const Navbar: React.FC<Props> = ({
       return (
         <ul>
           <li>
-            <Link to="/admin">Admin panel </Link>
+            <Link to='/admin'>Admin panel </Link>
           </li>
           {profile && showProfile}
           <li>
-            <a onClick={logout} href="#!">
-              <i className="fas fa-sign-out-alt" />
+            <a onClick={logout} href='#!'>
+              <i className='fas fa-sign-out-alt' />
               <span> Logout</span>
             </a>
           </li>
@@ -45,8 +45,8 @@ const Navbar: React.FC<Props> = ({
         <ul>
           {profile && showProfile}
           <li>
-            <a onClick={logout} href="#!">
-              <i className="fas fa-sign-out-alt" />
+            <a onClick={logout} href='#!'>
+              <i className='fas fa-sign-out-alt' />
               <span>Logout</span>
             </a>
           </li>
@@ -56,49 +56,47 @@ const Navbar: React.FC<Props> = ({
     return (
       <ul>
         <li>
-          <Link to="/"> Dashboard </Link>
+          <Link to='/'> Dashboard </Link>
         </li>
         <li>
-          <Link to="/login"> Login </Link>
+          <Link to='/login'> Login </Link>
         </li>
         <li>
-          <Link to="/register"> Register </Link>
+          <Link to='/register'> Register </Link>
         </li>
       </ul>
     )
   }
 
-  return loading
-? (
+  return loading ? (
     <Spinner />
-  )
-: (
-    <nav className="navbar bg-dark">
+  ) : (
+    <nav className='navbar bg-dark'>
       <h1>
-        <Link to="/" className="logoLink">
-          <i className="fas fa-hashtag" />
+        <Link to='/' className='logoLink'>
+          <i className='fas fa-hashtag' />
           JoinJobs
         </Link>
       </h1>
-      <div className="mainNav">{resolveRole()}</div>
-      <div className="menu-wrap">
-        <input type="checkbox" className="toggler" />
-        <div className="hamburger">
+      <div className='mainNav'>{resolveRole()}</div>
+      <div className='menu-wrap'>
+        <input type='checkbox' className='toggler' />
+        <div className='hamburger'>
           <div />
         </div>
-        <div className="menu">
+        <div className='menu'>
           <div>
             <div>{resolveRole()}</div>
           </div>
         </div>
       </div>
     </nav>
-  );
-};
+  )
+}
 
 const mapStateToProps = ({ auth, profile }: any) => ({
   auth,
   profile
-});
+})
 
 export default connect(mapStateToProps, { getCurrentProfile, logout })(Navbar)

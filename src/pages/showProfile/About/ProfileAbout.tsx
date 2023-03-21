@@ -1,20 +1,18 @@
-import React from 'react';
-
-function ProfileAbout ({
+const ProfileAbout: React.FC<{
+  profile: any
+}> = ({
   profile: {
     bio,
     user: { name }
   }
-}: {
-  profile: any
-}) {
+}) => {
   return (
-    <div className="profile-about bg-light">
+    <div className='profile-about bg-light'>
       {bio && (
         <>
-          <h2 className="text-primary">{name.trim().split(' ')[0]}s Bio</h2>
+          <h2 className='text-primary'>{name.trim().split(' ')[0]}s Bio</h2>
           <p>{bio}</p>
-          <div className="line" />
+          <div className='line' />
         </>
       )}
     </div>

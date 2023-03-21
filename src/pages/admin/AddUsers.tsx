@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { connect } from 'react-redux';
-import setAlert from '../../actions/setAlert';
-import { register } from '../../actions/auth';
+import { useState } from 'react'
+import { connect } from 'react-redux'
+import setAlert from '../../actions/setAlert'
+import { register } from '../../actions/auth'
 
 interface Params {
   name: string
@@ -16,7 +16,7 @@ const initialState = {
   email: '',
   password: '',
   password2: '',
-  role: '',
+  role: ''
 }
 
 const AddUsers = () => {
@@ -35,66 +35,66 @@ const AddUsers = () => {
         name,
         email,
         password,
-        role,
+        role
       })
 
   return (
-    <form className="form" onSubmit={onSubmit}>
-      <div className="form-group">
+    <form className='form' onSubmit={onSubmit}>
+      <div className='form-group'>
         <input
-          type="text"
-          placeholder="Name"
-          name="name"
+          type='text'
+          placeholder='Name'
+          name='name'
           value={name}
           onChange={onchange}
           required
         />
       </div>
-      <div className="form-group">
-        <select name="role" value={role} onChange={onchange} required>
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
+      <div className='form-group'>
+        <select name='role' value={role} onChange={onchange} required>
+          <option value='user'>User</option>
+          <option value='admin'>Admin</option>
         </select>
       </div>
-      <div className="form-group">
+      <div className='form-group'>
         <input
-          type="email"
-          placeholder="Email Address"
-          name="email"
+          type='email'
+          placeholder='Email Address'
+          name='email'
           value={email}
           onChange={onchange}
           required
         />
       </div>
-      <div className="form-group">
+      <div className='form-group'>
         <input
-          type="password"
-          placeholder="Password"
-          name="password"
+          type='password'
+          placeholder='Password'
+          name='password'
           minLength={6}
           value={password}
           onChange={onchange}
           required
         />
       </div>
-      <div className="form-group">
+      <div className='form-group'>
         <input
-          type="password"
-          placeholder="Confirm Password"
-          name="password2"
+          type='password'
+          placeholder='Confirm Password'
+          name='password2'
           minLength={6}
           value={password2}
           onChange={onchange}
           required
         />
       </div>
-      <input type="submit" className="btn btn-primary" value="Register" />
+      <input type='submit' className='btn btn-primary' value='Register' />
     </form>
   )
 }
 
 const mapStateToProps = ({ auth: { isAuthenticated } }: any) => ({
   isAuthenticated
-});
+})
 
 export default connect(mapStateToProps, { setAlert, register })(AddUsers)

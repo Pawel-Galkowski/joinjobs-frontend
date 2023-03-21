@@ -1,7 +1,7 @@
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import Moment from 'react-moment';
-import { deleteComment } from '../../actions/post';
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import Moment from 'react-moment'
+import { deleteComment } from '../../actions/post'
 
 interface User {
   _id: string
@@ -10,7 +10,7 @@ interface User {
 interface Comment {
   _id: number
   user: User
-  date: string
+  date?: string
   name: string
   avatar: string
   text: string
@@ -23,26 +23,26 @@ interface CommentItemData {
 }
 
 const CommentItem: React.FC<CommentItemData> = ({ postId, comment, auth }) => (
-  <div className="post bg-white">
+  <div className='post bg-white'>
     <div>
       <Link to={`/profile/${comment.user._id}`}>
-        <img className="round-img" src={comment.avatar} alt="avatar" />
+        <img className='round-img' src={comment.avatar} alt='avatar' />
         <h4>{comment.name}</h4>
       </Link>
     </div>
     <div>
       <p>{comment.text}</p>
-      <p className="post-date">
+      <p className='post-date'>
         {'Posted on '}
-        <Moment format="YYYY/MM/DD">{comment.date}</Moment>
+        <Moment format='YYYY/MM/DD'>{comment.date}</Moment>
       </p>
       {!auth.loading && comment.user === auth.user._id && (
         <button
-          className="btn btn-danger"
+          className='btn btn-danger'
           onClick={() => deleteComment(postId, comment._id)}
-          type="button"
+          type='button'
         >
-          <i className="fas fa-times" />
+          <i className='fas fa-times' />
         </button>
       )}
     </div>

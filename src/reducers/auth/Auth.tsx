@@ -11,7 +11,7 @@ import {
   ACCOUNT_DELETED2,
   ACCOUNT_CONFIRMED,
   RECOVERY_SEND
-} from '../../actions/types';
+} from '../../actions/types'
 // import { Props } from './types';
 
 const initialState = {
@@ -21,7 +21,7 @@ const initialState = {
   user: {}
 }
 
-function authReducer (state = initialState, action: any) {
+const authReducer = (state = initialState, action: any) => {
   const { payload, type } = action
   switch (type) {
     case USER_LOADED:
@@ -52,7 +52,7 @@ function authReducer (state = initialState, action: any) {
     case AUTH_ERROR:
     case LOGOUT:
     case ACCOUNT_DELETED:
-      localStorage.removeItem('token');
+      localStorage.removeItem('token')
       return {
         ...state,
         token: null,

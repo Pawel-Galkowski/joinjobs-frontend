@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { login } from '../../actions/auth';
+import { useState } from 'react'
+import { Link, Navigate } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { login } from '../../actions/auth'
 
 interface LoginData {
   email: string
@@ -10,71 +10,69 @@ interface LoginData {
 
 const initialData: LoginData = {
   email: '',
-  password: '',
+  password: ''
 }
 
-function Login ({ isAuthenticated }: any) {
-  const [formData, setFormData] = useState(initialData)
+const Login: React.FC<any> = ({ isAuthenticated }) => {
+  const [formData, setFormData] = useState<LoginData>(initialData)
 
   const onchange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [target.name]: target.value
-    });
-  };
+    })
+  }
 
   const onSubmit = () => login(formData)
 
-  return isAuthenticated
-? (
-    <Navigate to="/dashboard" />
-  )
-: (
-    <div className="center-box">
-      <div className="flex-box">
-        <div className="additionalBG">&nbsp;</div>
-        <div className="user bg-dark">
-          <div className="form-wrap">
-            <div className="tabs-content">
-              <div id="login-tab-content" className="active">
-                <form className="login-form" onSubmit={onSubmit} method="post">
-                  <div className="input-box">
+  return isAuthenticated ? (
+    <Navigate to='/dashboard' />
+  ) : (
+    <div className='center-box'>
+      <div className='flex-box'>
+        <div className='additionalBG'>&nbsp;</div>
+        <div className='user bg-dark'>
+          <div className='form-wrap'>
+            <div className='tabs-content'>
+              <div id='login-tab-content' className='active'>
+                <form className='login-form' onSubmit={onSubmit} method='post'>
+                  <div className='input-box'>
                     <input
-                      type="email"
-                      className="input"
-                      id="user_login"
-                      placeholder="Email Address"
-                      name="email"
+                      type='email'
+                      className='input'
+                      id='user_login'
+                      placeholder='Email Address'
+                      name='email'
                       value={formData.email}
                       onChange={onchange}
                       required
                     />
                     <input
-                      type="password"
-                      placeholder="Password"
-                      className="input"
-                      id="user_pass"
-                      name="password"
+                      type='password'
+                      placeholder='Password'
+                      className='input'
+                      id='user_pass'
+                      name='password'
                       value={formData.password}
                       onChange={onchange}
                       required
                     />
                   </div>
-                  <input type="submit" className="button" value="Login" />
+                  <input type='submit' className='button' value='Login' />
                 </form>
-                <div className="help-action">
+                <div className='help-action'>
                   <p>&nbsp;</p>
-                  <p className="forgot">
+                  <p className='forgot'>
                     {'Do not have account yet? '}
-                    <Link to="/register">
-                      <i className="fas fa-arrow-right" />
+                    <Link to='/register'>
+                      <i className='fas fa-arrow-right' />
                       {' Sign Up '}
-                      <i className="fas fa-arrow-left" />
+                      <i className='fas fa-arrow-left' />
                     </Link>
                   </p>
-                  <p className="forgot">
-                    <Link to="/recovery">
-                      <i className="fas fa-arrow-right" aria-hidden="true" />
+                  <p className='forgot'>
+                    <Link to='/recovery'>
+                      <i className='fas fa-arrow-right' aria-hidden='true' />
                       {' Forgot your password?'}
                     </Link>
                   </p>
@@ -85,11 +83,11 @@ function Login ({ isAuthenticated }: any) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 const mapStateToProps = (state: any) => ({
   isAuthenticated: state.auth.isAuthenticated
-});
+})
 
 export default connect(mapStateToProps, { login })(Login)

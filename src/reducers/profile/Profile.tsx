@@ -15,7 +15,7 @@ import {
   GET_EDUCATION,
   POST_FILE,
   ALL_USERS
-} from '../../actions/types';
+} from '../../actions/types'
 // import { Props } from './types';
 
 const initialState = {

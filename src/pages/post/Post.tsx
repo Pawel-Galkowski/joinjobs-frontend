@@ -1,13 +1,13 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import Spinner from '../../components/spinner/Spinner';
-import PostItem from '../posts/PostItem';
-import CommentItem from './CommentItem';
-import CommentForm from './CommentForm';
-import { getPost } from '../../actions/post';
-import { getProfiles } from '../../actions/profile';
-import { type CommentSchema } from '../../types';
+import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import Spinner from '../../components/spinner/Spinner'
+import PostItem from '../posts/PostItem'
+import CommentItem from './CommentItem'
+import CommentForm from './CommentForm'
+import { getPost } from '../../actions/post'
+import { getProfiles } from '../../actions/profile'
+import { type CommentSchema } from '../../types'
 
 interface PostData {
   post?: any
@@ -21,16 +21,14 @@ const Post = ({ post, profile, match }: PostData) => {
     getProfiles()
   }, [getPost, getProfiles])
 
-  return post.loading || !post.post || profile.loading
-? (
+  return post.loading || !post.post || profile.loading ? (
     <Spinner />
-  )
-: (
-    <div className="paddingSection">
-      <Link to="/posts" className="btn btn-light">
+  ) : (
+    <div className='paddingSection'>
+      <Link to='/posts' className='btn btn-light'>
         Back to Posts
       </Link>
-      <div className="mainPost">
+      <div className='mainPost'>
         <PostItem
           post={post.post}
           showActions={false}
@@ -39,7 +37,7 @@ const Post = ({ post, profile, match }: PostData) => {
       </div>
       <hr />
       <CommentForm postId={post.post._id} />
-      <div className="comments">
+      <div className='comments'>
         {post.comments.map((comment: CommentSchema) => (
           <CommentItem
             key={comment._id}
@@ -49,8 +47,8 @@ const Post = ({ post, profile, match }: PostData) => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
 const mapStateToProps = ({ post, profile }: any) => ({ post, profile })
 

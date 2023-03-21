@@ -10,4 +10,3 @@ export default (token: string) => {
     return delete axios.defaults.headers.common['x-auth-token']
   }
 }
-

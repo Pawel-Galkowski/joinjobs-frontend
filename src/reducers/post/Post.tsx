@@ -8,8 +8,8 @@ import {
   GET_POST,
   ADD_COMMENT,
   REMOVE_COMMENT
-} from '../../actions/types';
-import { type InitialState } from '../reducers';
+} from '../../actions/types'
+import { type InitialState } from '../reducers'
 
 const initialState: InitialState = {
   posts: [],
