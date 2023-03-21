@@ -1,6 +1,6 @@
-import { connect } from 'react-redux';
-import { deleteUserAccount as deleteUserAccountAction } from '../../actions/profile';
-import Spinner from '../../components/spinner/Spinner';
+import { connect } from 'react-redux'
+import { deleteUserAccount as deleteUserAccountAction } from '../../actions/profile'
+import Spinner from '../../components/spinner/Spinner'
 
 function AdminUsers ({
   usrs: { confirmed, _id, name, email, date, role, loading },
@@ -9,12 +9,10 @@ function AdminUsers ({
   usrs: any
   deleteUserAccount?: any
 }) {
-  return confirmed && loading
-? (
+  return confirmed && loading ? (
     <Spinner />
-  )
-: (
-    <div className="bg-white padding2 margin-2ud">
+  ) : (
+    <div className='bg-white padding2 margin-2ud'>
       <h3>
         <strong>
           {name}
@@ -22,7 +20,7 @@ function AdminUsers ({
         </strong>
         <span className={role === 'admin' ? 'dangerRole' : ''}>{role}</span>
       </h3>
-      <div className="margin-2ud">
+      <div className='margin-2ud'>
         <p>
           {'Email: '}
           <b>{email}</b>
@@ -37,9 +35,9 @@ function AdminUsers ({
         </p>
       </div>
       <button
-        className="btn btn-danger"
+        className='btn btn-danger'
         onClick={deleteUserAccount(_id)}
-        type="button"
+        type='button'
       >
         Delete Account
       </button>

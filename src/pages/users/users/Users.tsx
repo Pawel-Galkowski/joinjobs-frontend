@@ -1,11 +1,11 @@
-import { type FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import { connect } from 'react-redux'
 import Spinner from '../../../components/spinner/Spinner'
 import { getUsers } from '../../../actions/profile'
 import UsersItem from '../UsersItem/UsersItem'
-import { type Props } from '../types'
+import type { Props } from '../types'
 
-const Users: FC<Props> = ({ profile: { users, loading } }) => {
+const Users: React.FC<Props> = ({ profile: { users, loading } }) => {
   useEffect(() => {
     getUsers()
   }, [getUsers])

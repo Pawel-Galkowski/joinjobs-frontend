@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from './axios'
 import { type Dispatch } from 'redux'
 import setAlert from './setAlert'
 

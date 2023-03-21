@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../actions/axios'
 
 export default (token: string) => {
   if (token) {

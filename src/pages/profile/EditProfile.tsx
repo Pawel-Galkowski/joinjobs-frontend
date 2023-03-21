@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { createProfile, getCurrentProfile } from '../../actions/profile';
-import Spinner from '../../components/spinner/Spinner';
+import { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import axios from '../../actions/axios'
+import { createProfile, getCurrentProfile } from '../../actions/profile'
+import Spinner from '../../components/spinner/Spinner'
 
 interface ProfileProps {
   profile: any
@@ -34,7 +34,7 @@ const EditProfile: React.FC<Props> = ({
     linkedin: '',
     instagram: '',
     skills: '',
-    profileImg: '',
+    profileImg: ''
   })
 
   const {
@@ -74,7 +74,7 @@ const EditProfile: React.FC<Props> = ({
         facebook: !loading && profile.social?.facebook,
         linkedin: !loading && profile.social?.linkedin,
         instagram: !loading && profile.social?.instagram
-      });
+      })
   }, [])
 
   const onChange = (e: any) => {
@@ -97,16 +97,16 @@ const EditProfile: React.FC<Props> = ({
     try {
       const res = await axios.post('/uploads', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'multipart/form-data'
         }
-      });
+      })
       const { fileName, filePath } = res.data
       setdata({ ...data, profileImg: filePath })
       setUploadedFile({ fileName, filePath })
     } catch (err) {
       if (err.response.status > 500) {
         // eslint-disable-next-line no-console
-        console.log('There was a problem with the server');
+        console.log('There was a problem with the server')
       } else {
         // eslint-disable-next-line no-console
         console.log(err.response.data.msg)
@@ -127,10 +127,10 @@ const EditProfile: React.FC<Props> = ({
   }
 
   return loading
-? (
+    ? (
     <Spinner />
-  )
-: (
+      )
+    : (
     <div className="paddingSection">
       <h1 className="large text-primary">Create Your Profile</h1>
       <p className="lead">
@@ -332,13 +332,13 @@ const EditProfile: React.FC<Props> = ({
         </Link>
       </form>
     </div>
-  );
-};
+      )
+}
 
 const mapStateToProps = (state: any) => ({
   profile: state.profile,
   auth: state.auth
-});
+})
 
 export default connect(mapStateToProps, {
   createProfile,

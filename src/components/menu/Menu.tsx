@@ -1,11 +1,11 @@
-import { type FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ProfileActions from '../../pages/dashboard/DashboardActions'
 import { getCurrentProfile } from '../../actions/profile'
 import { type Props, type ArrowType } from './types'
 
-const Menu: FC<Props> = ({
+const Menu: React.FC<Props> = ({
   auth: { isAuthenticated, loading, user },
   profile: { profile }
 }) => {

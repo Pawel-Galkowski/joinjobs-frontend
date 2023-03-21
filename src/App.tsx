@@ -1,4 +1,4 @@
-import { useEffect, type FC } from 'react'
+import { useEffect } from 'react'
 // import './App.css';
 import { BrowserRouter } from 'react-router-dom'
 import { Navbar } from './components'
@@ -11,7 +11,7 @@ import './stylesheets/authLayout/auth.scss'
 import './stylesheets/formsLayout/forms.scss'
 import { store } from './store'
 
-const App: FC = () => {
+const App: React.FC = () => {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     store.dispatch(loadUser())

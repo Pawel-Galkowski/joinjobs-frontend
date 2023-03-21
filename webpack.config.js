@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import WorkboxWebpackPlugin from 'workbox-webpack-plugin'
+import * as Dotenv from 'dotenv-webpack'
 
 const stylesHandler = MiniCssExtractPlugin.loader
 const __filename = fileURLToPath(import.meta.url)
@@ -12,47 +13,47 @@ const __filename = fileURLToPath(import.meta.url)
 const config = {
   entry: './src/index.tsx',
   output: {
-    path: path.resolve(path.dirname(__filename), 'dist'),
+    path: path.resolve(path.dirname(__filename), 'dist')
   },
   devServer: {
     open: true,
-    host: 'localhost',
+    host: 'localhost'
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'index.html',
+      template: 'index.html'
     }),
-
     new MiniCssExtractPlugin(),
+    new Dotenv()
   ],
   module: {
     rules: [
       {
         test: /\.(ts|tsx)$/i,
         loader: 'ts-loader',
-        exclude: ['/node_modules/'],
+        exclude: ['/node_modules/']
       },
       {
         test: /\.css$/i,
-        use: [stylesHandler, 'css-loader'],
+        use: [stylesHandler, 'css-loader']
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [stylesHandler, 'css-loader', 'sass-loader'],
+        use: [stylesHandler, 'css-loader', 'sass-loader']
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: 'asset',
-      },
-    ],
+        type: 'asset'
+      }
+    ]
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
     alias: {
       actions: path.resolve(path.dirname(__filename), 'src/actions/'),
-      stylesheets: path.resolve(path.dirname(__filename), 'src/stylesheets/'),
-    },
-  },
+      stylesheets: path.resolve(path.dirname(__filename), 'src/stylesheets/')
+    }
+  }
 }
 
 export default () => {
@@ -65,4 +66,3 @@ export default () => {
   }
   return config
 }
-

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from './axios'
 import { type Dispatch } from 'redux'
 import setAuthToken from '../utils/setAuthToken'
 import setAlert from './setAlert'
@@ -86,7 +86,7 @@ export const login = (data: Login) => async (dispatch: Dispatch) => {
   const body = JSON.stringify(data)
 
   try {
-    const res = await axios.post('http://localhost:4000/api/auth', body, config)
+    const res = await axios.post('/api/auth', body, config)
 
     dispatch({
       type: LOGIN_SUCCESS,

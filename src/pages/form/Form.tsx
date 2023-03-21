@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import axios from '../../actions/axios'
 import Spinner from '../../components/spinner/Spinner'
 import { getForm, addResponseToForm } from '../../actions/form'
 
