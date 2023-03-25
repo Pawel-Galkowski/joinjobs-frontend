@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { authorize } from '../../actions/auth';
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { authorize } from '../../actions/auth'
 
 interface ConfirmationData {
   email: string
@@ -10,7 +10,7 @@ interface ConfirmationData {
 
 const initialData: ConfirmationData = {
   email: '',
-  token: '',
+  token: ''
 }
 
 function Confirmation () {
@@ -20,8 +20,8 @@ function Confirmation () {
     setFormData({
       ...formData,
       [target.name]: target.value
-    });
-  };
+    })
+  }
 
   const onSubmit = () => authorize(formData)
 
@@ -65,6 +65,6 @@ function Confirmation () {
 
 const mapStateToProps = (state: any) => ({
   isAuthenticated: state.auth.isAuthenticated
-});
+})
 
 export default connect(mapStateToProps, { authorize })(Confirmation)

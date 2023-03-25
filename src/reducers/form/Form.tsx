@@ -17,13 +17,11 @@ import {
   GET_RESPONSE,
   REMOVE_RESPONSE
 } from '../../actions/types'
-// import { InitialState } from '../reducers';
-// import { Props } from './types';
+import type { InitialState } from '../reducers'
 
-const initialState = {
+const initialState: InitialState = {
   forms: [],
   form: {},
-  loading: true,
   error: {}
 }
 

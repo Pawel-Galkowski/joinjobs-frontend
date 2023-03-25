@@ -1,3 +1,3 @@
 import { type Dispatch } from 'redux'
 
-export default (params: any) => async (dispatch: Dispatch) => dispatch(params)
+export default (params: any) => (dispatch: Dispatch) => dispatch(params)

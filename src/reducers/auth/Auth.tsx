@@ -12,16 +12,8 @@ import {
   ACCOUNT_CONFIRMED,
   RECOVERY_SEND
 } from '../../actions/types'
-// import { Props } from './types';
 
-const initialState = {
-  isAuthenticated: false,
-  token: localStorage.getItem('token'),
-  loading: true,
-  user: {}
-}
-
-const authReducer = (state = initialState, action: any) => {
+const authReducer = (state = {}, action: any) => {
   const { payload, type } = action
   switch (type) {
     case USER_LOADED:

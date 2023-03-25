@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { connect } from 'react-redux';
-import { addCompany } from '../../actions/form';
+import { useState } from 'react'
+import { connect } from 'react-redux'
+import { addCompany } from '../../actions/form'
 
 interface CreateCompanyData {
   company: string
@@ -9,7 +9,7 @@ interface CreateCompanyData {
 
 const initialData: CreateCompanyData = {
   company: '',
-  nip: '',
+  nip: ''
 }
 
 const CreateCompany = () => {
@@ -19,32 +19,30 @@ const CreateCompany = () => {
     setFormData({
       ...formData,
       [target.name]: target.value
-    });
-  };
-
-  const onSubmit = () => addCompany(formData)
+    })
+  }
 
   return (
-    <div className="form-box">
+    <div className='form-box'>
       <h1>Create your company profile</h1>
-      <form className="form" id="createCompanyForm" onSubmit={onSubmit}>
+      <form className='form' id='createCompanyForm' onSubmit={() => { addCompany(formData) }}>
         <input
-          type="text"
-          placeholder="Company name"
-          name="company"
+          type='text'
+          placeholder='Company name'
+          name='company'
           value={formData.company}
           onChange={onChange}
           required
         />
         <input
-          type="text"
-          name="nip"
-          placeholder="NIP"
+          type='text'
+          name='nip'
+          placeholder='NIP'
           value={formData.nip}
           onChange={onChange}
           required
         />
-        <input type="submit" className="btn btn-dark my-1" value="Submit" />
+        <input type='submit' className='btn btn-dark my-1' value='Submit' />
       </form>
     </div>
   )

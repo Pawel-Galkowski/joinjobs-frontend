@@ -19,12 +19,6 @@
     "types": [
       "node"
     ],
-    "baseUrl": ".",
-    "paths": {
-      "components/*": ["src/components/*"],
-      "stylesheets/*": ["src/stylesheets/*"],
-      "actions/*": ["src/actions/*"],
-    },
     "lib": [
       "dom",
       "dom.iterable",

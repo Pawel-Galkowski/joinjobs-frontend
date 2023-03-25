@@ -1,11 +1,10 @@
 export interface Auth {
-  isAuthenticated: any
-  loading: any
-  isAdmin: any
+  isAuthenticated: boolean
+  loading: boolean
+  isAdmin: boolean
 }
 
 export interface RouteInterface {
-  element: any
   auth: Auth
-  path: any
+  children: JSX.Element
 }

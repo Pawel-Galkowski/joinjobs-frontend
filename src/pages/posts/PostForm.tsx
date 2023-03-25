@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { Spinner } from '../../components';
-import { addPost } from '../../actions/post';
-import { getCurrentProfile } from '../../actions/profile';
-import { type ProfileSchema } from '../../types';
+import { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
+import { Spinner } from '../../components'
+import { addPost } from '../../actions/post'
+import { getCurrentProfile } from '../../actions/profile'
+import { type ProfileSchema } from '../../types'
 
 interface PostFormData {
   profile: {
@@ -13,7 +13,7 @@ interface PostFormData {
 }
 
 const PostForm = (profile: PostFormData) => {
-  const [text, setText] = useState<string>('');
+  const [text, setText] = useState<string>('')
 
   useEffect(() => {
     getCurrentProfile()
@@ -23,33 +23,32 @@ const PostForm = (profile: PostFormData) => {
     setText(target.value)
   }
 
-  return !profile
-? (
+  return !profile ? (
     <Spinner />
-  )
-: (
-    <div className="post-form">
-      <div className="bg-primary p">
+  ) : (
+    <div className='post-form'>
+      <div className='bg-primary p'>
         <h3>Say Something to create a post</h3>
       </div>
-      <form className="form" onSubmit={() => addPost(text)}>
+      <form
+        className='form'
+        onSubmit={() => { addPost(text) }}
+      >
         <textarea
-          name="text"
+          name='text'
           cols={30}
           rows={5}
-          placeholder="Create a post"
+          placeholder='Create a post'
           value={text}
           onChange={onChange}
           required
         />
-        <input type="submit" className="btn btn-dark" value="Submit" />
+        <input type='submit' className='btn btn-dark' value='Submit' />
       </form>
     </div>
-  );
-};
+  )
+}
 
 const mapStateToProps = ({ profile }: any) => ({ profile })
 
-export default connect(mapStateToProps, { addPost, getCurrentProfile })(
-  PostForm
-)
+export default connect(mapStateToProps, { addPost, getCurrentProfile })(PostForm)

@@ -1,8 +1,8 @@
-import { useEffect, Fragment } from 'react';
-import { connect } from 'react-redux';
-import Spinner from '../../components/spinner/Spinner';
-import { getForm } from '../../actions/form';
-import FormResponse from './FormResponse';
+import { useEffect, Fragment } from 'react'
+import { connect } from 'react-redux'
+import Spinner from '../../components/spinner/Spinner'
+import { getForm } from '../../actions/form'
+import FormResponse from './FormResponse'
 
 const SingleFormResponse: React.FC<any> = ({
   auth: { loading },
@@ -12,17 +12,15 @@ const SingleFormResponse: React.FC<any> = ({
   useEffect(() => {
     getForm(match.params.company, match.params.id)
   }, [getForm, match])
-  return !!loading || !form
-? (
+  return !!loading || !form ? (
     <Spinner />
-  )
-: (
-    <div className="paddingSection">
+  ) : (
+    <div className='paddingSection'>
       <h1>Responses to form </h1>
       <div>
         <hr />
         <h2>Questions:</h2>
-        <div className="sectionLeftPadding">
+        <div className='sectionLeftPadding'>
           <ol>
             {form?.questions?.map((ask: any, index: any) => (
               <Fragment key={index}>
@@ -45,12 +43,12 @@ const SingleFormResponse: React.FC<any> = ({
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
   forms: state.forms
-});
+})
 
 export default connect(mapStateToProps, { getForm })(SingleFormResponse)

@@ -48,11 +48,7 @@ const config = {
     ]
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.jsx', '.js', '...'],
-    alias: {
-      actions: path.resolve(path.dirname(__filename), 'src/actions/'),
-      stylesheets: path.resolve(path.dirname(__filename), 'src/stylesheets/')
-    }
+    extensions: ['.tsx', '.ts', '.jsx', '.js', '...']
   }
 }
 

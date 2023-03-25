@@ -6,7 +6,7 @@ export interface Action {
 export interface InitialState {
   forms?: any
   form?: any
-  loading: boolean
+  loading?: boolean
   error?: any
   isAuthenticated?: boolean
   token?: any

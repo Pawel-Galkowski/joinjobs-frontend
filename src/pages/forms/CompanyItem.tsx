@@ -1,8 +1,8 @@
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { Spinner } from '../../components';
-import { removeCompany } from '../../actions/form';
-import { type FormSchema } from '../../types';
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { Spinner } from '../../components'
+import { removeCompany } from '../../actions/form'
+import { type FormSchema } from '../../types'
 
 interface CompanyItemData {
   auth: any
@@ -10,15 +10,13 @@ interface CompanyItemData {
 }
 
 const CompanyItem = ({ auth, forms }: CompanyItemData) =>
-  forms.loading || !auth.user
-? (
+  forms.loading || !auth.user ? (
     <Spinner />
-  )
-: (
-    <div className="formItem bg-white">
+  ) : (
+    <div className='formItem bg-white'>
       <div>
         <Link to={`/api/forms/${forms._id}`}>
-          <i className="far fa-building fa-3x" />
+          <i className='far fa-building fa-3x' />
           <h4>{forms.company}</h4>
         </Link>
       </div>
@@ -36,12 +34,12 @@ const CompanyItem = ({ auth, forms }: CompanyItemData) =>
         {(forms.admins.includes(auth.user._id) ||
           auth.user.role === 'admin') && (
           <button
-            onClick={() => removeCompany(forms._id)}
-            type="button"
-            className="btn btn-danger"
+            onClick={() => { removeCompany(forms._id) }}
+            type='button'
+            className='btn btn-danger'
           >
             Remove &nbsp;
-            <i className="fas fa-trash-alt" />
+            <i className='fas fa-trash-alt' />
           </button>
         )}
       </div>

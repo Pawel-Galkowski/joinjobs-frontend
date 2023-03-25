@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import ProfileActions from '../../pages/dashboard/DashboardActions'
 import { getCurrentProfile } from '../../actions/profile'
 import { type Props, type ArrowType } from './types'
+import customDispatch from '../../actions/customDispatch'
 
 const Menu: React.FC<Props> = ({
   auth: { isAuthenticated, loading, user },
@@ -12,7 +13,7 @@ const Menu: React.FC<Props> = ({
   const [arrow, setArrow] = useState<ArrowType>('>')
 
   useEffect(() => {
-    getCurrentProfile()
+    customDispatch(getCurrentProfile())
   }, [])
 
   if (loading || !user || !isAuthenticated) return null

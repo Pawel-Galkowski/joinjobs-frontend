@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import { deleteUserAccount as deleteUserAccountAction } from '../../actions/profile'
 import Spinner from '../../components/spinner/Spinner'
+import { useCallback } from 'react'
 
 function AdminUsers ({
   usrs: { confirmed, _id, name, email, date, role, loading },
@@ -9,6 +10,13 @@ function AdminUsers ({
   usrs: any
   deleteUserAccount?: any
 }) {
+  const submitOperation = useCallback(async () => {
+    // eslint-disable-next-line no-alert
+    if (window.confirm('Do you really want to remove this account?')) {
+      await deleteUserAccount(_id)
+    }
+  }, [])
+
   return confirmed && loading ? (
     <Spinner />
   ) : (
@@ -36,7 +44,7 @@ function AdminUsers ({
       </div>
       <button
         className='btn btn-danger'
-        onClick={deleteUserAccount(_id)}
+        onClick={() => submitOperation}
         type='button'
       >
         Delete Account

@@ -1,10 +1,12 @@
-import { useEffect, Fragment } from 'react'
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import { useEffect, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Spinner from '../../components/spinner/Spinner'
 import { getCurrentProfile, deleteAccount } from '../../actions/profile'
 import Education from './Education'
 import Experience from './Experience'
+import dispatch from '../../actions/customDispatch'
 
 interface Auth {
   user: any
@@ -22,18 +24,18 @@ interface Props {
 
 const Dashboard: React.FC<Props> = ({
   auth: { user },
-  profile: { profile, loading },
+  profile: { profile, loading }
 }) => {
   useEffect(() => {
-    getCurrentProfile()
+    dispatch(getCurrentProfile())
   }, [])
 
-  const submitOperation = () => {
+  const submitOperation = useCallback(async () => {
     // eslint-disable-next-line no-alert
     if (window.confirm('Do you really want to remove your account?')) {
-      deleteAccount()
+      await deleteAccount()
     }
-  }
+  }, [])
 
   return loading ? (
     <Spinner />
@@ -48,19 +50,17 @@ const Dashboard: React.FC<Props> = ({
           {typeof profile.experience !== 'object' ||
           typeof profile.education !== 'object' ? (
             <Spinner />
-          ) : (
+              ) : (
             <div className='table-center'>
               <Experience experience={profile.experience} />
               <Education education={profile.education} />
             </div>
-          )}
+              )}
           <div className='removeUser-section'>
             <button
               className='btn btn-danger'
               type='submit'
-              onClick={() => {
-                submitOperation()
-              }}
+              onClick={submitOperation}
             >
               <i className='fas fa-user-minus' /> Delete My Account
             </button>
@@ -80,11 +80,10 @@ const Dashboard: React.FC<Props> = ({
 
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
-  profile: state.profile,
+  profile: state.profile
 })
 
 export default connect(mapStateToProps, {
   getCurrentProfile,
-  deleteAccount,
+  deleteAccount
 })(Dashboard)
-

@@ -1,7 +1,9 @@
-import { useState } from 'react'
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import { useState, useCallback } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { login } from '../../actions/auth'
+import dispatch from '../../actions/customDispatch'
 
 interface LoginData {
   email: string
@@ -23,7 +25,9 @@ const Login: React.FC<any> = ({ isAuthenticated }) => {
     })
   }
 
-  const onSubmit = () => login(formData)
+  const onSubmit = useCallback(() => {
+    dispatch(login(formData))
+  }, [])
 
   return isAuthenticated ? (
     <Navigate to='/dashboard' />
