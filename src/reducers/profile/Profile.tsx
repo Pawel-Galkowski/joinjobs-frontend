@@ -16,7 +16,7 @@ import {
   ALL_USERS
 } from '../../actions/types'
 
-const profileReducer = (state = {}, action: any) => {
+const profileReducer = (state: any = {}, action: any) => {
   const { type, payload } = action
 
   switch (type) {

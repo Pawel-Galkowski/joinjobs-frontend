@@ -22,10 +22,6 @@ const defaultHeaderConfig = {
 }
 
 export const loadUser = () => async (dispatch: Dispatch) => {
-  // setAuthToken(
-  //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNWRmZTMzOTQ4ZjM3NjA0Nzc0YzE3NzI2In0sImlhdCI6MTY3OTc3MDUxOSwiZXhwIjoxNjgwMTMwNTE5fQ.NI0bagQfVuJIiJ6HQ1QfljrmA97c7CEBrTdhAj65dPw'
-  // )
-
   if (localStorage.token) {
     setHeaderAuthToken(localStorage.token)
   } else {
@@ -39,9 +35,7 @@ export const loadUser = () => async (dispatch: Dispatch) => {
       payload: res.data
     })
   } catch (err) {
-    console.log('error')
     dispatch({ type: AUTH_ERROR })
-    console.error(err)
   }
 }
 
@@ -84,12 +78,10 @@ interface Login {
 }
 
 // Login User
-export const login =
+export const postLogin =
   ({ email, password }: Login) =>
     async (dispatch: Dispatch) => {
-      console.log('login')
       const body = JSON.stringify({ email, password })
-      console.log(body)
       try {
         const res = await axios.post(
           '/api/auth',

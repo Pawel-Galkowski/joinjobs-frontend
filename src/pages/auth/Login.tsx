@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Link, Navigate } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { login } from '../../actions/auth'
-import { useAppDispatch } from '../../hooks'
+import { postLogin } from '../../actions/auth'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
 interface LoginData {
   email: string
@@ -14,7 +14,9 @@ const initialData: LoginData = {
   password: ''
 }
 
-const Login = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
+const Login: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const isAuthenticated = useAppSelector((state) => state.auth?.isAuthenticated)
   const [formData, setFormData] = useState<LoginData>(initialData)
 
   const onchange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,18 +26,15 @@ const Login = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
     })
   }
 
-  const onSubmit = (e: any) => {
-    const dispatch = useAppDispatch()
-    e.preventDefault()
-    console.log('submited')
-    dispatch(
-      login({ email: formData.email, password: formData.password })
-    )
+  const onSubmit = useCallback(() => {
+    dispatch(postLogin({ email: formData.email, password: formData.password }))
+  }, [])
+
+  if (isAuthenticated) {
+    return <Navigate to='/dashboard' />
   }
 
-  return isAuthenticated ? (
-    <Navigate to='/dashboard' />
-  ) : (
+  return (
     <div className='center-box'>
       <div className='flex-box'>
         <div className='additionalBG'>&nbsp;</div>
@@ -43,7 +42,7 @@ const Login = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
           <div className='form-wrap'>
             <div className='tabs-content'>
               <div id='login-tab-content' className='active'>
-                <form className='login-form' onSubmit={onSubmit}>
+                <form className='login-form'>
                   <div className='input-box'>
                     <input
                       type='email'
@@ -66,7 +65,12 @@ const Login = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
                       required
                     />
                   </div>
-                  <input type='submit' className='button' value='Login' />
+                  <input
+                    type='button'
+                    className='button'
+                    value='Login'
+                    onClick={onSubmit}
+                  />
                 </form>
                 <div className='help-action'>
                   <p>&nbsp;</p>
@@ -94,8 +98,4 @@ const Login = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   )
 }
 
-const mapStateToProps = ({ auth }: any) => ({
-  isAuthenticated: auth.isAuthenticated
-})
-
-export default connect(mapStateToProps, { login })(Login)
+export default Login

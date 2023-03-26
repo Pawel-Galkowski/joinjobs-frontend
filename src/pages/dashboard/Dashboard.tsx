@@ -5,6 +5,8 @@ import Spinner from '../../components/spinner/Spinner'
 import { getCurrentProfile, deleteAccount } from '../../actions/profile'
 import Education from './Education'
 import Experience from './Experience'
+import { useAppDispatch } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
 interface Auth {
   user: any
@@ -24,8 +26,11 @@ const Dashboard: React.FC<Props> = ({
   auth: { user },
   profile: { profile, loading }
 }) => {
+  const dispatch: AppDispatch = useAppDispatch()
   useEffect(() => {
-    getCurrentProfile()
+    dispatch(
+      getCurrentProfile()
+    )
   }, [])
 
   const submitOperation = useCallback(() => {

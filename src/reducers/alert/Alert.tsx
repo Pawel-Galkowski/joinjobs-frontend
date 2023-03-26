@@ -1,6 +1,4 @@
-// import { FC } from 'react';
 import { SET_ALERT, REMOVE_ALERT } from '../../actions/types'
-// import { Props } from './types';'
 
 interface Props {
   state: any

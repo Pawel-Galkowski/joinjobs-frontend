@@ -20,10 +20,10 @@ interface Props {
 const AdminUsers: React.FC<Props> = ({
   usrs: { confirmed, _id, name, email, date, role, loading }
 }) => {
-  const submitOperation = useCallback(async () => {
+  const submitOperation = useCallback(() => {
     // eslint-disable-next-line no-alert
     if (window.confirm('Do you really want to remove this account?')) {
-      await deleteUserAccount(_id)
+      deleteUserAccount(_id)
     }
   }, [])
 

@@ -180,7 +180,7 @@ export const getAllusers = () => async (dispatch: Dispatch) => {
 }
 
 export const getProfileById =
-  (userId: number) => async (dispatch: Dispatch) => {
+  (userId: string) => async (dispatch: Dispatch) => {
     dispatch({ type: CLEAR_PROFILE })
     try {
       const res = await axios.get(`/api/profile/user/${userId}`)

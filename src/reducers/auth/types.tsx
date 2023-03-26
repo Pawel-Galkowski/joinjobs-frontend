@@ -1,6 +1,6 @@
-import { type Action } from '../reducers';
-
-export interface Props {
-  state: any
-  action: Action
+export interface AuthInitialStateProps {
+  isAuthenticated: boolean
+  loading: boolean
+  token: string
+  user: object
 }

@@ -1,4 +1,3 @@
-// import { FC } from 'react';
 import {
   USER_LOADED,
   AUTH_ERROR,
@@ -12,8 +11,16 @@ import {
   ACCOUNT_CONFIRMED,
   RECOVERY_SEND
 } from '../../actions/types'
+import type { AuthInitialStateProps } from './types'
 
-const authReducer = (state = {}, action: any) => {
+const initialState = {
+  isAuthenticated: false,
+  loading: false,
+  token: '',
+  user: {}
+}
+
+const authReducer = (state: AuthInitialStateProps = initialState, action: any) => {
   const { payload, type } = action
   switch (type) {
     case USER_LOADED:

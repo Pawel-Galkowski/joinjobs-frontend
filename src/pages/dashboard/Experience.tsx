@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
 import { deleteExperience } from '../../actions/profile'
+import { useAppDispatch } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
 interface Props {
   experience: any
@@ -18,10 +20,11 @@ interface Exp {
 }
 
 const Experience: React.FC<Props> = ({ experience }) => {
+  const dispatch: AppDispatch = useAppDispatch()
   const submitOperation = (id: number) => {
     // eslint-disable-next-line no-alert
     if (window.confirm('Do you really want to remove that experience?')) {
-      deleteExperience(id)
+      dispatch(deleteExperience(id))
     }
   }
 
@@ -45,9 +48,7 @@ const Experience: React.FC<Props> = ({ experience }) => {
       <td>
         <i
           className='far fa-window-close fa-2x'
-          onClick={() => {
-            submitOperation(exp._id)
-          }}
+          onClick={() => { submitOperation(exp._id) }}
         />
       </td>
     </tr>
@@ -82,9 +83,7 @@ const Experience: React.FC<Props> = ({ experience }) => {
         <td>
           <i
             className='far fa-window-close fa-2x'
-            onClick={() => {
-              submitOperation(exp._id)
-            }}
+            onClick={() => { submitOperation(exp._id) }}
           />
         </td>
       </tr>
@@ -114,4 +113,3 @@ const Experience: React.FC<Props> = ({ experience }) => {
 }
 
 export default connect(null, { deleteExperience })(Experience)
-

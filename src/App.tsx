@@ -1,25 +1,27 @@
 import { useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import { Menu, Navbar } from './components'
+import { Navbar } from './components'
 import ApplicationRoutes from './pages/routing/routes'
 import { loadUser } from './actions/auth'
 import './stylesheets/App.css'
-import './stylesheets/menuLayout/style.scss'
-import './stylesheets/mainLayout/App.scss'
-import './stylesheets/authLayout/auth.scss'
-import './stylesheets/formsLayout/forms.scss'
-import { store } from './store'
+import './stylesheets/menuLayout/style.css'
+import './stylesheets/mainLayout/app.css'
+import './stylesheets/authLayout/auth.css'
+import './stylesheets/formsLayout/forms.css'
+import { useAppDispatch } from './hooks'
+import { type AppDispatch } from './store'
 
 const App: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
   useEffect(() => {
-    store.dispatch(loadUser())
+    dispatch(loadUser())
   }, [])
 
   return (
     <BrowserRouter>
       <Navbar />
       <div className='rowLayout'>
-        <Menu />
+        {/* <Menu /> */}
         <ApplicationRoutes />
       </div>
     </BrowserRouter>
