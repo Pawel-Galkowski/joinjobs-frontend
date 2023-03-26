@@ -14,7 +14,6 @@ import { type InitialState } from '../reducers'
 const initialState: InitialState = {
   posts: [],
   post: {},
-  loading: true,
   error: {}
 }
 

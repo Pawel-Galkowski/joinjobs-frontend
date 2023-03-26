@@ -1,42 +1,25 @@
-interface User {
-  name: string
-  avatar: string
-}
+import { useAppSelector } from '../../../hooks'
+import { type ProfileProps } from './types'
 
-interface SocialMediaProps {
-  youtube?: string
-  twitter?: string
-  facebook?: string
-  linkedin?: string
-  instagram?: string
-}
+const ProfileTop: React.FC = () => {
+  const profile: ProfileProps = useAppSelector((state) => state.profile)
 
-interface Props {
-  status: string
-  skills?: string[]
-  company: string
-  location: string // TODO: change to date
-  website: string
-  social?: SocialMediaProps
-  user: User
-  profileImg: string
-}
+  const {
+    status,
+    skills,
+    company,
+    location,
+    website,
+    social,
+    user,
+    profileImg
+  } = profile
 
-const ProfileTop: React.FC<Props> = ({
-  status,
-  skills,
-  company,
-  location,
-  website,
-  social,
-  user: { name, avatar },
-  profileImg
-}) => {
   return (
     <div className="profile-top">
       <div className="profile-profile bg-primary">
-        <img className="round-img" src={profileImg || avatar} alt="avatar" />
-        <h1 className="large">{name}</h1>
+        <img className="round-img" src={profileImg || user?.avatar} alt="avatar" />
+        <h1 className="large">{user?.name}</h1>
         <p className="middle-text">
           {`${status} ${company && `at ${company}`}`}
         </p>

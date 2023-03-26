@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Link, Navigate } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { login } from '../../actions/auth'
+import { postLogin } from '../../actions/auth'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
 interface LoginData {
   email: string
@@ -13,7 +14,9 @@ const initialData: LoginData = {
   password: ''
 }
 
-const Login: React.FC<any> = ({ isAuthenticated }) => {
+const Login: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const isAuthenticated = useAppSelector((state) => state.auth?.isAuthenticated)
   const [formData, setFormData] = useState<LoginData>(initialData)
 
   const onchange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,11 +26,15 @@ const Login: React.FC<any> = ({ isAuthenticated }) => {
     })
   }
 
-  const onSubmit = () => login(formData)
+  const onSubmit = useCallback(() => {
+    dispatch(postLogin({ email: formData.email, password: formData.password }))
+  }, [])
 
-  return isAuthenticated ? (
-    <Navigate to='/dashboard' />
-  ) : (
+  if (isAuthenticated) {
+    return <Navigate to='/dashboard' />
+  }
+
+  return (
     <div className='center-box'>
       <div className='flex-box'>
         <div className='additionalBG'>&nbsp;</div>
@@ -35,7 +42,7 @@ const Login: React.FC<any> = ({ isAuthenticated }) => {
           <div className='form-wrap'>
             <div className='tabs-content'>
               <div id='login-tab-content' className='active'>
-                <form className='login-form' onSubmit={onSubmit} method='post'>
+                <form className='login-form'>
                   <div className='input-box'>
                     <input
                       type='email'
@@ -58,7 +65,12 @@ const Login: React.FC<any> = ({ isAuthenticated }) => {
                       required
                     />
                   </div>
-                  <input type='submit' className='button' value='Login' />
+                  <input
+                    type='button'
+                    className='button'
+                    value='Login'
+                    onClick={onSubmit}
+                  />
                 </form>
                 <div className='help-action'>
                   <p>&nbsp;</p>
@@ -86,8 +98,4 @@ const Login: React.FC<any> = ({ isAuthenticated }) => {
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  isAuthenticated: state.auth.isAuthenticated
-})
-
-export default connect(mapStateToProps, { login })(Login)
+export default Login

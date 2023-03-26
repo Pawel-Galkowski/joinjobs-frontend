@@ -1,6 +1,5 @@
+import setHeaderAuthToken from '../utils/setAuthToken'
 import axios from './axios'
-import { type Dispatch } from 'redux'
-import setAuthToken from '../utils/setAuthToken'
 import setAlert from './setAlert'
 import {
   REGISTER_SUCCESS,
@@ -14,18 +13,19 @@ import {
   ACCOUNT_CONFIRMED,
   RECOVERY_SEND
 } from './types'
-import customDispatch from './customDispatch'
+import { type Dispatch } from 'redux'
 
-export interface Register {
-  name: string
-  email: string
-  password: string
-  role?: string
+const defaultHeaderConfig = {
+  headers: {
+    'Content-Type': 'application/json'
+  }
 }
 
 export const loadUser = () => async (dispatch: Dispatch) => {
   if (localStorage.token) {
-    setAuthToken(localStorage.token)
+    setHeaderAuthToken(localStorage.token)
+  } else {
+    return dispatch({ type: AUTH_ERROR })
   }
 
   try {
@@ -35,23 +35,25 @@ export const loadUser = () => async (dispatch: Dispatch) => {
       payload: res.data
     })
   } catch (err) {
-    dispatch({
-      type: AUTH_ERROR
-    })
+    dispatch({ type: AUTH_ERROR })
   }
+}
+
+export interface Register {
+  name: string
+  email: string
+  password: string
+  role?: string
 }
 
 // register user
 export const register = (reg: Register) => async (dispatch: Dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }
-
   try {
-    const body = JSON.stringify(reg)
-    const res = await axios.post('/api/users', body, config)
+    const res = await axios.post(
+      '/api/users',
+      JSON.stringify(reg),
+      defaultHeaderConfig
+    )
 
     dispatch({
       type: REGISTER_SUCCESS,
@@ -61,7 +63,7 @@ export const register = (reg: Register) => async (dispatch: Dispatch) => {
     const errors = err.response
 
     if (errors) {
-      customDispatch(setAlert('Email is in use', 'danger'))
+      setAlert('Email is in use', 'danger')
     }
 
     dispatch({
@@ -76,37 +78,31 @@ interface Login {
 }
 
 // Login User
-export const login = (data: Login) => async (dispatch: Dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
+export const postLogin =
+  ({ email, password }: Login) =>
+    async (dispatch: Dispatch) => {
+      const body = JSON.stringify({ email, password })
+      try {
+        const res = await axios.post(
+          '/api/auth',
+          body,
+          defaultHeaderConfig
+        )
+        console.log(res)
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res.data
+        })
+      } catch (err: any) {
+        const { errors } = err.response.data
+
+        if (errors) {
+          errors.forEach((error: any) => setAlert(error.msg, 'danger'))
+        }
+
+        dispatch({ type: LOGIN_FAIL })
+      }
     }
-  }
-
-  const body = JSON.stringify(data)
-
-  try {
-    const res = await axios.post('/api/auth', body, config)
-
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: res.data
-    })
-    dispatch(loadUser() as any)
-  } catch (err: any) {
-    const { errors } = err.response.data
-
-    if (errors) {
-      errors.forEach((error: any) =>
-        customDispatch(setAlert(error.msg, 'danger'))
-      )
-    }
-
-    dispatch({
-      type: LOGIN_FAIL
-    })
-  }
-}
 
 interface Authorization {
   email: string
@@ -116,18 +112,11 @@ interface Authorization {
 // Authorize User
 export const authorize =
   (items: Authorization) => async (dispatch: Dispatch) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-
-    const body = JSON.stringify(items.email)
     try {
       const res = await axios.post(
         `/api/users/confirmation/${items.token}`,
-        body,
-        config
+        JSON.stringify(items.email),
+        defaultHeaderConfig
       )
       dispatch({
         type: ACCOUNT_CONFIRMED,
@@ -137,9 +126,7 @@ export const authorize =
       const { errors } = err.response.data
 
       if (errors) {
-        errors.forEach((error: any) =>
-          customDispatch(setAlert(error.msg, 'danger'))
-        )
+        errors.forEach((error: any) => setAlert(error.msg, 'danger'))
       }
 
       dispatch({
@@ -151,15 +138,12 @@ export const authorize =
 // Set Recovery Token
 export const recoveryPassword =
   (email: string) => async (dispatch: Dispatch) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-
-    const body = JSON.stringify({ email })
     try {
-      const res = await axios.post('/api/users/recovery', body, config)
+      const res = await axios.post(
+        '/api/users/recovery',
+        JSON.stringify({ email }),
+        defaultHeaderConfig
+      )
       dispatch({
         type: RECOVERY_SEND,
         payload: res.data
@@ -169,9 +153,7 @@ export const recoveryPassword =
       const { errors } = err.response.data
 
       if (errors) {
-        errors.forEach((error: any) =>
-          customDispatch(setAlert(error.msg, 'danger'))
-        )
+        errors.forEach((error: any) => setAlert(error.msg, 'danger'))
       }
 
       dispatch({
@@ -184,15 +166,12 @@ export const recoveryPassword =
 export const changePassword =
   (email: string, password: string, token: string) =>
     async (dispatch: Dispatch) => {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-
-      const body = JSON.stringify({ email, password })
       try {
-        const res = await axios.post(`/api/users/recovery/${token}`, body, config)
+        const res = await axios.post(
+        `/api/users/recovery/${token}`,
+        JSON.stringify({ email, password }),
+        defaultHeaderConfig
+        )
         dispatch({
           type: ACCOUNT_CONFIRMED,
           payload: res.data
@@ -203,9 +182,7 @@ export const changePassword =
         const { errors } = err.response.data
 
         if (errors) {
-          errors.forEach((error: any) =>
-            customDispatch(setAlert(error.msg, 'danger'))
-          )
+          errors.forEach((error: any) => setAlert(error.msg, 'danger'))
         }
 
         dispatch({
@@ -215,7 +192,7 @@ export const changePassword =
     }
 
 // Log user out
-export const logout = () => (dispatch: Dispatch) => {
+export const logout = () => async (dispatch: Dispatch) => {
   dispatch({ type: LOGOUT })
   dispatch({ type: CLEAR_PROFILE })
 }

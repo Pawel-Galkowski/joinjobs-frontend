@@ -1,4 +1,3 @@
-// import { FC } from 'react';
 import {
   FORM_ERROR,
   GET_FORMS,
@@ -17,17 +16,15 @@ import {
   GET_RESPONSE,
   REMOVE_RESPONSE
 } from '../../actions/types'
-// import { InitialState } from '../reducers';
-// import { Props } from './types';
+import { type FormRedcuerProps } from './types'
 
-const initialState = {
+const initialState: FormRedcuerProps = {
   forms: [],
   form: {},
-  loading: true,
   error: {}
 }
 
-const formReducer = (state = initialState, action: any) => {
+const formReducer = (state: FormRedcuerProps = initialState, action: any) => {
   const { payload, type } = action
 
   switch (type) {

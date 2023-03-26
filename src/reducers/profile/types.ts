@@ -1,4 +1,4 @@
-import { type Action } from '../reducers';
+import { type Action } from '../reducers'
 
 export interface Props {
   state: any

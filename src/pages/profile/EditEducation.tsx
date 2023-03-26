@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import Spinner from '../../components/spinner/Spinner';
+import { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import Spinner from '../../components/spinner/Spinner'
 import {
   getCurrentEducation,
   setCurrentEducation
-} from '../../actions/profile';
+} from '../../actions/profile'
 
 interface Props {
   profile: any
@@ -23,7 +23,7 @@ const EditEducation: React.FC<Props> = ({
     from: '',
     to: '',
     current: false,
-    description: '',
+    description: ''
   })
 
   const [toDateDisabled, toggleDisabled] = useState<any>(false)
@@ -43,15 +43,15 @@ const EditEducation: React.FC<Props> = ({
       to: !loading && dateTo.substring(0, 10),
       current: !loading && profile.current,
       description: !loading && profile.description
-    });
+    })
   }, [])
 
   const onChange = (e: any) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
-    });
-  };
+    })
+  }
 
   const onSubmit = (e: any) => {
     e.preventDefault()
@@ -59,10 +59,10 @@ const EditEducation: React.FC<Props> = ({
   }
 
   return !!loading || !profile
-? (
+    ? (
     <Spinner />
-  )
-: (
+      )
+    : (
     <div className="paddingSection">
       <h1 className="large text-primary"> Change your education </h1>
       <p className="lead">
@@ -168,12 +168,12 @@ const EditEducation: React.FC<Props> = ({
         </Link>
       </form>
     </div>
-  );
-};
+      )
+}
 
 const mapStateToProps = (state: any) => ({
   profile: state.profile
-});
+})
 
 export default connect(mapStateToProps, {
   getCurrentEducation,

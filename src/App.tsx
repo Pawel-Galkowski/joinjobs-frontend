@@ -1,20 +1,20 @@
 import { useEffect } from 'react'
-// import './App.css';
 import { BrowserRouter } from 'react-router-dom'
 import { Navbar } from './components'
 import ApplicationRoutes from './pages/routing/routes'
 import { loadUser } from './actions/auth'
-import './stylesheets/App.scss'
-import './stylesheets/menuLayout/style.scss'
-import './stylesheets/mainLayout/App.scss'
-import './stylesheets/authLayout/auth.scss'
-import './stylesheets/formsLayout/forms.scss'
-import { store } from './store'
+import './stylesheets/App.css'
+import './stylesheets/menuLayout/style.css'
+import './stylesheets/mainLayout/app.css'
+import './stylesheets/authLayout/auth.css'
+import './stylesheets/formsLayout/forms.css'
+import { useAppDispatch } from './hooks'
+import { type AppDispatch } from './store'
 
 const App: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    store.dispatch(loadUser())
+    dispatch(loadUser())
   }, [])
 
   return (

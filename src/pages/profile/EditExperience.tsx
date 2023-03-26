@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import Spinner from '../../components/spinner/Spinner';
+import { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import Spinner from '../../components/spinner/Spinner'
 import {
   getCurrentExperience,
   setCurrentExperience
-} from '../../actions/profile';
+} from '../../actions/profile'
 
 interface Props {
   profile: any
@@ -23,7 +23,7 @@ const EditExperience: React.FC<Props> = ({
     from: '',
     to: '',
     current: false,
-    description: '',
+    description: ''
   })
 
   const [toDateDisabled, toggleDisabled] = useState(false)
@@ -40,7 +40,7 @@ const EditExperience: React.FC<Props> = ({
       to: !loading && dateTo.substring(0, 10),
       current: !loading && profile.current,
       description: !loading && profile.description
-    });
+    })
   }, [])
 
   const { title, location, company, from, to, current, description } = formData
@@ -49,8 +49,8 @@ const EditExperience: React.FC<Props> = ({
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
-    });
-  };
+    })
+  }
 
   const onSubmit = (e: any) => {
     e.preventDefault()
@@ -58,10 +58,10 @@ const EditExperience: React.FC<Props> = ({
   }
 
   return !!loading || !profile
-? (
+    ? (
     <Spinner />
-  )
-: (
+      )
+    : (
     <div className="paddingSection">
       <h1 className="large text-primary"> Change Your experience </h1>
       <p className="lead">
@@ -154,12 +154,12 @@ const EditExperience: React.FC<Props> = ({
         </Link>
       </form>
     </div>
-  );
-};
+      )
+}
 
 const mapStateToProps = (state: any) => ({
   profile: state.profile
-});
+})
 
 export default connect(mapStateToProps, {
   getCurrentExperience,

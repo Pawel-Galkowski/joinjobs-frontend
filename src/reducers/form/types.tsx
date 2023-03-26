@@ -1,6 +1,5 @@
-import { type Action } from '../reducers';
-
-export interface Props {
-  state: any
-  action: Action
+export interface FormRedcuerProps {
+  forms: object[]
+  form: object
+  error: object
 }

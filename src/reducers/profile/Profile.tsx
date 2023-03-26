@@ -1,4 +1,3 @@
-// import { FC } from 'react';
 import {
   GET_PROFILE,
   PROFILE_ERROR,
@@ -16,13 +15,8 @@ import {
   POST_FILE,
   ALL_USERS
 } from '../../actions/types'
-// import { Props } from './types';
 
-const initialState = {
-  loading: true
-}
-
-const profileReducer = (state = initialState, action: any) => {
+const profileReducer = (state: any = {}, action: any) => {
   const { type, payload } = action
 
   switch (type) {

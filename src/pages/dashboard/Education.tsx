@@ -1,8 +1,10 @@
-import { Fragment } from 'react';
-import { connect } from 'react-redux';
-import Moment from 'react-moment';
-import { Link } from 'react-router-dom';
-import { deleteEducation } from '../../actions/profile';
+import { Fragment } from 'react'
+import { connect } from 'react-redux'
+import Moment from 'react-moment'
+import { Link } from 'react-router-dom'
+import { deleteEducation } from '../../actions/profile'
+import { useAppDispatch } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
 interface Edu {
   _id: number
@@ -14,10 +16,11 @@ interface Edu {
 }
 
 const Education: React.FC<any> = ({ education }) => {
+  const dispatch: AppDispatch = useAppDispatch()
   const submitOperation = (id: number) => {
     // eslint-disable-next-line no-alert
     if (window.confirm('Do you really want to remove that experience?')) {
-      deleteEducation(id)
+      dispatch(deleteEducation(id))
     }
   }
 

@@ -1,13 +1,14 @@
-import { useEffect, Fragment } from 'react'
-import { connect } from 'react-redux'
+import { useEffect } from 'react'
 import Spinner from '../../components/spinner/Spinner'
 import { getProfiles, getUsers, getAllusers } from '../../actions/profile'
-import { getPosts as getPostsAction } from '../../actions/post'
+import { getPosts } from '../../actions/post'
 import AdminPosts from '../admin/LastPosts'
 import AdminProfiles from '../admin/LastProfiles'
 import AddUsers from '../admin/AddUsers'
 import AdminUsers from '../admin/LastUsers'
 import AllUsers from '../admin/AllUsers'
+import { useMultipleDispatch } from '../../utils/useMultipleDispatch'
+import { store } from '../../store'
 
 const propComparator = (propName: any) => (a: any, b: any) => {
   if (a[propName] === b[propName]) {
@@ -19,25 +20,20 @@ const propComparator = (propName: any) => (a: any, b: any) => {
   return 1
 }
 
-interface Props {
-  profile?: any
-  getPosts?: any
-  post?: any
-}
-
-const Admin: React.FC<Props> = ({
-  profile: { profiles, profile, users2, allUsers, loading },
-  getPosts,
-  post: { posts }
-}) => {
+const Admin: React.FC = () => {
+  const { profile, post } = store.getState()
+  const { posts } = post
   useEffect(() => {
-    getPosts()
-    getProfiles()
-    getUsers()
-    getAllusers()
+    useMultipleDispatch([
+      getPosts(),
+      getProfiles(),
+      getUsers(),
+      getAllusers()
+    ]
+    )
   }, [getPosts, getProfiles, getUsers, getAllusers])
 
-  return loading && profile === null ? (
+  return profile.loading && profile === null ? (
     <Spinner />
   ) : (
     <div className='paddingSection'>
@@ -46,10 +42,10 @@ const Admin: React.FC<Props> = ({
           <div className='admin-box'>
             <div className='inside-box'>
               <h2 className='box-header'>Last added profiles</h2>
-              {profiles === undefined ? (
+              {profile.profiles === undefined ? (
                 <Spinner />
               ) : (
-                profiles
+                profile.profiles
                   .map((item: any) => (
                     <AdminProfiles key={item._id} profile={item} />
                   ))
@@ -76,11 +72,11 @@ const Admin: React.FC<Props> = ({
           <div className='admin-box'>
             <div className='inside-box'>
               <h2 className='box-header'>Last added users without profile</h2>
-              {users2 === undefined ? (
+              {profile.users2 === undefined ? (
                 <Spinner />
               ) : (
                 <>
-                  {users2
+                  {profile.users2
                     .map((usrs: any) => (
                       <AdminUsers key={usrs._id} usrs={usrs} />
                     ))
@@ -101,11 +97,11 @@ const Admin: React.FC<Props> = ({
           <div className='admin-box'>
             <div className='inside-box'>
               <h2 className='box-header'>All Users</h2>
-              {allUsers === undefined ? (
+              {profile.allUsers === undefined ? (
                 <Spinner />
               ) : (
                 <>
-                  {allUsers
+                  {profile.allUsers
                     .map((usrs: any) => <AllUsers key={usrs._id} usrs={usrs} />)
                     .sort(propComparator('date'))
                     .slice(0, 5)}
@@ -125,14 +121,4 @@ const Admin: React.FC<Props> = ({
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  profile: state.profile,
-  post: state.post
-})
-
-export default connect(mapStateToProps, {
-  getPostsAction,
-  getProfiles,
-  getUsers,
-  getAllusers
-})(Admin)
+export default Admin

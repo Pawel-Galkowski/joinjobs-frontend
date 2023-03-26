@@ -1,5 +1,5 @@
-import axios from './axios'
 import { type Dispatch } from 'redux'
+import axios from './axios'
 import setAlert from './setAlert'
 import {
   GET_POSTS,
@@ -11,7 +11,6 @@ import {
   ADD_COMMENT,
   REMOVE_COMMENT
 } from './types'
-import customDispatch from './customDispatch'
 
 export const getPosts = () => async (dispatch: Dispatch) => {
   try {
@@ -70,7 +69,7 @@ export const deletePost = (id: number) => async (dispatch: Dispatch) => {
       payload: { id }
     })
 
-    customDispatch(setAlert('Post Removed', 'success'))
+    setAlert('Post Removed', 'success')
   } catch (err: any) {
     dispatch({
       type: POST_ERROR,
@@ -93,7 +92,7 @@ export const addPost = (formData: string) => async (dispatch: Dispatch) => {
       payload: res.data
     })
 
-    customDispatch(setAlert('Post Created', 'success'))
+    setAlert('Post Created', 'success')
   } catch (err: any) {
     dispatch({
       type: POST_ERROR,
@@ -137,7 +136,7 @@ export const addComment =
         payload: res.data
       })
 
-      customDispatch(setAlert('Comment added', 'success'))
+      setAlert('Comment added', 'success')
     } catch (err: any) {
       dispatch({
         type: POST_ERROR,
@@ -156,7 +155,7 @@ export const deleteComment =
         payload: commentId
       })
 
-      customDispatch(setAlert('Comment removed', 'success'))
+      setAlert('Comment removed', 'success')
     } catch (err: any) {
       dispatch({
         type: POST_ERROR,

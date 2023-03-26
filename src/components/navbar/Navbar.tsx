@@ -16,15 +16,15 @@ const Navbar: React.FC<Props> = ({
 
   const showProfile = (
     <li>
-      <Link to={`/profile/${user._id}`}>
+      <Link to={`/profile/${user?._id}`}>
         <i className='fas fa-user' />
         {'Profile '}
       </Link>
     </li>
   )
 
-  const resolveRole = (): JSX.Element => {
-    if (user.role === 'admin' && isAuthenticated) {
+  const ResolveRole = (): JSX.Element => {
+    if (user?.role === 'admin' && isAuthenticated) {
       return (
         <ul>
           <li>
@@ -78,7 +78,9 @@ const Navbar: React.FC<Props> = ({
           JoinJobs
         </Link>
       </h1>
-      <div className='mainNav'>{resolveRole()}</div>
+      <div className='mainNav'>
+        <ResolveRole />
+      </div>
       <div className='menu-wrap'>
         <input type='checkbox' className='toggler' />
         <div className='hamburger'>
@@ -86,7 +88,9 @@ const Navbar: React.FC<Props> = ({
         </div>
         <div className='menu'>
           <div>
-            <div>{resolveRole()}</div>
+            <div>
+              <ResolveRole />
+            </div>
           </div>
         </div>
       </div>

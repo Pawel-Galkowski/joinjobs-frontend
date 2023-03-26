@@ -1,5 +1,4 @@
 import axios from './axios'
-import { type Dispatch } from 'redux'
 import setAlert from './setAlert'
 
 import {
@@ -20,8 +19,8 @@ import {
   POST_EDUCATION,
   ALL_USERS
 } from './types'
-import customDispatch from './customDispatch'
 import { type ProfileSchema } from '../types'
+import { type Dispatch } from 'redux'
 
 export const getCurrentProfile = () => async (dispatch: Dispatch) => {
   try {
@@ -41,9 +40,9 @@ export const getCurrentProfile = () => async (dispatch: Dispatch) => {
 }
 
 export const getCurrentExperience =
-  (ExpId: number) => async (dispatch: Dispatch) => {
+  (expId: number) => async (dispatch: Dispatch) => {
     try {
-      const res = await axios.get(`/api/profile/experience/${ExpId}`)
+      const res = await axios.get(`/api/profile/experience/${expId}`)
 
       dispatch({
         type: GET_EXPERIENCE,
@@ -59,7 +58,7 @@ export const getCurrentExperience =
   }
 
 export const setCurrentExperience =
-  (ExpId: number, formData: any) => async (dispatch: Dispatch) => {
+  (expId: number, formData: any) => async (dispatch: Dispatch) => {
     const config = {
       headers: {
         'Content-Type': 'application/json'
@@ -67,7 +66,7 @@ export const setCurrentExperience =
     }
     try {
       const res = await axios.post(
-        `/api/profile/experience/${ExpId}`,
+        `/api/profile/experience/${expId}`,
         formData,
         config
       )
@@ -86,9 +85,9 @@ export const setCurrentExperience =
   }
 
 export const getCurrentEducation =
-  (EduId: number) => async (dispatch: Dispatch) => {
+  (eduId: number) => async (dispatch: Dispatch) => {
     try {
-      const res = await axios.get(`/api/profile/education/${EduId}`)
+      const res = await axios.get(`/api/profile/education/${eduId}`)
 
       dispatch({
         type: GET_EDUCATION,
@@ -104,7 +103,7 @@ export const getCurrentEducation =
   }
 
 export const setCurrentEducation =
-  (EduId: number, formData: JSON) => async (dispatch: Dispatch) => {
+  (eduId: number, formData: JSON) => async (dispatch: Dispatch) => {
     const config = {
       headers: {
         'Content-Type': 'application/json'
@@ -112,7 +111,7 @@ export const setCurrentEducation =
     }
     try {
       const res = await axios.post(
-        `/api/profile/education/${EduId}`,
+        `/api/profile/education/${eduId}`,
         formData,
         config
       )
@@ -181,7 +180,7 @@ export const getAllusers = () => async (dispatch: Dispatch) => {
 }
 
 export const getProfileById =
-  (userId: number) => async (dispatch: Dispatch) => {
+  (userId: string) => async (dispatch: Dispatch) => {
     dispatch({ type: CLEAR_PROFILE })
     try {
       const res = await axios.get(`/api/profile/user/${userId}`)
@@ -232,9 +231,7 @@ export const createProfile =
           payload: res.data
         })
 
-        customDispatch(
-          setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success')
-        )
+        setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success')
 
         if (!edit) {
           history.push('/dashboard')
@@ -243,9 +240,7 @@ export const createProfile =
         const { errors } = err.response.data
 
         if (errors) {
-          errors.forEach((error: any) =>
-            customDispatch(setAlert(error.msg, 'danger'))
-          )
+          errors.forEach((error: any) => setAlert(error.msg, 'danger'))
         }
 
         dispatch({
@@ -271,15 +266,13 @@ export const addExperience =
         payload: res.data
       })
 
-      customDispatch(setAlert('Experience Added', 'success'))
+      setAlert('Experience Added', 'success')
       history.push('/dashboard')
     } catch (err: any) {
       const { errors } = err.response.data
 
       if (errors) {
-        errors.forEach((error: any) =>
-          customDispatch(setAlert(error.msg, 'danger'))
-        )
+        errors.forEach((error: any) => setAlert(error.msg, 'danger'))
       }
 
       dispatch({
@@ -306,9 +299,7 @@ export const editEducation =
           payload: res.data
         })
 
-        customDispatch(
-          setAlert(edit ? 'Profile Updated' : 'Education Added', 'success')
-        )
+        setAlert(edit ? 'Profile Updated' : 'Education Added', 'success')
 
         if (!edit) {
           history.push('/dashboard')
@@ -317,9 +308,7 @@ export const editEducation =
         const { errors } = err.response.data
 
         if (errors) {
-          errors.forEach((error: any) =>
-            customDispatch(setAlert(error.msg, 'danger'))
-          )
+          errors.forEach((error: any) => setAlert(error.msg, 'danger'))
         }
 
         dispatch({
@@ -345,15 +334,13 @@ export const addEducation =
         payload: res.data
       })
 
-      customDispatch(setAlert('Education Added', 'success'))
+      setAlert('Education Added', 'success')
       history.push('/dashboard')
     } catch (err: any) {
       const { errors } = err.response.data
 
       if (errors) {
-        errors.forEach((error: any) =>
-          customDispatch(setAlert(error.msg, 'danger'))
-        )
+        errors.forEach((error: any) => setAlert(error.msg, 'danger'))
       }
 
       dispatch({
@@ -372,7 +359,7 @@ export const deleteExperience = (id: number) => async (dispatch: Dispatch) => {
       payload: res.data
     })
 
-    customDispatch(setAlert('Experience Removed', 'success'))
+    setAlert('Experience Removed', 'success')
   } catch (err: any) {
     dispatch({
       type: PROFILE_ERROR,
@@ -389,8 +376,7 @@ export const deleteEducation = (id: number) => async (dispatch: Dispatch) => {
       type: UPDATE_PROFILE,
       payload: res.data
     })
-
-    customDispatch(setAlert('Education Removed', 'success'))
+    setAlert('Education Removed', 'success')
   } catch (err: any) {
     dispatch({
       type: PROFILE_ERROR,
@@ -401,52 +387,46 @@ export const deleteEducation = (id: number) => async (dispatch: Dispatch) => {
 
 export const deleteUserAccount =
   (userId: number) => async (dispatch: Dispatch) => {
-    // eslint-disable-next-line no-alert
-    if (window.confirm('Are you sure?')) {
-      try {
-        await axios.delete(`/api/profile/${userId}`)
-
-        dispatch({
-          type: CLEAR_PROFILE
-        })
-
-        dispatch({
-          type: ACCOUNT_DELETED2
-        })
-
-        customDispatch(setAlert('Account permamently deleted', 'warning'))
-      } catch (err: any) {
-        dispatch({
-          type: PROFILE_ERROR,
-          payload: {
-            msg: err.response.statusText,
-            status: err.response.status
-          }
-        })
-      }
-    }
-  }
-
-export const deleteAccount = () => async (dispatch: Dispatch) => {
-  // eslint-disable-next-line no-alert
-  if (window.confirm('Are you sure?')) {
     try {
-      await axios.delete('/api/profile/')
+      await axios.delete(`/api/profile/${userId}`)
 
       dispatch({
         type: CLEAR_PROFILE
       })
 
       dispatch({
-        type: ACCOUNT_DELETED
+        type: ACCOUNT_DELETED2
       })
 
-      customDispatch(setAlert('Account permamently deleted', 'warning'))
+      setAlert('Account permamently deleted', 'warning')
     } catch (err: any) {
       dispatch({
         type: PROFILE_ERROR,
-        payload: { msg: err.response.statusText, status: err.response.status }
+        payload: {
+          msg: err.response.statusText,
+          status: err.response.status
+        }
       })
     }
+  }
+
+export const deleteAccount = () => async (dispatch: Dispatch) => {
+  try {
+    await axios.delete('/api/profile/')
+
+    dispatch({
+      type: CLEAR_PROFILE
+    })
+
+    dispatch({
+      type: ACCOUNT_DELETED
+    })
+
+    setAlert('Account permamently deleted', 'warning')
+  } catch (err: any) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    })
   }
 }

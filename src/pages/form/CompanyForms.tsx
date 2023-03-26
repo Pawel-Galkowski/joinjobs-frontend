@@ -25,7 +25,7 @@ const CompanyForms: React.FC<Props> = ({
   company,
   formTable: { _id, responses, body },
   admins,
-  name,
+  name
 }) => {
   const setUpBody =
     body?.body?.length > 100 ? `${body.body.substring(0, 97)}...` : body.body
@@ -74,8 +74,7 @@ const CompanyForms: React.FC<Props> = ({
 }
 
 const mapStateToProps = (state: any) => ({
-  auth: state.auth,
+  auth: state.auth
 })
 
 export default connect(mapStateToProps, { removeForm })(CompanyForms)
-

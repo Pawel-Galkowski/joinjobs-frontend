@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Spinner from '../../components/spinner/Spinner'
 import { deleteUserAccount } from '../../actions/profile'
+import { useCallback } from 'react'
 
 interface User {
   _id: number
@@ -26,8 +27,14 @@ const AdminProfiles: React.FC<Props> = ({
     status,
     company
   }
-}) =>
-  loading ? (
+}) => {
+  const submitOperation = useCallback(async () => {
+    // eslint-disable-next-line no-alert
+    if (window.confirm('Do you really want to remove this account?')) {
+      await deleteUserAccount(_id)
+    }
+  }, [])
+  return loading ? (
     <Spinner />
   ) : (
     <div className='profile-admin bg-white'>
@@ -53,7 +60,7 @@ const AdminProfiles: React.FC<Props> = ({
         </Link>
         <button
           className='btn btn-danger'
-          onClick={() => deleteUserAccount(_id)}
+          onClick={() => submitOperation}
           type='button'
         >
           Delete User
@@ -61,5 +68,6 @@ const AdminProfiles: React.FC<Props> = ({
       </div>
     </div>
   )
+}
 
 export default connect(null, { deleteUserAccount })(AdminProfiles)

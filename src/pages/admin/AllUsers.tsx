@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import { deleteUserAccount } from '../../actions/profile'
 import Spinner from '../../components/spinner/Spinner'
+import { useCallback } from 'react'
 
 interface Usrs {
   confirmed: boolean
@@ -19,6 +20,13 @@ interface Props {
 const AdminUsers: React.FC<Props> = ({
   usrs: { confirmed, _id, name, email, date, role, loading }
 }) => {
+  const submitOperation = useCallback(() => {
+    // eslint-disable-next-line no-alert
+    if (window.confirm('Do you really want to remove this account?')) {
+      deleteUserAccount(_id)
+    }
+  }, [])
+
   return loading ? (
     <Spinner />
   ) : (
@@ -50,7 +58,7 @@ const AdminUsers: React.FC<Props> = ({
       </div>
       <button
         className='btn btn-danger'
-        onClick={() => deleteUserAccount(_id)}
+        onClick={() => submitOperation}
         type='button'
       >
         Delete Account

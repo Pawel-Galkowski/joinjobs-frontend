@@ -1,5 +1,5 @@
-import axios from './axios'
 import { type Dispatch } from 'redux'
+import axios from './axios'
 import setAlert from './setAlert'
 import {
   FORM_ERROR,
@@ -16,7 +16,6 @@ import {
   REMOVE_COMPANY,
   REMOVE_RESPONSE
 } from './types'
-import customDispatch from './customDispatch'
 
 interface CreateCompanyData {
   company: string
@@ -38,7 +37,7 @@ export const addCompany =
         payload: res.data
       })
 
-      customDispatch(setAlert('Company Created', 'success'))
+      setAlert('Company Created', 'success')
     } catch (err: any) {
       dispatch({
         type: FORM_ERROR,
@@ -110,7 +109,7 @@ export const addCompanyForm =
         payload: res.data
       })
 
-      customDispatch(setAlert('Form Created', 'success'))
+      setAlert('Form Created', 'success')
     } catch (err: any) {
       dispatch({
         type: FORM_ERROR,
@@ -144,7 +143,7 @@ export const removeForm =
         type: REMOVE_FORM,
         payload: res.data
       })
-      customDispatch(setAlert('Form Removed', 'success'))
+      setAlert('Form Removed', 'success')
     } catch (err: any) {
       window.location.reload()
       dispatch({
@@ -176,7 +175,7 @@ export const addResponseToForm =
           payload: res.data
         })
 
-        customDispatch(setAlert('Response send', 'success'))
+        setAlert('Response send', 'success')
       } catch (err: any) {
         dispatch({
           type: FORM_ERROR,

@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Spinner from '../../../components/spinner/Spinner'
 import ProfileTop from '../ProfileHeader/ProfileTop'
 import { getProfileById } from '../../../actions/profile'
@@ -8,19 +7,24 @@ import ProfileAbout from '../About/ProfileAbout'
 import ProfileExperience from '../Experience/ProfileExp'
 import ProfileEducation from '../Education/ProfileEdu'
 import ProfileGithub from '../Github/ProfileGithub'
+import { useAppDispatch, useAppSelector } from '../../../hooks'
+import { type AppDispatch } from '../../../store'
 
-const Profile: React.FC<any> = ({
-  match,
-  profile: { profile, loading },
-  auth
-}) => {
+const Profile: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const auth = useAppSelector((state) => state.auth)
+  const profile = useAppSelector((state) => state.profile)
+  const { id } = useParams()
   useEffect(() => {
-    getProfileById(match.params.id)
-  }, [getProfileById, match.params.id])
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    dispatch(getProfileById(id!))
+  }, [])
 
-  return loading ? (
-    <Spinner />
-  ) : (
+  if (profile.loading) {
+    return <Spinner />
+  }
+
+  return (
     <div className='paddingSection'>
       {profile === null || profile === undefined ? (
         <Spinner />
@@ -34,19 +38,19 @@ const Profile: React.FC<any> = ({
               auth.isAuthenticated &&
               !auth.loading &&
               auth.user &&
-              auth.user._id === profile.user._id && (
+              auth.user?._id === profile.user?._id && (
                 <Link to='/edit-profile' className='btn btn-dark'>
                   Edit profile
                 </Link>
             )}
           </div>
           <div className='profile-page'>
-            <ProfileTop {...profile} />
-            <ProfileAbout profile={profile} />
+            <ProfileTop />
+            <ProfileAbout />
             <div className='flex-row'>
               <div className='profile-exp bg-white p2'>
                 <h2 className='text-primary'>Experience</h2>
-                {profile.experience.length > 0 ? (
+                {profile.experience?.length > 0 ? (
                   <>
                     {profile.experience.map((experience: any) => (
                       <ProfileExperience
@@ -61,7 +65,7 @@ const Profile: React.FC<any> = ({
               </div>
               <div className='profile-edu bg-white p-2'>
                 <h2 className='text-primary'>Education</h2>
-                {profile.education.length > 0 ? (
+                {profile.education?.length > 0 ? (
                   <>
                     {profile.education.map((education: any) => (
                       <ProfileEducation
@@ -85,9 +89,4 @@ const Profile: React.FC<any> = ({
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  profile: state.profile,
-  auth: state.auth
-})
-
-export default connect(mapStateToProps, { getProfileById })(Profile)
+export default Profile
