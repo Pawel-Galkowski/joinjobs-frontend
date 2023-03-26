@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { login } from '../../actions/auth'
-import dispatch from '../../actions/customDispatch'
+import { useAppDispatch } from '../../hooks'
 
 interface LoginData {
   email: string
@@ -15,7 +14,7 @@ const initialData: LoginData = {
   password: ''
 }
 
-const Login: React.FC<any> = ({ isAuthenticated }) => {
+const Login = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   const [formData, setFormData] = useState<LoginData>(initialData)
 
   const onchange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,9 +24,14 @@ const Login: React.FC<any> = ({ isAuthenticated }) => {
     })
   }
 
-  const onSubmit = useCallback(() => {
-    dispatch(login(formData))
-  }, [])
+  const onSubmit = (e: any) => {
+    const dispatch = useAppDispatch()
+    e.preventDefault()
+    console.log('submited')
+    dispatch(
+      login({ email: formData.email, password: formData.password })
+    )
+  }
 
   return isAuthenticated ? (
     <Navigate to='/dashboard' />
@@ -39,7 +43,7 @@ const Login: React.FC<any> = ({ isAuthenticated }) => {
           <div className='form-wrap'>
             <div className='tabs-content'>
               <div id='login-tab-content' className='active'>
-                <form className='login-form' onSubmit={onSubmit} method='post'>
+                <form className='login-form' onSubmit={onSubmit}>
                   <div className='input-box'>
                     <input
                       type='email'
@@ -90,8 +94,8 @@ const Login: React.FC<any> = ({ isAuthenticated }) => {
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  isAuthenticated: state.auth.isAuthenticated
+const mapStateToProps = ({ auth }: any) => ({
+  isAuthenticated: auth.isAuthenticated
 })
 
 export default connect(mapStateToProps, { login })(Login)

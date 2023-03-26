@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { useEffect, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -6,7 +5,6 @@ import Spinner from '../../components/spinner/Spinner'
 import { getCurrentProfile, deleteAccount } from '../../actions/profile'
 import Education from './Education'
 import Experience from './Experience'
-import dispatch from '../../actions/customDispatch'
 
 interface Auth {
   user: any
@@ -27,13 +25,13 @@ const Dashboard: React.FC<Props> = ({
   profile: { profile, loading }
 }) => {
   useEffect(() => {
-    dispatch(getCurrentProfile())
+    getCurrentProfile()
   }, [])
 
-  const submitOperation = useCallback(async () => {
+  const submitOperation = useCallback(() => {
     // eslint-disable-next-line no-alert
     if (window.confirm('Do you really want to remove your account?')) {
-      await deleteAccount()
+      deleteAccount()
     }
   }, [])
 

@@ -3,17 +3,16 @@ import { BrowserRouter } from 'react-router-dom'
 import { Menu, Navbar } from './components'
 import ApplicationRoutes from './pages/routing/routes'
 import { loadUser } from './actions/auth'
-import './stylesheets/App.scss'
+import './stylesheets/App.css'
 import './stylesheets/menuLayout/style.scss'
 import './stylesheets/mainLayout/App.scss'
 import './stylesheets/authLayout/auth.scss'
 import './stylesheets/formsLayout/forms.scss'
-import { useAppDispatch } from './hooks'
+import { store } from './store'
 
 const App: React.FC = () => {
-  const dispatch = useAppDispatch()
   useEffect(() => {
-    dispatch(loadUser())
+    store.dispatch(loadUser())
   }, [])
 
   return (

@@ -5,14 +5,13 @@ import { logout } from '../../actions/auth'
 import { getCurrentProfile } from '../../actions/profile'
 import { type Props } from './types'
 import { Spinner } from '..'
-import customDispatch from '../../actions/customDispatch'
 
 const Navbar: React.FC<Props> = ({
   auth: { isAuthenticated, loading, user },
   profile: { profile }
 }) => {
   useEffect(() => {
-    customDispatch(getCurrentProfile())
+    getCurrentProfile()
   }, [])
 
   const showProfile = (

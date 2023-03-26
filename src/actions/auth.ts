@@ -1,5 +1,5 @@
+import setHeaderAuthToken from '../utils/setAuthToken'
 import axios from './axios'
-import setAuthToken from '../utils/setAuthToken'
 import setAlert from './setAlert'
 import {
   REGISTER_SUCCESS,
@@ -13,24 +13,24 @@ import {
   ACCOUNT_CONFIRMED,
   RECOVERY_SEND
 } from './types'
-import dispatch from './customDispatch'
-import { useAppDispatch } from '../hooks'
+import { type Dispatch } from 'redux'
 
-export interface Register {
-  name: string
-  email: string
-  password: string
-  role?: string
+const defaultHeaderConfig = {
+  headers: {
+    'Content-Type': 'application/json'
+  }
 }
 
-export const loadUser = () => async () => {
-  const dispatch = useAppDispatch()
-  // if (localStorage.token) {
-  //   setAuthToken(localStorage.token)
-  // }
-  setAuthToken(
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNWRmZTMzOTQ4ZjM3NjA0Nzc0YzE3NzI2In0sImlhdCI6MTY3OTc3MDUxOSwiZXhwIjoxNjgwMTMwNTE5fQ.NI0bagQfVuJIiJ6HQ1QfljrmA97c7CEBrTdhAj65dPw'
-  )
+export const loadUser = () => async (dispatch: Dispatch) => {
+  // setAuthToken(
+  //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNWRmZTMzOTQ4ZjM3NjA0Nzc0YzE3NzI2In0sImlhdCI6MTY3OTc3MDUxOSwiZXhwIjoxNjgwMTMwNTE5fQ.NI0bagQfVuJIiJ6HQ1QfljrmA97c7CEBrTdhAj65dPw'
+  // )
+
+  if (localStorage.token) {
+    setHeaderAuthToken(localStorage.token)
+  } else {
+    return dispatch({ type: AUTH_ERROR })
+  }
 
   try {
     const res = await axios.get('/api/auth')
@@ -39,22 +39,27 @@ export const loadUser = () => async () => {
       payload: res.data
     })
   } catch (err) {
+    console.log('error')
     dispatch({ type: AUTH_ERROR })
     console.error(err)
   }
 }
 
-// register user
-export const register = async (reg: Register) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }
+export interface Register {
+  name: string
+  email: string
+  password: string
+  role?: string
+}
 
+// register user
+export const register = (reg: Register) => async (dispatch: Dispatch) => {
   try {
-    const body = JSON.stringify(reg)
-    const res = await axios.post('/api/users', body, config)
+    const res = await axios.post(
+      '/api/users',
+      JSON.stringify(reg),
+      defaultHeaderConfig
+    )
 
     dispatch({
       type: REGISTER_SUCCESS,
@@ -79,32 +84,33 @@ interface Login {
 }
 
 // Login User
-export const login = async (data: Login) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
+export const login =
+  ({ email, password }: Login) =>
+    async (dispatch: Dispatch) => {
+      console.log('login')
+      const body = JSON.stringify({ email, password })
+      console.log(body)
+      try {
+        const res = await axios.post(
+          '/api/auth',
+          body,
+          defaultHeaderConfig
+        )
+        console.log(res)
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res.data
+        })
+      } catch (err: any) {
+        const { errors } = err.response.data
+
+        if (errors) {
+          errors.forEach((error: any) => setAlert(error.msg, 'danger'))
+        }
+
+        dispatch({ type: LOGIN_FAIL })
+      }
     }
-  }
-  const body = JSON.stringify(data)
-  try {
-    const res = await axios.post('/api/auth', body, config)
-
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: res.data
-    })
-    dispatch(loadUser() as any)
-  } catch (err: any) {
-    console.log('catch')
-    const { errors } = err.response.data
-
-    if (errors) {
-      errors.forEach((error: any) => setAlert(error.msg, 'danger'))
-    }
-
-    dispatch({ type: LOGIN_FAIL })
-  }
-}
 
 interface Authorization {
   email: string
@@ -112,102 +118,89 @@ interface Authorization {
 }
 
 // Authorize User
-export const authorize = async (items: Authorization) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
+export const authorize =
+  (items: Authorization) => async (dispatch: Dispatch) => {
+    try {
+      const res = await axios.post(
+        `/api/users/confirmation/${items.token}`,
+        JSON.stringify(items.email),
+        defaultHeaderConfig
+      )
+      dispatch({
+        type: ACCOUNT_CONFIRMED,
+        payload: res.data
+      })
+    } catch (err: any) {
+      const { errors } = err.response.data
+
+      if (errors) {
+        errors.forEach((error: any) => setAlert(error.msg, 'danger'))
+      }
+
+      dispatch({
+        type: AUTH_ERROR
+      })
     }
   }
-
-  const body = JSON.stringify(items.email)
-  try {
-    const res = await axios.post(
-      `/api/users/confirmation/${items.token}`,
-      body,
-      config
-    )
-    dispatch({
-      type: ACCOUNT_CONFIRMED,
-      payload: res.data
-    })
-  } catch (err: any) {
-    const { errors } = err.response.data
-
-    if (errors) {
-      errors.forEach((error: any) => setAlert(error.msg, 'danger'))
-    }
-
-    dispatch({
-      type: AUTH_ERROR
-    })
-  }
-}
 
 // Set Recovery Token
-export const recoveryPassword = async (email: string) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
+export const recoveryPassword =
+  (email: string) => async (dispatch: Dispatch) => {
+    try {
+      const res = await axios.post(
+        '/api/users/recovery',
+        JSON.stringify({ email }),
+        defaultHeaderConfig
+      )
+      dispatch({
+        type: RECOVERY_SEND,
+        payload: res.data
+      })
+      setAlert('Email send', 'success')
+    } catch (err: any) {
+      const { errors } = err.response.data
+
+      if (errors) {
+        errors.forEach((error: any) => setAlert(error.msg, 'danger'))
+      }
+
+      dispatch({
+        type: AUTH_ERROR
+      })
     }
   }
-
-  const body = JSON.stringify({ email })
-  try {
-    const res = await axios.post('/api/users/recovery', body, config)
-    dispatch({
-      type: RECOVERY_SEND,
-      payload: res.data
-    })
-    setAlert('Email send', 'success')
-  } catch (err: any) {
-    const { errors } = err.response.data
-
-    if (errors) {
-      errors.forEach((error: any) => setAlert(error.msg, 'danger'))
-    }
-
-    dispatch({
-      type: AUTH_ERROR
-    })
-  }
-}
 
 // Set new password
-export const changePassword = async (
-  email: string,
-  password: string,
-  token: string
-) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
+export const changePassword =
+  (email: string, password: string, token: string) =>
+    async (dispatch: Dispatch) => {
+      try {
+        const res = await axios.post(
+        `/api/users/recovery/${token}`,
+        JSON.stringify({ email, password }),
+        defaultHeaderConfig
+        )
+        dispatch({
+          type: ACCOUNT_CONFIRMED,
+          payload: res.data
+        })
+
+        setAlert('Password Changed', 'success')
+      } catch (err: any) {
+        const { errors } = err.response.data
+
+        if (errors) {
+          errors.forEach((error: any) => setAlert(error.msg, 'danger'))
+        }
+
+        dispatch({
+          type: AUTH_ERROR
+        })
+      }
     }
-  }
-
-  const body = JSON.stringify({ email, password })
-  try {
-    const res = await axios.post(`/api/users/recovery/${token}`, body, config)
-    dispatch({
-      type: ACCOUNT_CONFIRMED,
-      payload: res.data
-    })
-
-    setAlert('Password Changed', 'success')
-  } catch (err: any) {
-    const { errors } = err.response.data
-
-    if (errors) {
-      errors.forEach((error: any) => setAlert(error.msg, 'danger'))
-    }
-
-    dispatch({
-      type: AUTH_ERROR
-    })
-  }
-}
 
 // Log user out
-export const logout = () => {
+export const logout = () => async (dispatch: Dispatch) => {
   dispatch({ type: LOGOUT })
   dispatch({ type: CLEAR_PROFILE })
 }
