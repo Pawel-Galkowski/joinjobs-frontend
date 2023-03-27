@@ -353,7 +353,7 @@ button {
 
 /* Landing Page */
 .landing {
-  position: relative;
+  display: block;
   background-image: url('../assets/images/showcase.jpg');
   background-repeat: no-repeat;
   background-origin: center;

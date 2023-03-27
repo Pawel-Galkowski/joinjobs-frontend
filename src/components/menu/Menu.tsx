@@ -3,16 +3,18 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import ProfileActions from '../../pages/dashboard/DashboardActions'
 import { getCurrentProfile } from '../../actions/profile'
-import { type Props, type ArrowType } from './types'
+import { type ArrowType } from './types'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
-const Menu: React.FC<Props> = ({
-  auth: { isAuthenticated, loading, user },
-  profile: { profile }
-}) => {
+const Menu: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const { profile } = useAppSelector((state) => state.profile)
+  const { isAuthenticated, loading, user } = useAppSelector((state) => state.auth)
   const [arrow, setArrow] = useState<ArrowType>('>')
 
   useEffect(() => {
-    getCurrentProfile()
+    dispatch(getCurrentProfile())
   }, [])
 
   if (loading || !user || !isAuthenticated) return null
