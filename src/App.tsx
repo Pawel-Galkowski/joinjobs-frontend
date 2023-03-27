@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import { Navbar } from './components'
+import { Menu, Navbar } from './components'
 import ApplicationRoutes from './pages/routing/routes'
 import { loadUser } from './actions/auth'
 import './stylesheets/App.css'
@@ -21,7 +21,7 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Navbar />
       <div className='rowLayout'>
-        {/* <Menu /> */}
+        <Menu />
         <ApplicationRoutes />
       </div>
     </BrowserRouter>
