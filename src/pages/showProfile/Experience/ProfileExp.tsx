@@ -1,9 +1,10 @@
 import Moment from 'react-moment'
 
-const ProfileExp: React.FC<{
+interface Experience {
   experience: any
-}> = ({ experience: { title, company, from, to, location, description } }) => {
-  return (
+}
+
+const ProfileExp: React.FC<Experience> = ({ experience: { title, company, from, to, location, description } }) => (
     <div>
       <h3 className='text-dark'>{company}</h3>
       <p>
@@ -18,13 +19,12 @@ const ProfileExp: React.FC<{
         <strong>Location: </strong>
         {location}
       </p>
-      {description === '' ? null : (
+      {!!description.length && (
         <p>
           <strong>Description: </strong> {description}
         </p>
       )}
     </div>
-  )
-}
+)
 
 export default ProfileExp

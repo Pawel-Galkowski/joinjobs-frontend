@@ -1,40 +1,29 @@
-import { Fragment } from 'react'
-import { connect } from 'react-redux'
+import { Fragment, useCallback } from 'react'
 import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
 import { deleteExperience } from '../../actions/profile'
-import { useAppDispatch } from '../../hooks'
+import { useAppDispatch, useAppSelector } from '../../hooks'
 import { type AppDispatch } from '../../store'
+import { Spinner } from '../../components'
+import { type ExperienceProps } from '../../reducers/profile/types'
 
-interface Props {
-  experience: any
-}
-
-interface Exp {
-  _id: number
-  company: string
-  location: string
-  title: string
-  from: string
-  to: string
-}
-
-const Experience: React.FC<Props> = ({ experience }) => {
+const Experience: React.FC = () => {
+  const { experience, loading } = useAppSelector((state) => state.profile.profile)
   const dispatch: AppDispatch = useAppDispatch()
-  const submitOperation = (id: number) => {
+  const submitOperation = useCallback((id: string) => {
     // eslint-disable-next-line no-alert
     if (window.confirm('Do you really want to remove that experience?')) {
       dispatch(deleteExperience(id))
     }
-  }
+  }, [])
 
-  const experiences = experience.map((exp: Exp) => (
+  const experiences = experience.map((exp: ExperienceProps) => (
     <tr key={exp._id}>
       <td>{exp.company}</td>
       <td>{exp.location}</td>
       <td>{exp.title}</td>
       <td className='hide-md'>
-        <Moment format='YYYY/MM/DD'>{exp.from}</Moment> -{' '}
+        <Moment format='YYYY/MM/DD'>{exp.from}</Moment> {'- '}
         {!exp.to ? 'Now' : <Moment format='YYYY/MM/DD'>{exp.to}</Moment>}
       </td>
       <td>
@@ -54,7 +43,7 @@ const Experience: React.FC<Props> = ({ experience }) => {
     </tr>
   ))
 
-  const experiences2 = experience.map((exp: Exp) => (
+  const experiences2 = experience.map((exp: ExperienceProps) => (
     <Fragment key={exp._id}>
       <tr>
         <th>Company</th>
@@ -90,6 +79,10 @@ const Experience: React.FC<Props> = ({ experience }) => {
     </Fragment>
   ))
 
+  if (loading) {
+    return <Spinner />
+  }
+
   return (
     <>
       <h2>Experience Credentials</h2>
@@ -112,4 +105,4 @@ const Experience: React.FC<Props> = ({ experience }) => {
   )
 }
 
-export default connect(null, { deleteExperience })(Experience)
+export default Experience

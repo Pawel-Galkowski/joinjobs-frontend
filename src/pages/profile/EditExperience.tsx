@@ -1,67 +1,51 @@
-import { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { useState, useEffect, useCallback } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import Spinner from '../../components/spinner/Spinner'
 import {
   getCurrentExperience,
   setCurrentExperience
 } from '../../actions/profile'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
-interface Props {
-  profile: any
-  match?: any
-}
+const EditExperience: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const { profile, loading } = useAppSelector((state) => state.profile)
+  const { id } = useParams()
 
-const EditExperience: React.FC<Props> = ({
-  profile: { profile, loading },
-  match
-}) => {
-  const [formData, setFormData] = useState({
-    title: '',
-    location: '',
-    company: '',
-    from: '',
-    to: '',
-    current: false,
-    description: ''
-  })
+  const [formData, setFormData] = useState(profile.experience)
 
   const [toDateDisabled, toggleDisabled] = useState(false)
 
   useEffect(() => {
-    getCurrentExperience(match.params.id)
-    const dateFrom = !loading && profile.from
-    const dateTo = !loading && profile.to
-    setFormData({
-      title: !loading && profile.title,
-      location: !loading && profile.location,
-      company: !loading && profile.company,
-      from: !loading && dateFrom.substring(0, 10),
-      to: !loading && dateTo.substring(0, 10),
-      current: !loading && profile.current,
-      description: !loading && profile.description
-    })
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    dispatch(getCurrentExperience(id!))
   }, [])
 
   const { title, location, company, from, to, current, description } = formData
 
-  const onChange = (e: any) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     })
   }
 
-  const onSubmit = (e: any) => {
-    e.preventDefault()
-    setCurrentExperience(match.params.id, formData)
+  const onCurrentChange = useCallback(() => {
+    setFormData({ ...formData, current: !current })
+    toggleDisabled(!toDateDisabled)
+  }, [])
+
+  const onSubmit = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    dispatch(setCurrentExperience(id!, formData))
+  }, [])
+
+  if (loading ?? !profile) {
+    return <Spinner />
   }
 
-  return !!loading || !profile
-    ? (
-    <Spinner />
-      )
-    : (
+  return (
     <div className="paddingSection">
       <h1 className="large text-primary"> Change Your experience </h1>
       <p className="lead">
@@ -128,10 +112,7 @@ const EditExperience: React.FC<Props> = ({
               name="current"
               value={current.toString()}
               checked={current}
-              onChange={() => {
-                setFormData({ ...formData, current: !current })
-                toggleDisabled(!toDateDisabled)
-              }}
+              onChange={onCurrentChange}
             />
             Current Job
           </p>
@@ -143,9 +124,7 @@ const EditExperience: React.FC<Props> = ({
             rows={5}
             placeholder="Program Description"
             value={description}
-            onChange={(e: any) => {
-              onChange(e)
-            }}
+            onChange={onChange}
           />
         </div>
         <input type="submit" className="btn btn-primary my-1" />
@@ -154,14 +133,7 @@ const EditExperience: React.FC<Props> = ({
         </Link>
       </form>
     </div>
-      )
+  )
 }
 
-const mapStateToProps = (state: any) => ({
-  profile: state.profile
-})
-
-export default connect(mapStateToProps, {
-  getCurrentExperience,
-  setCurrentExperience
-})(EditExperience)
+export default EditExperience

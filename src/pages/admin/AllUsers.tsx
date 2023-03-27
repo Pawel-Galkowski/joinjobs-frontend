@@ -5,7 +5,7 @@ import { useCallback } from 'react'
 
 interface Usrs {
   confirmed: boolean
-  _id: number
+  _id: string
   name: string
   email: string
   date: string

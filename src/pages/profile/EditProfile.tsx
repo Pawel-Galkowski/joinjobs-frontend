@@ -13,13 +13,11 @@ interface ProfileProps {
 interface Props {
   auth: any
   profile: ProfileProps
-  history?: any
 }
 
 const EditProfile: React.FC<Props> = ({
   auth,
-  profile: { profile, loading },
-  history
+  profile: { profile, loading }
 }) => {
   const [data, setdata] = useState<any>({
     company: '',
@@ -83,7 +81,7 @@ const EditProfile: React.FC<Props> = ({
 
   const onSubmit = (e: any) => {
     e.preventDefault()
-    createProfile(data, history, true)
+    createProfile(data, true)
   }
 
   const handleFile = (elem: any) => {

@@ -2,8 +2,6 @@ import { useAppSelector } from '../../../hooks'
 import { type ProfileProps } from './types'
 
 const ProfileTop: React.FC = () => {
-  const profile: ProfileProps = useAppSelector((state) => state.profile)
-
   const {
     status,
     skills,
@@ -13,7 +11,7 @@ const ProfileTop: React.FC = () => {
     social,
     user,
     profileImg
-  } = profile
+  }: ProfileProps = useAppSelector((state) => state.profile.profile)
 
   return (
     <div className="profile-top">

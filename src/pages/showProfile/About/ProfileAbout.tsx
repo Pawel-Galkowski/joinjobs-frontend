@@ -1,7 +1,7 @@
 import { useAppSelector } from '../../../hooks'
 
 const ProfileAbout: React.FC = () => {
-  const { name, bio } = useAppSelector((state) => state.profile)
+  const { name, bio } = useAppSelector((state) => state.profile.profile)
 
   return (
     <div className='profile-about bg-light'>

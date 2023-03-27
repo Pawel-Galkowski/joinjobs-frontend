@@ -9,11 +9,12 @@ import ProfileEducation from '../Education/ProfileEdu'
 import ProfileGithub from '../Github/ProfileGithub'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import { type AppDispatch } from '../../../store'
+import type { EducationProps, ExperienceProps } from '../../../reducers/profile/types'
 
 const Profile: React.FC = () => {
   const dispatch: AppDispatch = useAppDispatch()
   const auth = useAppSelector((state) => state.auth)
-  const profile = useAppSelector((state) => state.profile)
+  const { profile } = useAppSelector((state) => state.profile)
   const { id } = useParams()
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -52,7 +53,7 @@ const Profile: React.FC = () => {
                 <h2 className='text-primary'>Experience</h2>
                 {profile.experience?.length > 0 ? (
                   <>
-                    {profile.experience.map((experience: any) => (
+                    {profile.experience.map((experience: ExperienceProps) => (
                       <ProfileExperience
                         key={experience._id}
                         experience={experience}
@@ -67,7 +68,7 @@ const Profile: React.FC = () => {
                 <h2 className='text-primary'>Education</h2>
                 {profile.education?.length > 0 ? (
                   <>
-                    {profile.education.map((education: any) => (
+                    {profile.education.map((education: EducationProps) => (
                       <ProfileEducation
                         key={education._id}
                         education={education}

@@ -15,8 +15,13 @@ import {
   POST_FILE,
   ALL_USERS
 } from '../../actions/types'
+import { type Profile } from './types'
 
-const profileReducer = (state: any = {}, action: any) => {
+const initialState: Profile = {
+  loading: true
+}
+
+const profileReducer = (state: Profile = initialState, action: any) => {
   const { type, payload } = action
 
   switch (type) {
@@ -56,7 +61,7 @@ const profileReducer = (state: any = {}, action: any) => {
         ...state,
         error: payload,
         loading: false,
-        profile: null
+        profile: undefined
       }
     case CLEAR_USERS:
     case CLEAR_PROFILE:
