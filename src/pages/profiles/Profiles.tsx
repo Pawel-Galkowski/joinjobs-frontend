@@ -1,18 +1,22 @@
 import { useEffect } from 'react'
-import { connect } from 'react-redux'
 import Spinner from '../../components/spinner/Spinner'
 import { getProfiles } from '../../actions/profile'
 import ProfileItem from './ProfileItem'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
-const Profiles: React.FC<{ profile: any }> = ({
-  profile: { profiles, loading }
-}) => {
+const Profiles: React.FC = () => {
+  const { profiles, loading } = useAppSelector((state) => state.profile.profile)
+  const dispatch: AppDispatch = useAppDispatch()
   useEffect(() => {
-    getProfiles()
+    dispatch(getProfiles())
   }, [getProfiles])
-  return loading ? (
-    <Spinner />
-  ) : (
+
+  if (loading) {
+    return <Spinner />
+  }
+
+  return (
     <div className='paddingSection'>
       <h1 className='large text-primary'>Developers</h1>
       <p className='lead'>
@@ -32,8 +36,4 @@ const Profiles: React.FC<{ profile: any }> = ({
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  profile: state.profile
-})
-
-export default connect(mapStateToProps, { getProfiles })(Profiles)
+export default Profiles

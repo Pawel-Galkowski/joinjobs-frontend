@@ -5,10 +5,10 @@ import axios from '../../actions/axios'
 import { createProfile } from '../../actions/profile'
 import { Spinner } from '../../components'
 import { type ProfileSchema } from '../../types'
+import { useAppSelector } from '../../hooks'
 
 interface CreateProfileData {
   auth: any
-  history?: any
   loading?: boolean
 }
 
@@ -30,11 +30,10 @@ const initialData: ProfileSchema = {
   profileImg: ''
 }
 
-const CreateProfile: React.FC<CreateProfileData> = ({
-  auth,
-  history,
+const CreateProfile: React.FC<CreateProfileData> = (
   loading
-}) => {
+) => {
+  const auth = useAppSelector((state) => state.auth)
   const [data, setData] = useState<ProfileSchema>(initialData)
   const [displaySocialInputs, toggleSocialInputs] = useState<boolean>(false)
 
@@ -87,7 +86,7 @@ const CreateProfile: React.FC<CreateProfileData> = ({
         {' Let&apos;s get some information to make your profile stand out'}
       </p>
       <small>* = required field</small>
-      <form className='form' onSubmit={() => createProfile(data, history)}>
+      <form className='form' onSubmit={() => createProfile(data)}>
         <div className='form-group'>
           <select name='status' value={data.status} onChange={onChange}>
             <option value='0'>* Select Professional Status</option>

@@ -2,7 +2,7 @@ import {
   type ExperienceSchema,
   type EducationSchema,
   type UserSchema
-} from '.';
+} from '.'
 
 interface ProfileSchema {
   user?: UserSchema

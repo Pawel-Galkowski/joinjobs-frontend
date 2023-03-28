@@ -1,68 +1,51 @@
-import { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { useState, useEffect, useCallback } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import Spinner from '../../components/spinner/Spinner'
 import {
   getCurrentEducation,
   setCurrentEducation
 } from '../../actions/profile'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
-interface Props {
-  profile: any
-  match?: any
-}
+const EditEducation: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const { profile, loading } = useAppSelector((state) => state.profile)
+  const { id } = useParams()
 
-const EditEducation: React.FC<Props> = ({
-  profile: { profile, loading },
-  match
-}) => {
-  const [formData, setFormData] = useState<any>({
-    school: '',
-    degree: '',
-    fieldofstudy: '',
-    from: '',
-    to: '',
-    current: false,
-    description: ''
-  })
-
-  const [toDateDisabled, toggleDisabled] = useState<any>(false)
+  const [formData, setFormData] = useState(profile.education)
+  const [toDateDisabled, toggleDisabled] = useState<boolean>(false)
 
   const { school, degree, fieldofstudy, from, to, current, description } =
     formData
 
   useEffect(() => {
-    getCurrentEducation(match.params.id)
-    const dateFrom = !loading && profile.from
-    const dateTo = !loading && profile.to
-    setFormData({
-      school: !loading && profile.school,
-      degree: !loading && profile.degree,
-      fieldofstudy: !loading && profile.fieldofstudy,
-      from: !loading && dateFrom.substring(0, 10),
-      to: !loading && dateTo.substring(0, 10),
-      current: !loading && profile.current,
-      description: !loading && profile.description
-    })
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    dispatch(getCurrentEducation(id!))
   }, [])
 
-  const onChange = (e: any) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     })
   }
 
-  const onSubmit = (e: any) => {
-    e.preventDefault()
-    setCurrentEducation(match.params.id, formData)
+  const onCurrentChange = useCallback(() => {
+    setFormData({ ...formData, current: !current })
+    toggleDisabled(!toDateDisabled)
+  }, [])
+
+  const onSubmit = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    dispatch(setCurrentEducation(id!, formData))
+  }, [])
+
+  if (loading ?? !profile) {
+    return <Spinner />
   }
 
-  return !!loading || !profile
-    ? (
-    <Spinner />
-      )
-    : (
+  return (
     <div className="paddingSection">
       <h1 className="large text-primary"> Change your education </h1>
       <p className="lead">
@@ -71,9 +54,7 @@ const EditEducation: React.FC<Props> = ({
       </p>
       <form
         className="form"
-        onSubmit={(e) => {
-          onSubmit(e)
-        }}
+        onSubmit={onSubmit}
       >
         <div className="form-group">
           <input
@@ -82,9 +63,7 @@ const EditEducation: React.FC<Props> = ({
             name="school"
             value={school}
             required
-            onChange={(e) => {
-              onChange(e)
-            }}
+            onChange={onChange}
           />
         </div>
         <div className="form-group">
@@ -93,9 +72,7 @@ const EditEducation: React.FC<Props> = ({
             placeholder="degree"
             name="degree"
             value={degree}
-            onChange={(e) => {
-              onChange(e)
-            }}
+            onChange={onChange}
           />
           <small className="form-text">
             City &amp; state suggested (eg. Boston, MA)
@@ -107,9 +84,7 @@ const EditEducation: React.FC<Props> = ({
             placeholder="field of study"
             name="fieldofstudy"
             value={fieldofstudy}
-            onChange={(e) => {
-              onChange(e)
-            }}
+            onChange={onChange}
           />
         </div>
         <div className="form-group">
@@ -118,9 +93,7 @@ const EditEducation: React.FC<Props> = ({
             type="date"
             name="from"
             value={from}
-            onChange={(e) => {
-              onChange(e)
-            }}
+            onChange={onChange}
             required
           />
         </div>
@@ -130,10 +103,7 @@ const EditEducation: React.FC<Props> = ({
               type="checkbox"
               name="current"
               checked={current}
-              onChange={(e) => {
-                onChange(e)
-                toggleDisabled(!toDateDisabled)
-              }}
+              onChange={onCurrentChange}
             />
             {' Current School or Bootcamp'}
           </p>
@@ -144,9 +114,7 @@ const EditEducation: React.FC<Props> = ({
             type="date"
             name="to"
             value={to}
-            onChange={(e: any) => {
-              onChange(e)
-            }}
+            onChange={onChange}
             disabled={toDateDisabled}
           />
         </div>
@@ -157,9 +125,7 @@ const EditEducation: React.FC<Props> = ({
             rows={5}
             placeholder="Program Description"
             value={description}
-            onChange={(e: any) => {
-              onChange(e)
-            }}
+            onChange={onChange}
           />
         </div>
         <input type="submit" className="btn btn-primary my-1" />
@@ -168,14 +134,7 @@ const EditEducation: React.FC<Props> = ({
         </Link>
       </form>
     </div>
-      )
+  )
 }
 
-const mapStateToProps = (state: any) => ({
-  profile: state.profile
-})
-
-export default connect(mapStateToProps, {
-  getCurrentEducation,
-  setCurrentEducation
-})(EditEducation)
+export default EditEducation

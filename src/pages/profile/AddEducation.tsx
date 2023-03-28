@@ -4,11 +4,8 @@ import { Link } from 'react-router-dom'
 import { addEducation } from '../../actions/profile'
 import { Spinner } from '../../components'
 import { type EducationSchema } from '../../types'
-
-interface AddEducationData {
-  loading?: boolean
-  history?: any
-}
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
 const initialData: EducationSchema = {
   school: '',
@@ -20,14 +17,13 @@ const initialData: EducationSchema = {
   description: ''
 }
 
-const AddEducation: React.FC<AddEducationData> = ({ loading, history }) => {
+const AddEducation: React.FC = () => {
+  const { loading } = useAppSelector((state) => state.profile)
   const [formData, setFormData] = useState<EducationSchema>(initialData)
+  const [toDateDisabled, toggleDisabled] = useState<boolean>(false)
+  const dispatch: AppDispatch = useAppDispatch()
 
-  const [toDateDisabled, toggleDisabled] = useState(false)
-
-  const onChange = ({
-    target
-  }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChange = ({ target }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [target.name]: target.value
@@ -42,9 +38,15 @@ const AddEducation: React.FC<AddEducationData> = ({ loading, history }) => {
     toggleDisabled((prevValue) => !prevValue)
   }, [])
 
-  return loading ? (
-    <Spinner />
-  ) : (
+  const onFormSubmit = useCallback(() => {
+    dispatch(addEducation(formData))
+  }, [])
+
+  if (loading) {
+    return <Spinner />
+  }
+
+  return (
     <div className='paddingSection'>
       <h1 className='large text-primary'>Add Your Education</h1>
       <p className='lead'>
@@ -52,7 +54,7 @@ const AddEducation: React.FC<AddEducationData> = ({ loading, history }) => {
         {' Add any school, bootcamp, etc that you have attended'}
       </p>
       <small>* = required field</small>
-      <form className='form' onSubmit={() => { addEducation(formData, history) }}>
+      <form className='form' onSubmit={onFormSubmit}>
         <div className='form-group'>
           <input
             type='text'

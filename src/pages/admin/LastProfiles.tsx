@@ -3,9 +3,11 @@ import { connect } from 'react-redux'
 import Spinner from '../../components/spinner/Spinner'
 import { deleteUserAccount } from '../../actions/profile'
 import { useCallback } from 'react'
+import { useAppDispatch } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
 interface User {
-  _id: number
+  _id: string
   name: string
   avatar: string
   loading?: boolean
@@ -28,10 +30,11 @@ const AdminProfiles: React.FC<Props> = ({
     company
   }
 }) => {
-  const submitOperation = useCallback(async () => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const submitOperation = useCallback(() => {
     // eslint-disable-next-line no-alert
     if (window.confirm('Do you really want to remove this account?')) {
-      await deleteUserAccount(_id)
+      dispatch(deleteUserAccount(_id))
     }
   }, [])
   return loading ? (
@@ -60,7 +63,7 @@ const AdminProfiles: React.FC<Props> = ({
         </Link>
         <button
           className='btn btn-danger'
-          onClick={() => submitOperation}
+          onClick={submitOperation}
           type='button'
         >
           Delete User

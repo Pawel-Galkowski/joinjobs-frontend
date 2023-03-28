@@ -1,36 +1,37 @@
 import { useState, useCallback } from 'react'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { addExperience } from '../../actions/profile'
 import { Spinner } from '../../components'
-import { type ExperienceSchema } from '../../types'
+import { useAppDispatch, useAppSelector } from '../../hooks'
 
-interface AddExperienceData {
-  loading?: boolean
-  history?: any
-}
+import { type ExperienceSchema } from '../../types' // TODO: remove it
+import { type AppDispatch } from '../../store'
+// import { type ExperienceProps } from '../../reducers/profile/types'
 
 const initialData: ExperienceSchema = {
+  current: true,
   title: '',
   company: '',
   location: '',
   from: '',
   to: '',
-  current: false,
   description: ''
+  // _id: ''
 }
 
-const AddExperience: React.FC<AddExperienceData> = ({ history, loading }) => {
+const AddExperience: React.FC = () => {
+  const { loading } = useAppSelector((state) => state.profile)
   const [formData, setFormData] = useState<ExperienceSchema>(initialData)
-  const [toDateDisabled, toggleDisabled] = useState<boolean>(false)
   const { title, company, location, from, to, current, description } = formData
+
+  const dispatch: AppDispatch = useAppDispatch()
 
   const onCurrentChange = useCallback(() => {
     setFormData((prevValue) => ({
       ...prevValue,
       current: !prevValue.current
+      // to: prevValue.current ? undefined : prevValue.to
     }))
-    toggleDisabled((prevValue) => !prevValue)
   }, [])
 
   const onChange = useCallback(
@@ -43,9 +44,15 @@ const AddExperience: React.FC<AddExperienceData> = ({ history, loading }) => {
     []
   )
 
-  return loading ? (
+  const onFormSubmit = useCallback(() => {
+    dispatch(addExperience(formData))
+  }, [])
+
+  if (loading) {
     <Spinner />
-  ) : (
+  }
+
+  return (
     <div className='paddingSection'>
       <h1 className='large text-primary'>Add An Experience</h1>
       <p className='lead'>
@@ -55,7 +62,7 @@ const AddExperience: React.FC<AddExperienceData> = ({ history, loading }) => {
       <small>* = required field</small>
       <form
         className='form'
-        onSubmit={() => { addExperience(formData, history) }}
+        onSubmit={onFormSubmit}
       >
         <div className='form-group'>
           <input
@@ -101,7 +108,6 @@ const AddExperience: React.FC<AddExperienceData> = ({ history, loading }) => {
             <input
               type='checkbox'
               name='current'
-              value={current.toString()}
               checked={current}
               onChange={onCurrentChange}
             />
@@ -115,7 +121,7 @@ const AddExperience: React.FC<AddExperienceData> = ({ history, loading }) => {
             name='to'
             value={to}
             onChange={onChange}
-            disabled={toDateDisabled}
+            disabled={current}
           />
         </div>
         <div className='form-group'>
@@ -137,4 +143,4 @@ const AddExperience: React.FC<AddExperienceData> = ({ history, loading }) => {
   )
 }
 
-export default connect(null, { addExperience })(AddExperience)
+export default AddExperience

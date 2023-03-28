@@ -1,13 +1,13 @@
-import { Fragment } from 'react'
-import { connect } from 'react-redux'
+import { Fragment, useCallback } from 'react'
 import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
 import { deleteEducation } from '../../actions/profile'
-import { useAppDispatch } from '../../hooks'
+import { useAppDispatch, useAppSelector } from '../../hooks'
 import { type AppDispatch } from '../../store'
+import { Spinner } from '../../components'
 
 interface Edu {
-  _id: number
+  _id: string
   school: string
   degree: string
   fieldofstudy: string
@@ -15,14 +15,15 @@ interface Edu {
   to: string
 }
 
-const Education: React.FC<any> = ({ education }) => {
+const Education: React.FC = () => {
+  const { education, loading } = useAppSelector((state) => state.profile.profile)
   const dispatch: AppDispatch = useAppDispatch()
-  const submitOperation = (id: number) => {
+  const submitOperation = useCallback((id: string) => {
     // eslint-disable-next-line no-alert
     if (window.confirm('Do you really want to remove that experience?')) {
       dispatch(deleteEducation(id))
     }
-  }
+  }, [])
 
   const educations = education.map((edu: Edu) => (
     <tr key={edu._id}>
@@ -44,9 +45,7 @@ const Education: React.FC<any> = ({ education }) => {
       <td>
         <i
           className="far fa-window-close fa-2x"
-          onClick={() => {
-            submitOperation(edu._id)
-          }}
+          onClick={() => { submitOperation(edu._id) }}
         />
       </td>
     </tr>
@@ -78,14 +77,17 @@ const Education: React.FC<any> = ({ education }) => {
         <td>
           <i
             className="far fa-window-close fa-2x"
-            onClick={() => {
-              submitOperation(edu._id)
-            }}
+            onClick={() => { submitOperation(edu._id) }}
           />
         </td>
       </tr>
     </Fragment>
   ))
+
+  if (loading) {
+    return <Spinner />
+  }
+
   return (
     <>
       <h2 className="me-2">Education Credentials</h2>
@@ -108,4 +110,4 @@ const Education: React.FC<any> = ({ education }) => {
   )
 }
 
-export default connect(null, { deleteEducation })(Education)
+export default Education

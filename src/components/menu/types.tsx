@@ -8,7 +8,7 @@ interface Profile {
   profile: any // Profile
 }
 
-export type ArrowType = '>' | '<';
+export type ArrowType = '>' | '<'
 
 export interface Props {
   auth: Auth

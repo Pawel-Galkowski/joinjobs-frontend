@@ -8,7 +8,7 @@ import AddUsers from '../admin/AddUsers'
 import AdminUsers from '../admin/LastUsers'
 import AllUsers from '../admin/AllUsers'
 import { useMultipleDispatch } from '../../utils/useMultipleDispatch'
-import { store } from '../../store'
+import { useAppSelector } from '../../hooks'
 
 const propComparator = (propName: any) => (a: any, b: any) => {
   if (a[propName] === b[propName]) {
@@ -21,8 +21,8 @@ const propComparator = (propName: any) => (a: any, b: any) => {
 }
 
 const Admin: React.FC = () => {
-  const { profile, post } = store.getState()
-  const { posts } = post
+  const { profile } = useAppSelector((state) => state.profile)
+  const { posts } = useAppSelector((state) => state.post)
   useEffect(() => {
     useMultipleDispatch([
       getPosts(),
