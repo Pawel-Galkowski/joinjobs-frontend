@@ -19,7 +19,7 @@ const ProfileExp: React.FC<Experience> = ({ experience: { title, company, from, 
         <strong>Location: </strong>
         {location}
       </p>
-      {!!description.length && (
+      {description.length && (
         <p>
           <strong>Description: </strong> {description}
         </p>

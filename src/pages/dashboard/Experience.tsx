@@ -52,7 +52,7 @@ const Experience: React.FC = () => {
       <tr>
         <th>Location</th>
         <td>
-          <Moment format='YYYY/MM/DD'>{exp.from}</Moment> -{' '}
+          <Moment format='YYYY/MM/DD'>{exp.from}</Moment> {'- '}
           {!exp.to ? 'Now' : <Moment format='YYYY/MM/DD'>{exp.to}</Moment>}
         </td>
       </tr>

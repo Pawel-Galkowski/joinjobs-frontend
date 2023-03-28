@@ -13,7 +13,7 @@ import type { EducationProps, ExperienceProps } from '../../../reducers/profile/
 
 const Profile: React.FC = () => {
   const dispatch: AppDispatch = useAppDispatch()
-  const auth = useAppSelector((state) => state.auth)
+  const { isAuthenticated, loading, user } = useAppSelector((state) => state.auth)
   const { profile } = useAppSelector((state) => state.profile)
   const { id } = useParams()
   useEffect(() => {
@@ -35,11 +35,9 @@ const Profile: React.FC = () => {
             <Link to='/profiles' className='btn btn-light'>
               Back to profiles
             </Link>
-            {!!auth &&
-              auth.isAuthenticated &&
-              !auth.loading &&
-              auth.user &&
-              auth.user?._id === profile.user?._id && (
+            { isAuthenticated &&
+              !loading &&
+              user?._id === profile.user?._id && (
                 <Link to='/edit-profile' className='btn btn-dark'>
                   Edit profile
                 </Link>
@@ -51,7 +49,7 @@ const Profile: React.FC = () => {
             <div className='flex-row'>
               <div className='profile-exp bg-white p2'>
                 <h2 className='text-primary'>Experience</h2>
-                {profile.experience?.length > 0 ? (
+                {profile.experience?.length ? (
                   <>
                     {profile.experience.map((experience: ExperienceProps) => (
                       <ProfileExperience
@@ -66,7 +64,7 @@ const Profile: React.FC = () => {
               </div>
               <div className='profile-edu bg-white p-2'>
                 <h2 className='text-primary'>Education</h2>
-                {profile.education?.length > 0 ? (
+                {profile.education?.length ? (
                   <>
                     {profile.education.map((education: EducationProps) => (
                       <ProfileEducation
