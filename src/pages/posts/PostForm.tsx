@@ -1,38 +1,40 @@
-import { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+import { useState, useEffect, useCallback } from 'react'
 import { Spinner } from '../../components'
 import { addPost } from '../../actions/post'
 import { getCurrentProfile } from '../../actions/profile'
-import { type ProfileSchema } from '../../types'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
+import { type ProfileProps } from '../../reducers/profile/types'
 
-interface PostFormData {
-  profile: {
-    profile: ProfileSchema
-    loading: boolean
-  }
-}
-
-const PostForm = (profile: PostFormData) => {
+const PostForm: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const { profile, loading }: ProfileProps = useAppSelector((state) => state.profile.profile)
   const [text, setText] = useState<string>('')
 
   useEffect(() => {
-    getCurrentProfile()
+    dispatch(getCurrentProfile())
   }, [])
 
-  const onChange = ({ target }: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(target.value)
+  const onChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value)
+  }, [])
+
+  const handleAddPost = useCallback(() => {
+    dispatch(addPost(text))
+  }, [])
+
+  if (!profile || loading) {
+    return <Spinner />
   }
 
-  return !profile ? (
-    <Spinner />
-  ) : (
+  return (
     <div className='post-form'>
       <div className='bg-primary p'>
         <h3>Say Something to create a post</h3>
       </div>
       <form
         className='form'
-        onSubmit={() => { addPost(text) }}
+        onSubmit={handleAddPost}
       >
         <textarea
           name='text'
@@ -49,6 +51,4 @@ const PostForm = (profile: PostFormData) => {
   )
 }
 
-const mapStateToProps = ({ profile }: any) => ({ profile })
-
-export default connect(mapStateToProps, { addPost, getCurrentProfile })(PostForm)
+export default PostForm

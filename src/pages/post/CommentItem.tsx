@@ -1,14 +1,16 @@
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Moment from 'react-moment'
 import { deleteComment } from '../../actions/post'
+import { useCallback } from 'react'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
 interface User {
   _id: string
 }
 
 interface Comment {
-  _id: number
+  _id: string
   user: User
   date?: string
   name: string
@@ -17,12 +19,18 @@ interface Comment {
 }
 
 interface CommentItemData {
-  postId: any
+  postId: string
   comment: Comment
-  auth: any
 }
 
-const CommentItem: React.FC<CommentItemData> = ({ postId, comment, auth }) => (
+const CommentItem: React.FC<CommentItemData> = ({ postId, comment }) => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const { loading, user } = useAppSelector((state) => state.auth)
+
+  const handleDelateComment = useCallback(() => {
+    dispatch(deleteComment(postId, comment._id))
+  }, [])
+  return (
   <div className='post bg-white'>
     <div>
       <Link to={`/profile/${comment.user._id}`}>
@@ -36,10 +44,10 @@ const CommentItem: React.FC<CommentItemData> = ({ postId, comment, auth }) => (
         {'Posted on '}
         <Moment format='YYYY/MM/DD'>{comment.date}</Moment>
       </p>
-      {!auth.loading && comment.user === auth.user._id && (
+      {!loading && comment.user === user._id && (
         <button
           className='btn btn-danger'
-          onClick={() => deleteComment(postId, comment._id)}
+          onClick={handleDelateComment}
           type='button'
         >
           <i className='fas fa-times' />
@@ -47,7 +55,7 @@ const CommentItem: React.FC<CommentItemData> = ({ postId, comment, auth }) => (
       )}
     </div>
   </div>
-)
-const mapStateToProps = ({ auth }: any) => ({ auth })
+  )
+}
 
-export default connect(mapStateToProps, { deleteComment })(CommentItem)
+export default CommentItem

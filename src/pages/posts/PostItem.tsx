@@ -1,30 +1,44 @@
 import { Link } from 'react-router-dom'
 import Moment from 'react-moment'
-import { connect } from 'react-redux'
 import { addLike, removeLike, deletePost } from '../../actions/post'
-import { type PostSchema, type ProfileSchema } from '../../types'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
+import { useCallback } from 'react'
+import { type ProfileType } from '../../reducers/profile/types'
+import { type PostProps } from '../../reducers/post/types'
+import { type AuthProps } from '../../reducers/auth/types'
 
 interface PostItemData {
-  auth?: any
-  post: PostSchema
+  post: PostProps
   showActions?: boolean
-  profile: ProfileSchema[]
 }
 
 const PostItem: React.FC<PostItemData> = ({
-  auth,
   post,
-  showActions,
-  profile
+  showActions
 }) => {
-  const singleProfile = profile.filter(({ user }: any) => user._id === post.user)
-  const getUserImage: string =
-    (profile && singleProfile[0]?.profileImg) || post.avatar
+  const dispatch: AppDispatch = useAppDispatch()
+  const auth: AuthProps = useAppSelector((state) => state.auth)
+  const profiles: ProfileType[] = useAppSelector((state) => state.profile.profiles)
+  const singleProfile: ProfileType = profiles?.filter((profile: ProfileType) => profile.user._id === post.user)[0]
+  const getUserImage: string = singleProfile?.profileImg || post.avatar
+
+  const addlikeAction = useCallback(() => {
+    dispatch(addLike(post._id))
+  }, [])
+
+  const removeLikeAction = useCallback(() => {
+    dispatch(removeLike(post._id))
+  }, [])
+
+  const handleDelatePost = useCallback(() => {
+    dispatch(deletePost(post._id))
+  }, [])
 
   return (
     <div className='post bg-white'>
       <div>
-        <Link to={`/profile/${post.user._id}`}>
+        <Link to={`/profile/${post.user}`}>
           <img className='round-img' src={getUserImage} alt='avatar' />
           <h4>{post.name}</h4>
         </Link>
@@ -40,27 +54,27 @@ const PostItem: React.FC<PostItemData> = ({
             <button
               type='button'
               className='btn btn-light'
-              onClick={() => addLike(post._id)}
+              onClick={addlikeAction}
             >
               <i className='fas fa-thumbs-up' />{' '}
-              <span>{post.likes && post.likes.length > 0}</span>
+              <span>{post.likes?.length}</span>
             </button>
             <button
               type='button'
               className='btn btn-light'
-              onClick={() => removeLike(post._id)}
+              onClick={removeLikeAction}
             >
               <i className='fas fa-thumbs-down' />
             </button>
             <Link to={`/posts/${post._id}`} className='btn btn-primary'>
               {'Discussion '}
-              {post.comments.length > 0 && (
+              {post.comments.length && (
                 <span className='comment-count'> {post.comments.length}</span>
               )}
             </Link>
             {!auth.loading && post.user === auth.user._id && (
               <button
-                onClick={() => deletePost(post._id)}
+                onClick={handleDelatePost}
                 type='button'
                 className='btn btn-danger'
               >
@@ -74,12 +88,4 @@ const PostItem: React.FC<PostItemData> = ({
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  auth: state.auth
-})
-
-export default connect(mapStateToProps, {
-  addLike,
-  removeLike,
-  deletePost
-})(PostItem)
+export default PostItem

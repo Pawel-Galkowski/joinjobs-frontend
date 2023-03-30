@@ -1,10 +1,10 @@
-import { type UserSchema, type CommentSchema } from '.';
+import { type CommentSchema } from '.'
 
 interface PostSchema {
-  _id: number
+  _id: string
   name: string
   avatar: string
-  user: UserSchema
+  user: string
   text: string
   likes: string[]
   comments: CommentSchema[]

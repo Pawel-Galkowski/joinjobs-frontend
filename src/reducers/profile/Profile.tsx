@@ -15,13 +15,13 @@ import {
   POST_FILE,
   ALL_USERS
 } from '../../actions/types'
-import { type Profile } from './types'
+import { type ProfileProps } from './types'
 
-const initialState: Profile = {
+const initialState: ProfileProps = {
   loading: true
 }
 
-const profileReducer = (state: Profile = initialState, action: any) => {
+const profileReducer = (state = initialState, action: any) => {
   const { type, payload } = action
 
   switch (type) {

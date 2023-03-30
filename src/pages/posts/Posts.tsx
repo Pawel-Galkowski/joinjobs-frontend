@@ -1,29 +1,29 @@
 import { useEffect } from 'react'
-import { connect } from 'react-redux'
 import Spinner from '../../components/spinner/Spinner'
 import PostItem from './PostItem'
 import { getProfiles } from '../../actions/profile'
 import { getPosts } from '../../actions/post'
-import { type PostSchema } from '../../types'
 import PostForm from './PostForm'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
+import { type PostProps } from '../../reducers/post/types'
+import { type ProfileProps } from '../../reducers/profile/types'
 
-interface PostsData {
-  profile?: any
-  post: {
-    posts: PostSchema[]
-    loading: boolean
-  }
-}
+const Posts: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const { loading, profile }: ProfileProps = useAppSelector((state) => state.profile)
+  const posts: PostProps[] = useAppSelector((state) => state.post.posts)
 
-const Posts: React.FC<PostsData> = ({ profile, post: { posts, loading } }) => {
   useEffect(() => {
-    getProfiles()
-    getPosts()
+    dispatch(getProfiles())
+    dispatch(getPosts())
   }, [getPosts, getProfiles])
 
-  return !!loading || profile.loading ? (
-    <Spinner />
-  ) : (
+  if (loading ?? profile ?? !posts?.length) {
+    return <Spinner />
+  }
+
+  return (
     <div className='paddingSection'>
       <h1 className='large text-primary'>Posts</h1>
       <p className='lead'>
@@ -32,14 +32,12 @@ const Posts: React.FC<PostsData> = ({ profile, post: { posts, loading } }) => {
       </p>
       <PostForm />
       <div className='posts'>
-        {posts.map((post: PostSchema) => (
-          <PostItem key={post._id} post={post} profile={profile.profiles} />
+        {posts?.map((post: PostProps) => (
+          <PostItem key={post._id} post={post} />
         ))}
       </div>
     </div>
   )
 }
 
-const mapStateToProps = ({ post, profile }: any) => ({ post, profile })
-
-export default connect(mapStateToProps, { getPosts, getProfiles })(Posts)
+export default Posts

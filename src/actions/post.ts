@@ -28,7 +28,7 @@ export const getPosts = () => async (dispatch: Dispatch) => {
   }
 }
 
-export const addLike = (id: number) => async (dispatch: Dispatch) => {
+export const addLike = (id: string) => async (dispatch: Dispatch) => {
   try {
     const res = await axios.put(`/api/posts/like/${id}`)
 
@@ -44,7 +44,7 @@ export const addLike = (id: number) => async (dispatch: Dispatch) => {
   }
 }
 
-export const removeLike = (id: number) => async (dispatch: Dispatch) => {
+export const removeLike = (id: string) => async (dispatch: Dispatch) => {
   try {
     const res = await axios.put(`/api/posts/unlike/${id}`)
 
@@ -60,7 +60,7 @@ export const removeLike = (id: number) => async (dispatch: Dispatch) => {
   }
 }
 
-export const deletePost = (id: number) => async (dispatch: Dispatch) => {
+export const deletePost = (id: string) => async (dispatch: Dispatch) => {
   try {
     await axios.delete(`/api/posts/${id}`)
 
@@ -101,7 +101,7 @@ export const addPost = (formData: string) => async (dispatch: Dispatch) => {
   }
 }
 
-export const getPost = (id: number) => async (dispatch: Dispatch) => {
+export const getPost = (id: string) => async (dispatch: Dispatch) => {
   try {
     const res = await axios.get(`/api/posts/${id}`)
 
@@ -118,7 +118,7 @@ export const getPost = (id: number) => async (dispatch: Dispatch) => {
 }
 
 export const addComment =
-  (postId: number, formData: string) => async (dispatch: Dispatch) => {
+  (postId: string, formData: string) => async (dispatch: Dispatch) => {
     const config = {
       headers: {
         'Content-Type': 'application/json'
@@ -146,7 +146,7 @@ export const addComment =
   }
 
 export const deleteComment =
-  (postId: number, commentId: number) => async (dispatch: Dispatch) => {
+  (postId: string, commentId: string) => async (dispatch: Dispatch) => {
     try {
       await axios.delete(`/api/posts/comment/${postId}/${commentId}`)
 

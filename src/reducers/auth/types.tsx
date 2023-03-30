@@ -1,6 +1,8 @@
-export interface AuthInitialStateProps {
+import { type UserType } from '../profile/types'
+
+export interface AuthProps {
   isAuthenticated: boolean
   loading: boolean
   token: string
-  user: object
+  user: UserType
 }
