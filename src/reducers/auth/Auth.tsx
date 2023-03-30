@@ -11,16 +11,24 @@ import {
   ACCOUNT_CONFIRMED,
   RECOVERY_SEND
 } from '../../actions/types'
-import type { AuthInitialStateProps } from './types'
+import type { AuthProps } from './types'
 
-const initialState = {
+const initialState: AuthProps = {
   isAuthenticated: false,
   loading: false,
   token: '',
-  user: {}
+  user: {
+    _id: '',
+    name: '',
+    avatar: '',
+    confirmed: false,
+    date: '',
+    role: 'user',
+    email: ''
+  }
 }
 
-const authReducer = (state: AuthInitialStateProps = initialState, action: any) => {
+const authReducer = (state: AuthProps = initialState, action: any) => {
   const { payload, type } = action
   switch (type) {
     case USER_LOADED:

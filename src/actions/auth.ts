@@ -88,18 +88,12 @@ export const postLogin =
           body,
           defaultHeaderConfig
         )
-        console.log(res)
         dispatch({
           type: LOGIN_SUCCESS,
           payload: res.data
         })
       } catch (err: any) {
-        const { errors } = err.response.data
-
-        if (errors) {
-          errors.forEach((error: any) => setAlert(error.msg, 'danger'))
-        }
-
+        setAlert(err.response.data, 'danger')
         dispatch({ type: LOGIN_FAIL })
       }
     }

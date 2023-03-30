@@ -9,12 +9,20 @@ import {
   ADD_COMMENT,
   REMOVE_COMMENT
 } from '../../actions/types'
-import { type InitialState } from '../reducers'
+import type { InitialStateProps, PostProps, CommentProps } from './types'
 
-const initialState: InitialState = {
-  posts: [],
-  post: {},
-  error: {}
+const initialState: InitialStateProps = {
+  post: {
+    _id: '',
+    text: '',
+    name: '',
+    avatar: '',
+    user: '',
+    comments: [],
+    likes: [],
+    date: '',
+    loading: false
+  }
 }
 
 const postReducer = (state = initialState, action: any) => {
@@ -42,13 +50,13 @@ const postReducer = (state = initialState, action: any) => {
     case ADD_POST:
       return {
         ...state,
-        posts: [...state.posts, payload],
+        posts: state.posts?.length ? [...state.posts, payload] : [payload],
         loading: false
       }
     case UPDATE_LIKES:
       return {
         ...state,
-        posts: state.posts.map((post: any) =>
+        posts: state.posts?.map((post: PostProps) =>
           post._id === payload.id ? { ...post, likes: payload.likes } : post
         ),
         loading: false
@@ -56,7 +64,7 @@ const postReducer = (state = initialState, action: any) => {
     case DELETE_POST:
       return {
         ...state,
-        posts: state.posts.filter((post: any) => post._id !== payload),
+        posts: state.posts?.filter((post: PostProps) => post._id !== payload),
         loading: false
       }
     case ADD_COMMENT:
@@ -70,8 +78,8 @@ const postReducer = (state = initialState, action: any) => {
         ...state,
         post: {
           ...state.post,
-          comments: state.post.comments.filter(
-            (comment: any) => comment._id === payload
+          comments: state.post?.comments.filter(
+            (comment: CommentProps) => comment._id === payload
           )
         },
         loading: false

@@ -33,26 +33,34 @@ export interface ExperienceProps {
   to?: Date
 }
 
-export interface User {
+export interface UserType {
   _id: string
   name: string
   avatar: string
+  confirmed: boolean
+  date: Date | string
+  role: 'admin' | 'user'
+  email: string
 }
 
-export interface Profile {
-  profile?: {
-    _id: string
-    name: string
-    avatar: string
-    skills: string[]
-    social: object
-    user: User
-    company: string
-    bio: string
-    status: string
-    date: Date
-    education: EducationProps[]
-    experience: ExperienceProps[]
-  }
+export interface ProfileType {
+  _id: string
+  name: string
+  avatar: string
+  skills: string[]
+  social: object
+  user: UserType
+  company: string
+  bio: string
+  status: string
+  date: Date
+  profileImg: string
+  education: EducationProps[]
+  experience: ExperienceProps[]
+}
+
+export interface ProfileProps {
+  profile?: ProfileType
+  profiles?: ProfileType[]
   loading?: boolean
 }

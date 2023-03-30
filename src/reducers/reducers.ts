@@ -4,12 +4,10 @@ export interface Action {
 }
 
 export interface InitialState {
-  forms?: any
-  form?: any
   loading?: boolean
   error?: any
   isAuthenticated?: boolean
-  token?: any
+  token?: string
   user?: any
   posts?: any
   post?: any

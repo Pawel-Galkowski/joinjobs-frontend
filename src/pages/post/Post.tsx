@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { Link, useParams } from 'react-router-dom'
 import Spinner from '../../components/spinner/Spinner'
 import PostItem from '../posts/PostItem'
 import CommentItem from './CommentItem'
@@ -8,22 +7,26 @@ import CommentForm from './CommentForm'
 import { getPost } from '../../actions/post'
 import { getProfiles } from '../../actions/profile'
 import { type CommentSchema } from '../../types'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
-interface PostData {
-  post?: any
-  profile?: any
-  match?: any
-}
+const Post: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const profile = useAppSelector((state) => state.profile.profile)
+  const post = useAppSelector((state) => state.post.post)
+  const { id } = useParams()
 
-const Post = ({ post, profile, match }: PostData) => {
   useEffect(() => {
-    getPost(match.params.id)
-    getProfiles()
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    dispatch(getPost(id!))
+    dispatch(getProfiles())
   }, [getPost, getProfiles])
 
-  return post.loading || !post.post || profile.loading ? (
-    <Spinner />
-  ) : (
+  if (post.loading || !post.post || profile.loading) {
+    return <Spinner />
+  }
+
+  return (
     <div className='paddingSection'>
       <Link to='/posts' className='btn btn-light'>
         Back to Posts
@@ -32,7 +35,6 @@ const Post = ({ post, profile, match }: PostData) => {
         <PostItem
           post={post.post}
           showActions={false}
-          profile={profile.profiles}
         />
       </div>
       <hr />
@@ -50,6 +52,4 @@ const Post = ({ post, profile, match }: PostData) => {
   )
 }
 
-const mapStateToProps = ({ post, profile }: any) => ({ post, profile })
-
-export default connect(mapStateToProps, { getPost, getProfiles })(Post)
+export default Post

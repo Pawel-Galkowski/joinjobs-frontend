@@ -1,33 +1,26 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, type ChangeEvent } from 'react'
 import { Link, Navigate } from 'react-router-dom'
-import { postLogin } from '../../actions/auth'
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { type AppDispatch } from '../../store'
-
-interface LoginData {
-  email: string
-  password: string
-}
-
-const initialData: LoginData = {
-  email: '',
-  password: ''
-}
+import { postLogin } from '../../../actions/auth'
+import { useAppDispatch, useAppSelector } from '../../../hooks'
+import { type AppDispatch } from '../../../store'
+import { type LoginData, initialData } from './types'
 
 const Login: React.FC = () => {
   const dispatch: AppDispatch = useAppDispatch()
   const isAuthenticated = useAppSelector((state) => state.auth?.isAuthenticated)
   const [formData, setFormData] = useState<LoginData>(initialData)
 
-  const onchange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+  const { email, password }: LoginData = formData
+
+  const onchange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [target.name]: target.value
+      [e.target.name]: e.target.value
     })
-  }
+  }, [])
 
   const onSubmit = useCallback(() => {
-    dispatch(postLogin({ email: formData.email, password: formData.password }))
+    dispatch(postLogin({ email, password }))
   }, [])
 
   if (isAuthenticated) {
@@ -46,11 +39,11 @@ const Login: React.FC = () => {
                   <div className='input-box'>
                     <input
                       type='email'
+                      placeholder='Email Address'
                       className='input'
                       id='user_login'
-                      placeholder='Email Address'
                       name='email'
-                      value={formData.email}
+                      value={email}
                       onChange={onchange}
                       required
                     />
@@ -60,7 +53,7 @@ const Login: React.FC = () => {
                       className='input'
                       id='user_pass'
                       name='password'
-                      value={formData.password}
+                      value={password}
                       onChange={onchange}
                       required
                     />

@@ -1,62 +1,53 @@
 import { Link } from 'react-router-dom'
 import Moment from 'react-moment'
-import { connect } from 'react-redux'
 import Spinner from '../../components/spinner/Spinner'
 import { deletePost } from '../../actions/post'
-
-interface User {
-  _id: number
-  role: 'admin' | 'user'
-}
-
-interface Post {
-  _id: number
-  text: string
-  name: string
-  avatar: string
-  user: User
-  comments: string[]
-  date: string
-  loading?: boolean
-}
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
+import { useCallback } from 'react'
+import { type AuthProps } from '../../reducers/auth/types'
+import { type PostProps } from '../../reducers/post/types'
 
 interface Props {
-  auth?: any
-  post: Post
+  post: PostProps
   showActions?: boolean
 }
 
-const PostItem: React.FC<Props> = ({
-  auth,
-  post: { _id, text, name, avatar, user, comments, date, loading },
-  showActions = true
-}) =>
-  loading ? (
-    <Spinner />
-  ) : (
+const PostItem: React.FC<Props> = ({ post, showActions = true }) => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const auth: AuthProps = useAppSelector((state) => state.auth)
+
+  const handleDeletePost = useCallback(() => {
+    dispatch(deletePost(post._id))
+  }, [])
+
+  if (post.loading) {
+    return <Spinner />
+  }
+  return (
     <div className='post-users bg-white p-1 my-4'>
       <div>
-        <Link to={`/profile/${user._id}`}>
-          <img className='round-img' src={avatar} alt='avatar' />
-          <h4>{name}</h4>
+        <Link to={`/profile/${post.user}`}>
+          <img className='round-img' src={post.avatar} alt='avatar' />
+          <h4>{post.name}</h4>
         </Link>
       </div>
       <div>
-        <p className='my-1'>{text}</p>
+        <p className='my-1'>{post.text}</p>
         <p className='post-date'>
-          Posted on <Moment format='YYYY/MM/DD'>{date}</Moment>
+          Posted on <Moment format='YYYY/MM/DD'>{post.date}</Moment>
         </p>
         {showActions && (
           <div>
-            <Link to={`/posts/${_id}`} className='btn btn-primary'>
+            <Link to={`/posts/${post._id}`} className='btn btn-primary'>
               Discussion{' '}
-              {comments.length > 0 && (
-                <span className='comment-count'> {comments.length}</span>
+              {post.comments.length && (
+                <span className='comment-count'> {post.comments.length}</span>
               )}
             </Link>
             {!auth.loading && (
               <button
-                onClick={() => deletePost(_id)}
+                onClick={handleDeletePost}
                 type='button'
                 className='btn btn-danger'
               >
@@ -68,9 +59,6 @@ const PostItem: React.FC<Props> = ({
       </div>
     </div>
   )
+}
 
-const mapStateToProps = (state: any) => ({
-  auth: state.auth
-})
-
-export default connect(mapStateToProps, { deletePost })(PostItem)
+export default PostItem

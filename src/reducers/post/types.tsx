@@ -1,6 +1,30 @@
-import { type Action } from '../reducers';
+export interface RecomendProps {
+  _id: string
+  user: string
+}
 
-export interface Props {
-  state: any
-  action: Action
+export interface CommentProps {
+  date: Date | string
+  _id: string
+  text: string
+  name: string
+  avatar: string
+  user: string
+}
+
+export interface PostProps {
+  _id: string
+  text: string
+  name: string
+  avatar: string
+  user: string
+  comments: CommentProps[]
+  likes: RecomendProps[]
+  date: Date | string
+  loading: boolean
+}
+
+export interface InitialStateProps {
+  posts?: PostProps[]
+  post?: PostProps
 }

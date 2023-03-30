@@ -3,7 +3,7 @@ interface User {
 }
 
 interface CommentSchema {
-  _id: number
+  _id: string
   name: string
   avatar: string
   user: User
