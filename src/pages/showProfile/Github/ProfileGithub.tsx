@@ -1,29 +1,34 @@
 import { useEffect } from 'react'
-import { connect } from 'react-redux'
 import Spinner from '../../../components/spinner/Spinner'
-import { getGithubRepos as githubProfile } from '../../../actions/profile'
+import { useAppDispatch, useAppSelector } from '../../../hooks'
+import { type AppDispatch } from '../../../store'
+import { getGithubRepos } from '../../../actions/profile'
+import { type ProfileProps, type GithubRepositoryProps } from '../../../reducers/profile/types'
 
 interface Props {
   username: any
-  getGithubRepos?: any
-  repos?: any
 }
 
 const ProfileGithub: React.FC<Props> = ({
-  username,
-  getGithubRepos,
-  repos
+  username
 }) => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const { loading, repos }: ProfileProps = useAppSelector((state) => state.profile.profile)
   useEffect(() => {
-    getGithubRepos(username)
+    dispatch(getGithubRepos(username))
   }, [getGithubRepos, username])
+
+  if (loading) {
+    return <Spinner />
+  }
+
   return (
     <div className='profile-github bg-white'>
       <h2 className='text-primary my-1'>Github Repos</h2>
-      {repos === null ? (
+      {!repos ? (
         <Spinner />
       ) : (
-        repos.map((repo: any, index: number) => (
+        repos.map((repo: GithubRepositoryProps, index: number) => (
           <div key={index} className='repo bg-white'>
             <div>
               <h4>
@@ -60,8 +65,4 @@ const ProfileGithub: React.FC<Props> = ({
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  repos: state.profile.repos
-})
-
-export default connect(mapStateToProps, { githubProfile })(ProfileGithub)
+export default ProfileGithub

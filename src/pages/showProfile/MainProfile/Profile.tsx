@@ -14,20 +14,20 @@ import type { EducationProps, ExperienceProps } from '../../../reducers/profile/
 const Profile: React.FC = () => {
   const dispatch: AppDispatch = useAppDispatch()
   const { isAuthenticated, loading, user } = useAppSelector((state) => state.auth)
-  const { profile } = useAppSelector((state) => state.profile)
+  const profile = useAppSelector((state) => state.profile)
   const { id } = useParams()
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dispatch(getProfileById(id!))
   }, [])
 
-  if (profile.loading) {
+  if (profile.loading ?? loading) {
     return <Spinner />
   }
 
   return (
     <div className='paddingSection'>
-      {profile === null || profile === undefined ? (
+      {!profile.profile ? (
         <Spinner />
       ) : (
         <div>
@@ -37,7 +37,7 @@ const Profile: React.FC = () => {
             </Link>
             { isAuthenticated &&
               !loading &&
-              user?._id === profile.user?._id && (
+              user?._id === profile.profile.user?._id && (
                 <Link to='/edit-profile' className='btn btn-dark'>
                   Edit profile
                 </Link>
@@ -49,9 +49,9 @@ const Profile: React.FC = () => {
             <div className='flex-row'>
               <div className='profile-exp bg-white p2'>
                 <h2 className='text-primary'>Experience</h2>
-                {profile.experience?.length ? (
+                {profile.profile.experience?.length ? (
                   <>
-                    {profile.experience.map((experience: ExperienceProps) => (
+                    {profile.profile.experience.map((experience: ExperienceProps) => (
                       <ProfileExperience
                         key={experience._id}
                         experience={experience}
@@ -64,9 +64,9 @@ const Profile: React.FC = () => {
               </div>
               <div className='profile-edu bg-white p-2'>
                 <h2 className='text-primary'>Education</h2>
-                {profile.education?.length ? (
+                {profile.profile.education?.length ? (
                   <>
-                    {profile.education.map((education: EducationProps) => (
+                    {profile.profile.education.map((education: EducationProps) => (
                       <ProfileEducation
                         key={education._id}
                         education={education}
@@ -78,8 +78,8 @@ const Profile: React.FC = () => {
                 )}
               </div>
             </div>
-            {profile.githubusername && (
-              <ProfileGithub username={profile.githubusername} />
+            {profile.profile.githubusername && (
+              <ProfileGithub username={profile.profile.githubusername} />
             )}
           </div>
         </div>

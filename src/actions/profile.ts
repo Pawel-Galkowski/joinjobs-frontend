@@ -19,9 +19,9 @@ import {
   POST_EDUCATION,
   ALL_USERS
 } from './types'
-import { type ProfileSchema } from '../types'
 import { type Dispatch } from 'redux'
 import { useNavigate } from 'react-router-dom'
+import { type ProfileType } from '../reducers/profile/types'
 
 const defaultHeaderConfig = {
   headers: {
@@ -212,7 +212,7 @@ export const getGithubRepos =
   }
 
 export const createProfile =
-  (formData: ProfileSchema, edit = false) =>
+  (formData: ProfileType, edit = false) =>
     async (dispatch: Dispatch) => {
       const navigate = useNavigate()
       try {
