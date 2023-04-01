@@ -1,55 +1,44 @@
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { removeResponse } from '../../actions/form'
 import Spinner from '../../components/spinner/Spinner'
+import { useAppSelector, useAppDispatch } from '../../hooks'
+import { type FormTableType, type FormProps } from '../../reducers/form/types'
+import { type AppDispatch } from '../../store'
+import { type AuthProps } from '../../reducers/auth/types'
+import { useCallback } from 'react'
+import { type ProfileType } from '../../reducers/profile/types'
 
-interface User {
-  _id: number
-  role: 'admin' | 'user'
-}
+const FormResponse: React.FC<{ form: FormTableType }> = ({ form }) => {
+  const { user }: AuthProps = useAppSelector((state) => state.auth)
+  const profile: ProfileType = useAppSelector((state) => state.profile.profile)
+  const { loading }: FormProps = useAppSelector((state) => state.forms)
+  const { company, id } = useParams()
+  const dispatch: AppDispatch = useAppDispatch()
 
-interface Form {
-  _id: string
-  user: User
-  answer: any
-  file: string
-  loading?: boolean
-}
+  if (!company || !id) {
+    return <Navigate to='/dashboard' />
+  }
 
-interface Params {
-  company: string
-  id: number
-}
+  // const singleProfile = profile.filter((e: any) => e.user._id === user)[0]
 
-interface Match {
-  params: Params
-}
+  if (!!profile && !!loading) {
+    return <Spinner />
+  }
 
-interface Props {
-  form: Form
-  profile?: any
-  match: Match
-}
+  const handleRemoveResponse = useCallback(() => {
+    dispatch(removeResponse(company, id, user._id))
+  }, [])
 
-const FormResponse: React.FC<Props> = ({
-  profile,
-  match,
-  form: { _id, user, answer, file, loading }
-}) => {
-  const singleProfile = profile?.filter((e: any) => e.user._id === user)[0]
-
-  return !!profile && !!loading ? (
-    <Spinner />
-  ) : (
+  return (
     <div className='post bg-white'>
       <div>
         <h1>
           <Link to={`/profile/${user._id}`}>
-            {!singleProfile.profileImg ? (
+            {!profile.profileImg ? (
               <i className='fas fa-user-tie fa-4x' />
             ) : (
               <img
-                src={singleProfile.profileImg}
+                src={profile.profileImg}
                 className='round-img'
                 alt=''
               />
@@ -58,12 +47,12 @@ const FormResponse: React.FC<Props> = ({
         </h1>
       </div>
       <div>
-        <h2>{singleProfile?.user.name}</h2>
+        <h2>{profile.user?.name}</h2>
         <h4>Form responses:</h4>
         <div className='sectionLeftPadding'>
           <ol>
-            {answer?.length > 0 ? (
-              answer.map((res: any, index: any) => (
+            {form.responses?.length ? (
+              form.responses.map((res: any, index: any) => (
                 <span key={index}>
                   <li>{res}</li>
                 </span>
@@ -73,18 +62,17 @@ const FormResponse: React.FC<Props> = ({
             )}
           </ol>
         </div>
-        {!!file && (
+        {!!form.file && (
           <>
             {'My CV: '}
-            <a href={file} download>
+            <a href={form.file} download>
               {'Download now '}
             </a>
           </>
         )}
         <hr />
         <button
-          onClick={() => { removeResponse(match.params.company, match.params.id, _id) }
-          }
+          onClick={handleRemoveResponse}
           type='button'
           className='btn btn-danger marginUpDown-1'
         >
@@ -96,4 +84,4 @@ const FormResponse: React.FC<Props> = ({
   )
 }
 
-export default connect(null, { removeResponse })(FormResponse)
+export default FormResponse

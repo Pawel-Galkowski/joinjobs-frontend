@@ -5,4 +5,5 @@ export interface AuthProps {
   loading: boolean
   token: string
   user: UserType
+  isAdmin: boolean
 }

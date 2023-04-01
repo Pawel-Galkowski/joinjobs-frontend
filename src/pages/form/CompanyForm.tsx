@@ -1,47 +1,37 @@
 import { useEffect } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { getCompanyForms } from '../../actions/form'
 import CompanyForms from './CompanyForms'
 import Spinner from '../../components/spinner/Spinner'
+import { useAppSelector, useAppDispatch } from '../../hooks'
+import { type FormType, type FormProps } from '../../reducers/form/types'
+import { type AppDispatch } from '../../store'
+import { type AuthProps } from '../../reducers/auth/types'
 
-interface Params {
-  company: string
-  id: number
-}
+const CompanyForm: React.FC = () => {
+  const { user }: AuthProps = useAppSelector((state) => state.auth)
+  const { forms, loading }: FormProps = useAppSelector((state) => state.forms)
+  const { company } = useParams()
+  const dispatch: AppDispatch = useAppDispatch()
 
-interface Match {
-  params: Params
-}
+  if (!company) {
+    return <Navigate to='/dashboard' />
+  }
 
-interface Forms {
-  forms: any
-  loading?: boolean
-}
+  if (!!loading || !forms || !user) {
+    return <Spinner />
+  }
 
-interface Props {
-  auth: any
-  forms: Forms
-  match?: Match
-}
-
-const CompanyForm: React.FC<Props> = ({
-  auth,
-  forms: { forms, loading },
-  match
-}) => {
   useEffect(() => {
-    match && getCompanyForms(match.params.company)
-  }, [getCompanyForms, match])
+    dispatch(getCompanyForms(company))
+  }, [getCompanyForms])
 
-  return !!loading || !forms || !auth.user || !match ? (
-    <Spinner />
-  ) : (
+  return (
     <div className='paddingSection'>
-      {forms?.admins?.includes(auth.user._id) ? (
+      {forms[0].admins?.includes(user._id) ? (
         <div className='mobile-center'>
           <Link
-            to={`/api/forms/create/${match.params.company}`}
+            to={`/api/forms/create/${company}`}
             className='btn btn-primary'
           >
             Create new form
@@ -52,17 +42,11 @@ const CompanyForm: React.FC<Props> = ({
       )}
       <div className='marginTop-2'>
         <h2>Actually forms:</h2>
-        {!forms.formTable || forms.formTable.length < 1 ? (
+        {!forms.length ? (
           <h2>No forms available</h2>
         ) : (
-          forms.formTable.map((form: any) => (
-            <CompanyForms
-              key={form._id}
-              formTable={form}
-              company={match.params.company}
-              admins={forms.admins}
-              name={forms.company}
-            />
+          forms.map((form: FormType) => (
+            <CompanyForms key={form._id} form={form} />
           ))
         )}
       </div>
@@ -70,9 +54,4 @@ const CompanyForm: React.FC<Props> = ({
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  forms: state.forms,
-  auth: state.auth
-})
-
-export default connect(mapStateToProps, { getCompanyForms })(CompanyForm)
+export default CompanyForm

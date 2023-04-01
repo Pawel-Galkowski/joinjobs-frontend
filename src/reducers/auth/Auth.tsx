@@ -25,7 +25,8 @@ const initialState: AuthProps = {
     date: '',
     role: 'user',
     email: ''
-  }
+  },
+  isAdmin: false
 }
 
 const authReducer = (state: AuthProps = initialState, action: any) => {

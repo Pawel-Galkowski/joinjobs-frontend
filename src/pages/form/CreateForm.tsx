@@ -1,22 +1,12 @@
-import { useState, Fragment } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { useState, Fragment, useCallback } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import { addCompanyForm } from '../../actions/form'
+import { useAppDispatch } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
-interface Params {
-  company: string
-  id: number
-}
-
-interface Match {
-  params: Params
-}
-
-interface Props {
-  match?: Match
-}
-
-const CreateForm: React.FC<Props> = ({ match }) => {
+const CreateForm: React.FC = () => {
+  const { company } = useParams()
+  const dispatch: AppDispatch = useAppDispatch()
   const [formData, setFormData] = useState<any>([])
   const [newData, setData] = useState<any>({
     title: '',
@@ -26,52 +16,47 @@ const CreateForm: React.FC<Props> = ({ match }) => {
   })
 
   const onSubmit = () => {
-    if (formData < 1) {
+    if (!formData.length) {
       // eslint-disable-next-line no-alert
       alert('You need to add at least one question')
     } else {
-      match &&
-        addCompanyForm(match.params.company, {
-          questions: formData,
-          body: {
-            title: newData.title,
-            skills: newData.skills,
-            body: newData.body
-          }
-        })
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      dispatch(addCompanyForm(company!, {
+        questions: formData,
+        body: {
+          title: newData.title,
+          skills: newData.skills,
+          body: newData.body
+        }
+      }))
     }
   }
 
-  const removeInput = (ind: any) => {
+  const removeInput = useCallback((ind: any) => {
     formData.splice(ind, 1)
     setFormData([...formData])
-  }
+  }, [])
 
   const { title, skills, body, question } = newData
 
-  const onChange = (e: any) => {
+  const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setData({
       ...newData,
-      [e.target.name]: e.target.value
+      [event.target.name]: event.target.value
     })
-  }
+  }, [])
 
-  const generateFormObject = () => {
+  const generateFormObject = useCallback(() => {
     if (newData !== '') {
       setFormData([newData.question, ...formData])
-      setData({
-        title: newData.title,
-        skills: newData.skills,
-        body: newData.body,
-        question: ''
-      })
+      setData({ title, skills, body, question })
     }
-  }
+  }, [])
 
   return (
     <div className='paddingSection'>
       <Link
-        to={`/api/forms/${match ? match.params.company : ''}`}
+        to={`/api/forms/${company ?? ''}`}
         className='btn btn-light'
       >
         Back to forms
@@ -144,9 +129,7 @@ const CreateForm: React.FC<Props> = ({ match }) => {
                     <button
                       type='button'
                       className='trashBase'
-                      onClick={() => {
-                        removeInput(index)
-                      }}
+                      onClick={() => { removeInput(index) }}
                     >
                       <i className='fas fa-trash' />
                     </button>
@@ -169,4 +152,4 @@ const CreateForm: React.FC<Props> = ({ match }) => {
   )
 }
 
-export default connect(null, { addCompanyForm })(CreateForm)
+export default CreateForm

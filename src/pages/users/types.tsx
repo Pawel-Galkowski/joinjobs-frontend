@@ -1,5 +1,4 @@
 interface Profile {
-  users?: any
   user?: any
   loading: boolean
 }

@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 import { authorize } from '../../actions/auth'
+import { useAppDispatch } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
 interface ConfirmationData {
   email: string
@@ -13,7 +14,8 @@ const initialData: ConfirmationData = {
   token: ''
 }
 
-function Confirmation () {
+const Confirmation: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
   const [formData, setFormData] = useState<ConfirmationData>(initialData)
 
   const onchange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +25,9 @@ function Confirmation () {
     })
   }
 
-  const onSubmit = () => authorize(formData)
+  const onSubmit = useCallback(() => {
+    dispatch(authorize(formData))
+  }, [])
 
   return (
     <>
@@ -63,8 +67,4 @@ function Confirmation () {
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  isAuthenticated: state.auth.isAuthenticated
-})
-
-export default connect(mapStateToProps, { authorize })(Confirmation)
+export default Confirmation

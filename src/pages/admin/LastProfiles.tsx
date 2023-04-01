@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 import Spinner from '../../components/spinner/Spinner'
 import { deleteUserAccount } from '../../actions/profile'
 import { useCallback } from 'react'
@@ -73,4 +72,4 @@ const AdminProfiles: React.FC<Props> = ({
   )
 }
 
-export default connect(null, { deleteUserAccount })(AdminProfiles)
+export default AdminProfiles

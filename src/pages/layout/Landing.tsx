@@ -1,10 +1,15 @@
 import { Link, Navigate } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useAppSelector } from '../../hooks'
+import { type AuthProps } from '../../reducers/auth/types'
 
-export const Landing = ({ isAuthenticated }: any) =>
-  isAuthenticated ? (
-    <Navigate to='/dashboard' />
-  ) : (
+export const Landing: React.FC = () => {
+  const { isAuthenticated }: AuthProps = useAppSelector((state) => state.auth)
+
+  if (isAuthenticated) {
+    return <Navigate to='/dashboard' />
+  }
+
+  return (
     <section className='landing'>
       <div className='dark-overlay'>
         <div className='container-fluid'>
@@ -27,9 +32,6 @@ export const Landing = ({ isAuthenticated }: any) =>
       </div>
     </section>
   )
+}
 
-const mapStateToProps = (state: any) => ({
-  isAuthenticated: state.auth.isAuthenticated
-})
-
-export default connect(mapStateToProps)(Landing)
+export default Landing

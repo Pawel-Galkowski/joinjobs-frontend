@@ -9,7 +9,6 @@ import Admin from '../dashboard/Admin'
 import ReMailer from '../auth/ReMailer'
 import Authorize from '../auth/Authorize'
 import ChangePassword from '../auth/ChangePassword'
-import { Alert } from '../../components'
 import { Landing } from '../layout/Landing'
 import Dashboard from '../dashboard/Dashboard'
 import CompanyForm from '../form/CompanyForm'
@@ -31,7 +30,6 @@ import PrivateRoute from './routeTypes/PrivateRoute'
 
 const ApplicationRoutes = () => (
   <>
-    <Alert />
     <Routes>
       <Route path='/' element={<Landing />} />
       <Route path='/register' element={<Register />} />

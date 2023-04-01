@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Link } from 'react-router-dom'
 import { Spinner } from '../../components'
 import { removeCompany } from '../../actions/form'

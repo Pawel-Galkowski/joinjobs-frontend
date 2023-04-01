@@ -1,30 +1,34 @@
-import { connect } from 'react-redux'
-import { deleteUserAccount as deleteUserAccountAction } from '../../actions/profile'
+/* eslint-disable @typescript-eslint/restrict-template-expressions */ // TODO: remove that!!
+import { deleteUserAccount } from '../../actions/profile'
 import Spinner from '../../components/spinner/Spinner'
 import { useCallback } from 'react'
+import { useAppDispatch } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
-function AdminUsers ({
-  usrs: { confirmed, _id, name, email, date, role, loading },
-  deleteUserAccount
-}: {
+interface UsrsTyepe {
   usrs: any
-  deleteUserAccount?: any
-}) {
-  const submitOperation = useCallback(async () => {
+}
+
+const AdminUsers: React.FC<UsrsTyepe> = ({
+  usrs: { confirmed, _id, name, email, date, role, loading }
+}) => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const submitOperation = useCallback(() => {
     // eslint-disable-next-line no-alert
     if (window.confirm('Do you really want to remove this account?')) {
-      await deleteUserAccount(_id)
+      dispatch(deleteUserAccount(_id))
     }
   }, [])
 
-  return confirmed && loading ? (
-    <Spinner />
-  ) : (
+  if (!confirmed || loading) {
+    return <Spinner />
+  }
+
+  return (
     <div className='bg-white padding2 margin-2ud'>
       <h3>
         <strong>
-          {name}
-          {' -'}
+          {`${name} -`}
         </strong>
         <span className={role === 'admin' ? 'dangerRole' : ''}>{role}</span>
       </h3>
@@ -44,7 +48,7 @@ function AdminUsers ({
       </div>
       <button
         className='btn btn-danger'
-        onClick={() => submitOperation}
+        onClick={submitOperation}
         type='button'
       >
         Delete Account
@@ -53,4 +57,4 @@ function AdminUsers ({
   )
 }
 
-export default connect(null, { deleteUserAccountAction })(AdminUsers)
+export default AdminUsers

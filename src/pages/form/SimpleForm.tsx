@@ -1,57 +1,47 @@
 import { useEffect, Fragment } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { getCompanyForms } from '../../actions/form'
-import CompanyFormsSimple from './CompanyFormsSimple'
+import CompanyFormsSimple from './SingleCompanyForm'
 import Spinner from '../../components/spinner/Spinner'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
+import { type AuthProps } from '../../reducers/auth/types'
+import { type FormTableType, type FormProps } from '../../reducers/form/types'
 
-interface Params {
-  id: number
-  company: string
-}
+const SimpleForm: React.FC = () => {
+  const auth: AuthProps = useAppSelector((state) => state.auth)
+  const { form, loading }: FormProps = useAppSelector((state) => state.forms)
+  const { company, id } = useParams()
+  const dispatch: AppDispatch = useAppDispatch()
 
-interface MatchProps {
-  params: Params
-}
+  if (!company || !id) {
+    return <Navigate to='/dashboard' />
+  }
 
-interface FormProps {
-  forms: any
-  loading: any
-}
-
-interface Props {
-  auth: any
-  match?: MatchProps
-  forms: FormProps
-}
-
-const SimpleForm: React.FC<Props> = ({
-  auth,
-  forms: { forms, loading },
-  match
-}) => {
   useEffect(() => {
-    match && getCompanyForms(match.params.company)
-  }, [getCompanyForms, match])
+    dispatch(getCompanyForms(company))
+  }, [getCompanyForms])
 
-  return !!loading || !forms || !auth.user || !match ? (
-    <Spinner />
-  ) : (
+  if (!!loading || !form || !auth.user) {
+    return <Spinner />
+  }
+
+  return (
     <div className='paddingSection'>
-      <Link to={`/api/forms/${match.params.company}`} className='btn btn-light'>
+      <Link to={`/api/forms/${company}`} className='btn btn-light'>
         Back to forms
       </Link>
-      {!forms.formTable || forms.formTable.length < 1 ? (
+      {!form.formTable ?? !form.formTable?.length ? (
         <h2>Form not available</h2>
       ) : (
-        forms.formTable.map((form: any) => (
-          <Fragment key={form._id}>
-            {form._id === match.params.id ? (
+        form.formTable.map((item: FormTableType) => (
+          <Fragment key={item._id}>
+            {item._id === id ? (
               <CompanyFormsSimple
-                formTable={form}
-                company={match.params.company}
-                name={forms.company}
-              />
+                formBody={item.body}
+                company={company}
+                _id={item._id}
+                />
             ) : null}
           </Fragment>
         ))
@@ -60,9 +50,4 @@ const SimpleForm: React.FC<Props> = ({
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  forms: state.forms,
-  auth: state.auth
-})
-
-export default connect(mapStateToProps, { getCompanyForms })(SimpleForm)
+export default SimpleForm

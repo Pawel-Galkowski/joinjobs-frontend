@@ -1,18 +1,25 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 import { logout } from '../../actions/auth'
 import { getCurrentProfile } from '../../actions/profile'
-import { type Props } from './types'
 import { Spinner } from '..'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
+import { type AuthProps } from '../../reducers/auth/types'
+import { type ProfileType } from '../../reducers/profile/types'
 
-const Navbar: React.FC<Props> = ({
-  auth: { isAuthenticated, loading, user },
-  profile: { profile }
-}) => {
+const Navbar: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const { isAuthenticated, loading, user }: AuthProps = useAppSelector((state) => state.auth)
+  const profile: ProfileType = useAppSelector((state) => state.profile.profile)
+
   useEffect(() => {
-    getCurrentProfile()
+    dispatch(getCurrentProfile())
   }, [])
+
+  if (loading) {
+    return <Spinner />
+  }
 
   const showProfile = (
     <li>
@@ -68,9 +75,7 @@ const Navbar: React.FC<Props> = ({
     )
   }
 
-  return loading ? (
-    <Spinner />
-  ) : (
+  return (
     <nav className='navbar bg-dark'>
       <h1>
         <Link to='/' className='logoLink'>
@@ -98,9 +103,4 @@ const Navbar: React.FC<Props> = ({
   )
 }
 
-const mapStateToProps = ({ auth, profile }: any) => ({
-  auth,
-  profile
-})
-
-export default connect(mapStateToProps, { getCurrentProfile, logout })(Navbar)
+export default Navbar

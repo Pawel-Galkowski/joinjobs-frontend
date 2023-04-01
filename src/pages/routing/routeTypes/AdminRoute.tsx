@@ -1,18 +1,18 @@
 import { Navigate } from 'react-router-dom'
-import { connect } from 'react-redux'
 import { type RouteInterface } from '../types'
+import { useAppSelector } from '../../../hooks'
+import { type AuthProps } from '../../../reducers/auth/types'
 
 const AdminRoute: React.FC<RouteInterface> = ({
-  auth: { isAuthenticated, loading, isAdmin },
   children
 }) => {
-  if (!isAuthenticated || !loading || !isAdmin) {
+  const { isAuthenticated, loading, isAdmin }: AuthProps = useAppSelector((state) => state.auth)
+
+  if (!isAuthenticated || loading || !isAdmin) {
     <Navigate to='/login' />
   }
 
   return children
 }
 
-const mapStateToProps = ({ auth }: any) => ({ auth })
-
-export default connect(mapStateToProps)(AdminRoute)
+export default AdminRoute

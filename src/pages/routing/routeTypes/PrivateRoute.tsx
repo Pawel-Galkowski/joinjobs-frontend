@@ -1,11 +1,11 @@
 import { Navigate } from 'react-router-dom'
-import { connect } from 'react-redux'
 import type { RouteInterface } from '../types'
+import { useAppSelector } from '../../../hooks'
+import { type AuthProps } from '../../../reducers/auth/types'
 
-const PrivateRoute: React.FC<RouteInterface> = ({
-  auth: { isAuthenticated, loading },
-  children
-}) => {
+const PrivateRoute: React.FC<RouteInterface> = ({ children }) => {
+  const { isAuthenticated, loading }: AuthProps = useAppSelector((state) => state.auth)
+
   if (!isAuthenticated || !loading) {
     <Navigate to='/login' />
   }
@@ -13,6 +13,4 @@ const PrivateRoute: React.FC<RouteInterface> = ({
   return children
 }
 
-const mapStateToProps = ({ auth }: any) => ({ auth })
-
-export default connect(mapStateToProps)(PrivateRoute)
+export default PrivateRoute
