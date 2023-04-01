@@ -1,40 +1,47 @@
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Spinner } from '../../components'
 import { removeCompany } from '../../actions/form'
-import { type FormSchema } from '../../types'
+import { useAppSelector, useAppDispatch } from '../../hooks'
+import { type FormProps } from '../../reducers/form/types'
+import { type AppDispatch } from '../../store'
+import { type AuthProps } from '../../reducers/auth/types'
+import { useCallback } from 'react'
 
-interface CompanyItemData {
-  auth: any
-  forms: FormSchema
-}
+const CompanyItem: React.FC = () => {
+  const { user }: AuthProps = useAppSelector((state) => state.auth)
+  const { form, loading }: FormProps = useAppSelector((state) => state.forms)
+  const dispatch: AppDispatch = useAppDispatch()
 
-const CompanyItem = ({ auth, forms }: CompanyItemData) =>
-  forms.loading || !auth.user ? (
-    <Spinner />
-  ) : (
+  if (loading || !user || !form) {
+    return <Spinner />
+  }
+
+  const handleRemoveCompany = useCallback(() => {
+    dispatch(removeCompany(form._id))
+  }, [])
+
+  return (
     <div className='formItem bg-white'>
       <div>
-        <Link to={`/api/forms/${forms._id}`}>
+        <Link to={`/api/forms/${form._id}`}>
           <i className='far fa-building fa-3x' />
-          <h4>{forms.company}</h4>
+          <h4>{form.company}</h4>
         </Link>
       </div>
       <div>
         <h4>
           {'Available forms: '}
-          <Link to={`/api/forms/${forms._id}`}>
-            {forms.formTable.length}
+          <Link to={`/api/forms/${form._id}`}>
+            {form.formTable?.length}
             <br />
             Check all positions
           </Link>
         </h4>
       </div>
       <div>
-        {(forms.admins.includes(auth.user._id) ||
-          auth.user.role === 'admin') && (
+        {(form.admins.includes(user._id) || user.role === 'admin') && (
           <button
-            onClick={() => { removeCompany(forms._id) }}
+            onClick={handleRemoveCompany}
             type='button'
             className='btn btn-danger'
           >
@@ -45,7 +52,6 @@ const CompanyItem = ({ auth, forms }: CompanyItemData) =>
       </div>
     </div>
   )
+}
 
-const mapStateToProps = ({ auth }: any) => ({ auth })
-
-export default connect(mapStateToProps, { removeCompany })(CompanyItem)
+export default CompanyItem

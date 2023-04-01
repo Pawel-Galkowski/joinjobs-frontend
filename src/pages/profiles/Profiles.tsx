@@ -4,9 +4,10 @@ import { getProfiles } from '../../actions/profile'
 import ProfileItem from './ProfileItem'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { type AppDispatch } from '../../store'
+import { type ProfileProps } from '../../reducers/profile/types'
 
 const Profiles: React.FC = () => {
-  const { profiles, loading } = useAppSelector((state) => state.profile.profile)
+  const { profiles, loading }: ProfileProps = useAppSelector((state) => state.profile)
   const dispatch: AppDispatch = useAppDispatch()
   useEffect(() => {
     dispatch(getProfiles())
@@ -24,7 +25,7 @@ const Profiles: React.FC = () => {
         developers
       </p>
       <div className='profiles'>
-        {profiles.length > 0 ? (
+        {profiles?.length ? (
           profiles.map((profile: any) => (
             <ProfileItem key={profile._id} {...profile} />
           ))

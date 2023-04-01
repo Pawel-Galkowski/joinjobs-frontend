@@ -16,15 +16,14 @@ import {
   GET_RESPONSE,
   REMOVE_RESPONSE
 } from '../../actions/types'
-import { type FormRedcuerProps } from './types'
+import { type FormType, type FormProps } from './types'
 
-const initialState: FormRedcuerProps = {
+const initialState: FormProps = {
   forms: [],
-  form: {},
-  error: {}
+  loading: false
 }
 
-const formReducer = (state: FormRedcuerProps = initialState, action: any) => {
+const formReducer = (state = initialState, action: any) => {
   const { payload, type } = action
 
   switch (type) {
@@ -56,7 +55,7 @@ const formReducer = (state: FormRedcuerProps = initialState, action: any) => {
     case ADD_FORM:
       return {
         ...state,
-        forms: [...state.forms, payload],
+        forms: state.forms?.length ? [...state.forms, payload] : [payload],
         loading: false
       }
     case ADD_RESPONSE:
@@ -71,7 +70,7 @@ const formReducer = (state: FormRedcuerProps = initialState, action: any) => {
     case REMOVE_COMPANY:
       return {
         ...state,
-        forms: state.forms.filter((form: any) => form._id !== payload),
+        forms: state.forms?.filter((form: FormType) => form._id !== payload),
         loading: false
       }
     default:

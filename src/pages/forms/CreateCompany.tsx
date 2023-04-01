@@ -1,31 +1,33 @@
-import { useState } from 'react'
-import { connect } from 'react-redux'
+import { useCallback, useState } from 'react'
 import { addCompany } from '../../actions/form'
+import { useAppDispatch } from '../../hooks'
+import { type AppDispatch } from '../../store'
+import { type CompanyDataType } from '../../reducers/form/types'
 
-interface CreateCompanyData {
-  company: string
-  nip: string
-}
-
-const initialData: CreateCompanyData = {
+const initialData: CompanyDataType = {
   company: '',
   nip: ''
 }
 
 const CreateCompany = () => {
-  const [formData, setFormData] = useState<CreateCompanyData>(initialData)
+  const dispatch: AppDispatch = useAppDispatch()
+  const [formData, setFormData] = useState<CompanyDataType>(initialData)
 
-  const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [target.name]: target.value
+      [event.target.name]: event.target.value
     })
   }
+
+  const handleCompanyAdd = useCallback(() => {
+    dispatch(addCompany(formData))
+  }, [])
 
   return (
     <div className='form-box'>
       <h1>Create your company profile</h1>
-      <form className='form' id='createCompanyForm' onSubmit={() => { addCompany(formData) }}>
+      <form className='form' id='createCompanyForm' onSubmit={handleCompanyAdd}>
         <input
           type='text'
           placeholder='Company name'
@@ -48,4 +50,4 @@ const CreateCompany = () => {
   )
 }
 
-export default connect(null, { addCompany })(CreateCompany)
+export default CreateCompany
