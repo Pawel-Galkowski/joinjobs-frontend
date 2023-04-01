@@ -1,14 +1,22 @@
-import { connect } from 'react-redux'
-import { type AlertData, type Props } from './types'
+import { type AlertData } from './types'
 
-const Alert: React.FC<Props> = ({ alerts }): any =>
-  alerts?.length &&
-  alerts.map((alert: AlertData) => (
-    <div key={alert.id} className={`alert alert-${alert.alertType}`}>
-      {alert.msg}
-    </div>
-  ))
+// TODO: take alertData from store
 
-const mapStateToProps = ({ alert }: any) => ({ alerts: alert })
+const Alert = (): JSX.Element => {
+  const alerts: AlertData[] = []
+  if (!alerts?.length) {
+    return <></>
+  }
 
-export default connect(mapStateToProps)(Alert)
+  return (
+    <>
+      {alerts.map((alert: AlertData) => (
+        <div key={alert.id} className={`alert alert-${alert.alertType}`}>
+          {alert.msg}
+        </div>
+      ))}
+    </>
+  )
+}
+
+export default Alert

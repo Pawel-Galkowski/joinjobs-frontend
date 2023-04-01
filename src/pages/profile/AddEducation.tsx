@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { addEducation } from '../../actions/profile'
 import { Spinner } from '../../components'
@@ -135,4 +134,4 @@ const AddEducation: React.FC = () => {
   )
 }
 
-export default connect(null, { addEducation })(AddEducation)
+export default AddEducation

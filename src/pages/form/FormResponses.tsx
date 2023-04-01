@@ -1,55 +1,36 @@
 import { useEffect, Fragment } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import Spinner from '../../components/spinner/Spinner'
 import { getForm } from '../../actions/form'
 import { getProfiles } from '../../actions/profile'
 import FormResponse from './FormResponse'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
+import { type AuthProps } from '../../reducers/auth/types'
+import { type FormProps } from '../../reducers/form/types'
 
-interface Params {
-  company: string
-  id: number
-}
+const FormResponses: React.FC = () => {
+  const { loading }: AuthProps = useAppSelector((state) => state.auth)
+  const { form }: FormProps = useAppSelector((state) => state.forms)
+  const { company, id } = useParams()
+  const dispatch: AppDispatch = useAppDispatch()
 
-interface Match {
-  params: Params
-}
+  if (!company || !id) {
+    return <Navigate to='/dashboard' />
+  }
 
-interface Profiles {
-  profiles: any
-}
-
-interface Auth {
-  loading?: boolean
-}
-
-interface Forms {
-  form: any
-}
-
-interface Props {
-  auth: Auth
-  profile: Profiles
-  forms: Forms
-  match?: Match
-}
-
-const FormResponses: React.FC<Props> = ({
-  auth: { loading },
-  profile: { profiles },
-  forms: { form },
-  match
-}) => {
   useEffect(() => {
-    match && getForm(match.params.company, match.params.id)
-    getProfiles()
-  }, [getForm, match, getProfiles])
+    dispatch(getForm(company, id))
+    dispatch(getProfiles())
+  }, [getForm, getProfiles])
 
-  return !!loading || !form || !match ? (
-    <Spinner />
-  ) : (
+  if (loading ?? !form) {
+    return <Spinner />
+  }
+
+  return (
     <div className='paddingSection'>
-      <Link to={`/api/forms/${match.params.company}`} className='btn btn-light'>
+      <Link to={`/api/forms/${company}`} className='btn btn-light'>
         Back to forms
       </Link>
       <div className='marginTop-2'>
@@ -60,7 +41,7 @@ const FormResponses: React.FC<Props> = ({
           <h2>Questions:</h2>
           <div className='sectionLeftPadding'>
             <ol>
-              {form?.questions?.map((ask: any, index: any) => (
+              {form.formTable?.[0].questions.map((ask: any, index: any) => (
                 <Fragment key={index}>
                   <li>{ask}</li>
                 </Fragment>
@@ -72,13 +53,11 @@ const FormResponses: React.FC<Props> = ({
           <hr />
           <br />
           <h2>Responses:</h2>
-          {form?.responses?.length > 0 ? (
-            form.responses.map((formItem: any) => (
+          {form.formTable?.[0].responses?.length ? (
+            form.formTable?.[0].responses.map((formItem: any) => (
               <FormResponse
                 key={formItem._id}
                 form={formItem}
-                match={match}
-                profile={profiles}
               />
             ))
           ) : (
@@ -90,10 +69,4 @@ const FormResponses: React.FC<Props> = ({
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  auth: state.auth,
-  forms: state.forms,
-  profile: state.profile
-})
-
-export default connect(mapStateToProps, { getForm, getProfiles })(FormResponses)
+export default FormResponses

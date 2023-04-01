@@ -1,5 +1,5 @@
 import { useAppSelector } from '../../../hooks'
-import { type ProfileProps } from './types'
+import { type ProfileType } from '../../../reducers/profile/types'
 
 const ProfileTop: React.FC = () => {
   const {
@@ -8,10 +8,10 @@ const ProfileTop: React.FC = () => {
     company,
     location,
     website,
-    social,
+    socialMedia,
     user,
     profileImg
-  }: ProfileProps = useAppSelector((state) => state.profile.profile)
+  }: ProfileType = useAppSelector((state) => state.profile.profile)
 
   return (
     <div className="profile-top">
@@ -28,29 +28,29 @@ const ProfileTop: React.FC = () => {
               <i className="fas fa-globe fa-2x" />
             </a>
           )}
-          {social?.twitter && (
-            <a href={social.twitter} target="_blank" rel="noopener noreferrer">
+          {socialMedia?.twitter && (
+            <a href={socialMedia.twitter} target="_blank" rel="noopener noreferrer">
               <i className="fab fa-twitter fa-2x" />
             </a>
           )}
-          {social?.facebook && (
-            <a href={social.facebook} target="_blank" rel="noopener noreferrer">
+          {socialMedia?.facebook && (
+            <a href={socialMedia.facebook} target="_blank" rel="noopener noreferrer">
               <i className="fab fa-facebook fa-2x" />
             </a>
           )}
-          {social?.linkedin && (
-            <a href={social.linkedin} target="_blank" rel="noopener noreferrer">
+          {socialMedia?.linkedin && (
+            <a href={socialMedia.linkedin} target="_blank" rel="noopener noreferrer">
               <i className="fab fa-linkedin fa-2x" />
             </a>
           )}
-          {social?.youtube && (
-            <a href={social.youtube} target="_blank" rel="noopener noreferrer">
+          {socialMedia?.youtube && (
+            <a href={socialMedia.youtube} target="_blank" rel="noopener noreferrer">
               <i className="fab fa-youtube fa-2x" />
             </a>
           )}
-          {social?.instagram && (
+          {socialMedia?.instagram && (
             <a
-              href={social.instagram}
+              href={socialMedia.instagram}
               target="_blank"
               rel="noopener noreferrer"
             >

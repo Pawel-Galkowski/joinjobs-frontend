@@ -1,24 +1,17 @@
-import { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import axios from '../../actions/axios'
 import { createProfile, getCurrentProfile } from '../../actions/profile'
 import Spinner from '../../components/spinner/Spinner'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
+import { type AuthProps } from '../../reducers/auth/types'
+import { type ProfileProps } from '../../reducers/profile/types'
 
-interface ProfileProps {
-  profile: any
-  loading: any
-}
-
-interface Props {
-  auth: any
-  profile: ProfileProps
-}
-
-const EditProfile: React.FC<Props> = ({
-  auth,
-  profile: { profile, loading }
-}) => {
+const EditProfile: React.FC = () => {
+  const auth: AuthProps = useAppSelector((state) => state.auth)
+  const { profile, loading }: ProfileProps = useAppSelector((state) => state.profile)
+  const dispatch: AppDispatch = useAppDispatch()
   const [data, setdata] = useState<any>({
     company: '',
     website: '',
@@ -56,37 +49,36 @@ const EditProfile: React.FC<Props> = ({
   const [uploadedFile, setUploadedFile] = useState<any>(null)
 
   useEffect(() => {
-    getCurrentProfile()
-    profile &&
+    dispatch(getCurrentProfile())
+    profile && !loading &&
       setdata({
-        company: !loading && profile.company,
-        website: !loading && profile.website,
-        location: !loading && profile.location,
-        bio: !loading && profile.bio,
-        skills: !loading && profile.skills,
-        status: !loading && profile.status,
-        profileImg: !loading && profile.profileImg,
-        githubusername: !loading && profile.githubusername,
-        youtube: !loading && profile.social?.youtube,
-        twitter: !loading && profile.social?.twitter,
-        facebook: !loading && profile.social?.facebook,
-        linkedin: !loading && profile.social?.linkedin,
-        instagram: !loading && profile.social?.instagram
+        company: profile.company,
+        website: profile.website,
+        location: profile.location,
+        bio: profile.bio,
+        skills: profile.skills,
+        status: profile.status,
+        profileImg: profile.profileImg,
+        githubusername: profile.githubusername,
+        youtube: profile.socialMedia?.youtube,
+        twitter: profile.socialMedia?.twitter,
+        facebook: profile.socialMedia?.facebook,
+        linkedin: profile.socialMedia?.linkedin,
+        instagram: profile.socialMedia?.instagram
       })
   }, [])
 
-  const onChange = (e: any) => {
-    setdata({ ...data, [e.target.name]: e.target.value })
-  }
+  const onChange = useCallback((event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
+    setdata({ ...data, [event.target.name]: event.target.value })
+  }, [])
 
-  const onSubmit = (e: any) => {
-    e.preventDefault()
-    createProfile(data, true)
-  }
+  const onSubmit = useCallback(() => {
+    dispatch(createProfile(data, true))
+  }, [])
 
-  const handleFile = (elem: any) => {
+  const handleFile = useCallback((elem: any) => {
     setFile(elem.target.files[0])
-  }
+  }, [])
 
   const uploadFile = async () => {
     const formData = new FormData()
@@ -112,6 +104,10 @@ const EditProfile: React.FC<Props> = ({
     }
   }
 
+  const handleSocialInputToggle = useCallback(() => {
+    toggleSocialInputs((prevValue: boolean) => !prevValue)
+  }, [])
+
   const resolveImage = () => {
     if (uploadedFile?.length > 0) {
       return (
@@ -124,11 +120,11 @@ const EditProfile: React.FC<Props> = ({
     return null
   }
 
-  return loading
-    ? (
-    <Spinner />
-      )
-    : (
+  if (loading) {
+    return <Spinner />
+  }
+
+  return (
     <div className="paddingSection">
       <h1 className="large text-primary">Create Your Profile</h1>
       <p className="lead">
@@ -245,9 +241,7 @@ const EditProfile: React.FC<Props> = ({
 
         <div className="my-2">
           <button
-            onClick={() => {
-              toggleSocialInputs(!displaySocialInputs)
-            }}
+            onClick={handleSocialInputToggle}
             type="button"
             className="btn btn-light"
           >
@@ -265,9 +259,7 @@ const EditProfile: React.FC<Props> = ({
                 placeholder="Twitter URL"
                 name="twitter"
                 value={twitter}
-                onChange={(e: any) => {
-                  onChange(e)
-                }}
+                onChange={onChange}
               />
             </div>
 
@@ -278,9 +270,7 @@ const EditProfile: React.FC<Props> = ({
                 placeholder="Facebook URL"
                 name="facebook"
                 value={facebook}
-                onChange={(e: any) => {
-                  onChange(e)
-                }}
+                onChange={onChange}
               />
             </div>
 
@@ -291,9 +281,7 @@ const EditProfile: React.FC<Props> = ({
                 placeholder="YouTube URL"
                 name="youtube"
                 value={youtube}
-                onChange={(e: any) => {
-                  onChange(e)
-                }}
+                onChange={onChange}
               />
             </div>
 
@@ -304,9 +292,7 @@ const EditProfile: React.FC<Props> = ({
                 placeholder="Linkedin URL"
                 name="linkedin"
                 value={linkedin}
-                onChange={(e: any) => {
-                  onChange(e)
-                }}
+                onChange={onChange}
               />
             </div>
 
@@ -317,9 +303,7 @@ const EditProfile: React.FC<Props> = ({
                 placeholder="Instagram URL"
                 name="instagram"
                 value={instagram}
-                onChange={(e: any) => {
-                  onChange(e)
-                }}
+                onChange={onChange}
               />
             </div>
           </>
@@ -330,15 +314,7 @@ const EditProfile: React.FC<Props> = ({
         </Link>
       </form>
     </div>
-      )
+  )
 }
 
-const mapStateToProps = (state: any) => ({
-  profile: state.profile,
-  auth: state.auth
-})
-
-export default connect(mapStateToProps, {
-  createProfile,
-  getCurrentProfile
-})(EditProfile)
+export default EditProfile

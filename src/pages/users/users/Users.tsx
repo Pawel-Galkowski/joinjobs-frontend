@@ -1,18 +1,23 @@
 import { useEffect } from 'react'
-import { connect } from 'react-redux'
 import Spinner from '../../../components/spinner/Spinner'
 import { getUsers } from '../../../actions/profile'
 import UsersItem from '../UsersItem/UsersItem'
-import type { Props } from '../types'
+import { useAppDispatch, useAppSelector } from '../../../hooks'
+import { type ProfileProps } from '../../../reducers/profile/types'
+import { type AppDispatch } from '../../../store'
 
-const Users: React.FC<Props> = ({ profile: { users, loading } }) => {
+const Users: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
+  const { profiles, loading }: ProfileProps = useAppSelector((state) => state.profile)
   useEffect(() => {
-    getUsers()
+    dispatch(getUsers())
   }, [getUsers])
 
-  return loading ? (
-    <Spinner />
-  ) : (
+  if (loading) {
+    return <Spinner />
+  }
+
+  return (
     <>
       <h1 className='large text-primary'>Developers</h1>
       <p className='lead'>
@@ -20,8 +25,8 @@ const Users: React.FC<Props> = ({ profile: { users, loading } }) => {
         developers
       </p>
       <div className='profiles'>
-        {users.length > 0 ? (
-          users.map((user: any) => <UsersItem key={user._id} profile={user} />)
+        {profiles?.length ? (
+          profiles.map((user: any) => <UsersItem key={user._id} profile={user} />)
         ) : (
           <h4>No Users found...</h4>
         )}
@@ -30,8 +35,4 @@ const Users: React.FC<Props> = ({ profile: { users, loading } }) => {
   )
 }
 
-const mapStateToProps = ({ profile }: any) => ({
-  profile
-})
-
-export default connect(mapStateToProps, { getUsers })(Users)
+export default Users

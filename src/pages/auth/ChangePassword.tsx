@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { connect } from 'react-redux'
+import { useCallback, useState } from 'react'
 import { changePassword } from '../../actions/auth'
 import setAlert from '../../actions/setAlert'
+import { useAppDispatch } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
 interface ChangePasswordData {
   email: string
@@ -16,6 +17,7 @@ const initialData: ChangePasswordData = {
 }
 
 const ChangePassword: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
   const [formData, setFormData] = useState<ChangePasswordData>(initialData)
 
   const onchange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,14 +27,17 @@ const ChangePassword: React.FC = () => {
     })
   }
 
-  const onSubmit = () =>
-    formData.password === formData.password2
-      ? changePassword(
+  const onSubmit = useCallback(() => {
+    if (formData.password !== formData.password2) {
+      setAlert('Passwords do not match', 'danger')
+    } else {
+      dispatch(changePassword(
         formData.email,
         formData.password,
         window.location.href.replace(/([^]+)recovery\//g, '')
-      )
-      : setAlert('Passwords do not match', 'danger')
+      ))
+    }
+  }, [])
 
   return (
     <div className='center-box'>
@@ -99,4 +104,4 @@ const ChangePassword: React.FC = () => {
   )
 }
 
-export default connect(null, { changePassword })(ChangePassword)
+export default ChangePassword

@@ -1,15 +1,19 @@
-import { useState } from 'react'
-import { connect } from 'react-redux'
+import { useCallback, useState } from 'react'
 import { recoveryPassword } from '../../actions/auth'
+import { useAppDispatch } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
 const ReMailer = () => {
+  const dispatch: AppDispatch = useAppDispatch()
   const [formData, setFormData] = useState<string>('')
 
   const onchange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(target.value)
   }
 
-  const onSubmit = () => recoveryPassword(formData)
+  const onSubmit = useCallback(() => {
+    dispatch(recoveryPassword(formData))
+  }, [])
 
   return (
     <div className='center-box'>
@@ -54,4 +58,4 @@ const ReMailer = () => {
   )
 }
 
-export default connect(null, { recoveryPassword })(ReMailer)
+export default ReMailer

@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 import ProfileActions from '../../pages/dashboard/DashboardActions'
 import { getCurrentProfile } from '../../actions/profile'
 import { type ArrowType } from './types'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { type AppDispatch } from '../../store'
+import { type ProfileType } from '../../reducers/profile/types'
 
 const Menu: React.FC = () => {
   const dispatch: AppDispatch = useAppDispatch()
-  const { profile } = useAppSelector((state) => state.profile)
+  const profile: ProfileType = useAppSelector((state) => state.profile.profile)
   const { isAuthenticated, loading, user } = useAppSelector((state) => state.auth)
   const [arrow, setArrow] = useState<ArrowType>('>')
 
@@ -96,9 +96,4 @@ const Menu: React.FC = () => {
   )
 }
 
-const mapStateToProps = ({ auth, profile }: any) => ({
-  auth,
-  profile
-})
-
-export default connect(mapStateToProps, { getCurrentProfile })(Menu)
+export default Menu

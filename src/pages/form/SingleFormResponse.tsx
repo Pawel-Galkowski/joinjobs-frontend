@@ -1,20 +1,32 @@
 import { useEffect, Fragment } from 'react'
-import { connect } from 'react-redux'
 import Spinner from '../../components/spinner/Spinner'
 import { getForm } from '../../actions/form'
 import FormResponse from './FormResponse'
+import { useParams, Navigate } from 'react-router'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
+import { type AuthProps } from '../../reducers/auth/types'
+import { type FormProps } from '../../reducers/form/types'
 
-const SingleFormResponse: React.FC<any> = ({
-  auth: { loading },
-  forms: { form },
-  match
-}) => {
+const SingleFormResponse: React.FC = () => {
+  const auth: AuthProps = useAppSelector((state) => state.auth)
+  const { form, loading }: FormProps = useAppSelector((state) => state.forms.form)
+  const { company, id, response } = useParams()
+  const dispatch: AppDispatch = useAppDispatch()
+
+  if (!company || !id || !response) {
+    return <Navigate to='/dashboard' />
+  }
+
   useEffect(() => {
-    getForm(match.params.company, match.params.id)
-  }, [getForm, match])
-  return !!loading || !form ? (
-    <Spinner />
-  ) : (
+    dispatch(getForm(company, id))
+  }, [getForm])
+
+  if (!!auth.loading || !form || loading) {
+    return <Spinner />
+  }
+
+  return (
     <div className='paddingSection'>
       <h1>Responses to form </h1>
       <div>
@@ -22,9 +34,9 @@ const SingleFormResponse: React.FC<any> = ({
         <h2>Questions:</h2>
         <div className='sectionLeftPadding'>
           <ol>
-            {form?.questions?.map((ask: any, index: any) => (
+            {form.formTable?.[0].questions.map((question: string, index: number) => (
               <Fragment key={index}>
-                <li>{ask}</li>
+                <li>{question}</li>
               </Fragment>
             ))}
           </ol>
@@ -34,10 +46,10 @@ const SingleFormResponse: React.FC<any> = ({
       <div>
         <hr />
         <h2>Responses:</h2>
-        {form?.responses?.map((formItem: any) => (
+        {form.formTable?.[0].responses.map((formItem: any) => (
           <Fragment key={formItem._id}>
-            {formItem._id === match.params.response && (
-              <FormResponse form={formItem} match={match} />
+            {formItem._id === response && (
+              <FormResponse form={formItem} />
             )}
           </Fragment>
         ))}
@@ -46,9 +58,4 @@ const SingleFormResponse: React.FC<any> = ({
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  auth: state.auth,
-  forms: state.forms
-})
-
-export default connect(mapStateToProps, { getForm })(SingleFormResponse)
+export default SingleFormResponse

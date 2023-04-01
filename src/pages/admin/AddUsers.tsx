@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { connect } from 'react-redux'
+import { useCallback, useState } from 'react'
 import setAlert from '../../actions/setAlert'
 import { register } from '../../actions/auth'
+import { useAppDispatch } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
 interface Params {
   name: string
@@ -19,24 +20,23 @@ const initialState = {
   role: ''
 }
 
-const AddUsers = () => {
+const AddUsers: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
   const [formData, setFormData] = useState<Params>(initialState)
 
-  const onchange = (e: any) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
+  const onchange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [event.target.name]: event.target.value })
   }
 
   const { name, email, password, password2, role } = formData
 
-  const onSubmit = () =>
-    password !== password2
-      ? setAlert('Passwords do not match', 'danger')
-      : register({
-        name,
-        email,
-        password,
-        role
-      })
+  const onSubmit = useCallback(() => {
+    if (password !== password2) {
+      setAlert('Passwords do not match', 'danger')
+    } else {
+      dispatch(register({ name, email, password, role }))
+    }
+  }, [])
 
   return (
     <form className='form' onSubmit={onSubmit}>
@@ -93,8 +93,4 @@ const AddUsers = () => {
   )
 }
 
-const mapStateToProps = ({ auth: { isAuthenticated } }: any) => ({
-  isAuthenticated
-})
-
-export default connect(mapStateToProps, { setAlert, register })(AddUsers)
+export default AddUsers

@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import { connect } from 'react-redux'
 import { Link, Navigate } from 'react-router-dom'
 import setAlert from '../../actions/setAlert'
 import { register } from '../../actions/auth'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type AppDispatch } from '../../store'
+import { type AuthProps } from '../../reducers/auth/types'
 
 type RoleType = 'user' | 'admin'
 
@@ -22,7 +24,9 @@ const initialData: RegisterData = {
   role: 'user' as RoleType
 }
 
-const Register: React.FC<any> = ({ isAuthenticated }) => {
+const Register: React.FC = () => {
+  const { isAuthenticated }: AuthProps = useAppSelector((state) => state.auth)
+  const dispatch: AppDispatch = useAppDispatch()
   const [formData, setFormData] = useState<RegisterData>(initialData)
 
   const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,15 +38,17 @@ const Register: React.FC<any> = ({ isAuthenticated }) => {
 
   const onSubmit = () => {
     if (formData.password === formData.password2) {
-      register(formData)
+      dispatch(register(formData))
     } else {
       setAlert('Passwords do not match', 'danger')
     }
   }
 
-  return isAuthenticated ? (
-    <Navigate to='/dashboard' />
-  ) : (
+  if (isAuthenticated) {
+    return <Navigate to='/dashboard' />
+  }
+
+  return (
     <div className='center-box'>
       <div className='flex-box'>
         <div className='additionalBG'>&nbsp;</div>
@@ -126,8 +132,4 @@ const Register: React.FC<any> = ({ isAuthenticated }) => {
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  isAuthenticated: state.auth.isAuthenticated
-})
-
-export default connect(mapStateToProps, { setAlert, register })(Register)
+export default Register

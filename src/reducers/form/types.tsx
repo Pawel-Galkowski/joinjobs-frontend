@@ -16,6 +16,7 @@ export interface FormTableType {
   body: FormBodyType
   responses: string[]
   date: Date | string
+  file: string
 }
 
 export interface FormType {

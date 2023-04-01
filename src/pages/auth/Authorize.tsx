@@ -1,20 +1,23 @@
-import { useState } from 'react'
-import { connect } from 'react-redux'
+import { useCallback, useState } from 'react'
 import { authorize } from '../../actions/auth'
 import Alert from '../../components/alert/Alert'
+import { useAppDispatch } from '../../hooks'
+import { type AppDispatch } from '../../store'
 
 const Authorize: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
   const [formData, setFormData] = useState<string>('')
 
   const onchange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(target.value)
   }
 
-  const onSubmit = () =>
-    authorize({
+  const onSubmit = useCallback(() => {
+    dispatch(authorize({
       email: formData,
       token: window.location.href.replace(/([^]+)confirmation\//g, '')
-    })
+    }))
+  }, [])
 
   return (
     <div className='center-box'>
@@ -56,4 +59,4 @@ const Authorize: React.FC = () => {
   )
 }
 
-export default connect(null, { authorize })(Authorize)
+export default Authorize

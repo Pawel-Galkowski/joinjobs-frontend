@@ -119,7 +119,7 @@ export const addCompanyForm =
   }
 
 export const getForm =
-  (company: string, id: number) => async (dispatch: Dispatch) => {
+  (company: string, id: string) => async (dispatch: Dispatch) => {
     try {
       const res = await axios.get(`/api/forms/${company}/${id}`)
       dispatch({
@@ -135,7 +135,7 @@ export const getForm =
   }
 
 export const removeForm =
-  (company: string, id: number) => async (dispatch: Dispatch) => {
+  (company: string, id: string) => async (dispatch: Dispatch) => {
     try {
       const res = await axios.delete(`/api/forms/${company}/${id}`)
 
@@ -154,7 +154,7 @@ export const removeForm =
   }
 
 export const addResponseToForm =
-  (company: string, id: number, formData: string[], fileData: JSON) =>
+  (company: string, id: string, formData: string[], fileData: JSON) =>
     async (dispatch: Dispatch) => {
       const config = {
         headers: {
@@ -185,7 +185,7 @@ export const addResponseToForm =
     }
 
 export const getQuestions =
-  (company: string, id: number) => async (dispatch: Dispatch) => {
+  (company: string, id: string) => async (dispatch: Dispatch) => {
     try {
       const res = await axios.get(`/api/forms/asks/${company}/${id}`)
       dispatch({
@@ -201,7 +201,7 @@ export const getQuestions =
   }
 
 export const getResponses =
-  (company: string, id: number) => async (dispatch: Dispatch) => {
+  (company: string, id: string) => async (dispatch: Dispatch) => {
     try {
       const responses = await axios.get(`/api/forms/res/${company}/${id}`)
       dispatch({
@@ -217,7 +217,7 @@ export const getResponses =
   }
 
 export const getOneResponse =
-  (company: string, id: number, res: string) => async (dispatch: Dispatch) => {
+  (company: string, id: string, res: string) => async (dispatch: Dispatch) => {
     try {
       const responses = await axios.get(
         `/api/forms/res/${company}/${id}/${res}`
@@ -235,7 +235,7 @@ export const getOneResponse =
   }
 
 export const removeResponse =
-  (company: string, id: number, response: string) =>
+  (company: string, id: string, response: string) =>
     async (dispatch: Dispatch) => {
       try {
         const res = await axios.delete(

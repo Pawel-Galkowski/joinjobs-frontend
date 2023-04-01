@@ -1,119 +1,111 @@
-import { Fragment, useEffect, useState } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { Fragment, useCallback, useEffect, useState } from 'react'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import axios from '../../actions/axios'
 import Spinner from '../../components/spinner/Spinner'
 import { getForm, addResponseToForm } from '../../actions/form'
-
-interface User {
-  _id: string
-}
-
-interface Auth {
-  user: User
-}
-
-interface Params {
-  company: string
-  id: number
-}
-
-interface Match {
-  params: Params
-}
-
-interface FormsProps {
-  form: any
-  loading: any
-}
-
-interface Props {
-  auth: Auth
-  forms: FormsProps
-  match?: Match
-}
+import { useAppSelector, useAppDispatch } from '../../hooks'
+import { type AuthProps } from '../../reducers/auth/types'
+import { type FormProps } from '../../reducers/form/types'
+import { type AppDispatch } from '../../store'
 
 const checkType = (name: string) => {
   const afterDot = name.split('.').pop()
-  return afterDot ? ['pdf', 'docx'].includes(afterDot?.toLowerCase()) : false
+  return afterDot && ['pdf', 'docx'].includes(afterDot?.toLowerCase())
 }
 
-const Forms: React.FC<Props> = ({ auth, forms: { form, loading }, match }) => {
+const Forms: React.FC = () => {
+  const auth: AuthProps = useAppSelector((state) => state.auth)
+  const { form, loading }: FormProps = useAppSelector((state) => state.forms)
+  const { company, id } = useParams()
+  const dispatch: AppDispatch = useAppDispatch()
+
+  if (!company || !id) {
+    return <Navigate to='/dashboard' />
+  }
+
+  if (!!loading || !form) {
+    return <Spinner />
+  }
+
   useEffect(() => {
-    match && getForm(match.params.company, match.params.id)
-  }, [getForm, match])
+    dispatch(getForm(company, id))
+  }, [getForm])
 
   const [answer, setAnswer] = useState<any>('')
   const [fileData, setFileData] = useState<any>('')
   const [formData, setFormData] = useState<any>([])
-  const onChange = (e: any) => {
-    setAnswer({ ...answer, [e.target.name]: e.target.value })
-    setFormData([answer, ...formData])
-  }
-
-  const onSubmit = (e: any) => {
-    e.preventDefault()
-    setFormData([answer, ...formData])
-    const arr: string[] = Object.values(answer)
-    match && addResponseToForm(match.params.company, match.params.id, arr, fileData)
-  }
-
   const [file, setFile] = useState<any>()
 
-  const handleFile = (elem: any) => {
-    if (checkType(elem.target.files[0]?.name)) {
-      setFile(elem.target.files[0])
-    } else {
-      // eslint-disable-next-line no-alert
-      alert(
-        'Wrong file format. File will not be added!. \nAvailable formats: PDF, DOCX'
-      )
-    }
-  }
+  const onChange = useCallback((e: any) => {
+    setAnswer({ ...answer, [e.target.name]: e.target.value })
+    setFormData([answer, ...formData])
+  }, [])
 
-  const uploadFile = async () => {
-    if (file && checkType(file.name)) {
-      const newformData = new FormData()
-      newformData.append('file', file)
-      newformData.append('user', auth.user._id)
-      try {
-        const res = match && await axios.post(
-          `/uploads/${match.params.company}/${auth.user._id}`,
-          newformData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          }
+  const onSubmit = useCallback(() => {
+    setFormData([answer, ...formData])
+    const arr: string[] = Object.values(answer)
+    dispatch(addResponseToForm(company, id, arr, fileData))
+  }, [])
+
+  const handleFile = useCallback(
+    (elem: React.ChangeEvent<HTMLInputElement>) => {
+      if (checkType(elem.target.files![0]?.name)) {
+        setFile(elem.target.files![0])
+      } else {
+        // eslint-disable-next-line no-alert
+        alert(
+          'Wrong file format. File will not be added!. \nAvailable formats: PDF, DOCX'
         )
-        setFileData(res?.data.filePath)
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error(err)
       }
-    } else {
-      // eslint-disable-next-line no-alert
-      alert('Not valid file')
-    }
-  }
+    },
+    []
+  )
 
-  return !!loading || !form || !match ? (
-    <Spinner />
-  ) : (
+  const uploadFile = useCallback(
+    () => async () => {
+      if (file && checkType(file.name)) {
+        const newformData = new FormData()
+        newformData.append('file', file)
+        newformData.append('user', auth.user._id)
+        try {
+          const res = await axios.post(
+            `/uploads/${company}/${auth.user._id}`,
+            newformData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            }
+          )
+          setFileData(res?.data.filePath)
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error(err)
+        }
+      } else {
+        // eslint-disable-next-line no-alert
+        alert('Not valid file')
+      }
+    },
+    []
+  )
+
+  return (
     <div className='paddingSection'>
-      <Link to={`/api/forms/${match.params.company}`} className='btn btn-light'>
+      <Link to={`/api/forms/${company}`} className='btn btn-light'>
         Back to forms
       </Link>
       <div className='marginTop-2'>
         <h1 className='large text-primary'>Form Questions</h1>
         <form className='form' onSubmit={onSubmit}>
-          {form.questions.map((el: any, index: any) => (
+          {form.formTable![0].questions.map((question: string, index: any) => (
             <Fragment key={index}>
               <div className='form-group'>
-                <label>{el}</label>
+                <label>{question}</label>
                 <input
                   type='text'
-                  placeholder={el}
+                  placeholder={question}
                   name={index}
                   required
                   onChange={onChange}
@@ -133,7 +125,7 @@ const Forms: React.FC<Props> = ({ auth, forms: { form, loading }, match }) => {
             <button
               type='button'
               className='btn btn-light'
-              onClick={() => uploadFile}
+              onClick={uploadFile}
             >
               Upload file
             </button>
@@ -145,12 +137,4 @@ const Forms: React.FC<Props> = ({ auth, forms: { form, loading }, match }) => {
   )
 }
 
-const mapStateToProps = (state: any) => ({
-  forms: state.forms,
-  auth: state.auth
-})
-
-export default connect(mapStateToProps, {
-  getForm,
-  addResponseToForm
-})(Forms)
+export default Forms
