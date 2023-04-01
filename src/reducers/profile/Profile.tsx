@@ -15,10 +15,34 @@ import {
   POST_FILE,
   ALL_USERS
 } from '../../actions/types'
-import { type ProfileProps } from './types'
+import type { ProfileType, ProfileProps } from './types'
 
 const initialState: ProfileProps = {
   loading: true
+}
+
+export const profileInitialData: ProfileType = {
+  company: '',
+  website: '',
+  location: '',
+  bio: '',
+  status: '',
+  githubusername: '',
+  socialMedia: {
+    youtube: '',
+    twitter: '',
+    facebook: '',
+    linkedin: '',
+    instagram: ''
+  },
+  skills: [],
+  profileImg: '',
+  _id: '',
+  name: '',
+  avatar: '',
+  date: '',
+  education: [],
+  experience: []
 }
 
 const profileReducer = (state = initialState, action: any) => {

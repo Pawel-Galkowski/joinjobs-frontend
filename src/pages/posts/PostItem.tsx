@@ -20,19 +20,19 @@ const PostItem: React.FC<PostItemData> = ({
   const dispatch: AppDispatch = useAppDispatch()
   const auth: AuthProps = useAppSelector((state) => state.auth)
   const profiles: ProfileType[] = useAppSelector((state) => state.profile.profiles)
-  const singleProfile: ProfileType = profiles?.filter((profile: ProfileType) => profile.user._id === post.user)[0]
+  const singleProfile: ProfileType = profiles?.filter((profile: ProfileType) => profile.user?._id === post.user)[0]
   const getUserImage: string = singleProfile?.profileImg || post.avatar
 
   const addlikeAction = useCallback(() => {
-    dispatch(addLike(post._id))
+    dispatch(addLike(post?._id))
   }, [])
 
   const removeLikeAction = useCallback(() => {
-    dispatch(removeLike(post._id))
+    dispatch(removeLike(post?._id))
   }, [])
 
   const handleDelatePost = useCallback(() => {
-    dispatch(deletePost(post._id))
+    dispatch(deletePost(post?._id))
   }, [])
 
   return (

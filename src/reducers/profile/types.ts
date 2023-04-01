@@ -43,24 +43,45 @@ export interface UserType {
   email: string
 }
 
+export interface SocialMediaProps {
+  youtube: string
+  twitter: string
+  facebook: string
+  linkedin: string
+  instagram: string
+}
+
 export interface ProfileType {
   _id: string
   name: string
   avatar: string
   skills: string[]
-  social: object
-  user: UserType
+  user?: UserType
   company: string
   bio: string
   status: string
-  date: Date
+  date: Date | string
   profileImg: string
   education: EducationProps[]
   experience: ExperienceProps[]
+  website: string
+  location: string
+  githubusername: string
+  socialMedia: SocialMediaProps
+}
+
+export interface GithubRepositoryProps {
+  html_url: string
+  name: string
+  description: string
+  stargazers_count: number
+  watchers_count: number
+  forks_count: number
 }
 
 export interface ProfileProps {
   profile?: ProfileType
   profiles?: ProfileType[]
   loading?: boolean
+  repos?: GithubRepositoryProps[]
 }

@@ -1,40 +1,17 @@
 import { useState, useCallback } from 'react'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import axios from '../../actions/axios'
 import { createProfile } from '../../actions/profile'
 import { Spinner } from '../../components'
-import { type ProfileSchema } from '../../types'
-import { useAppSelector } from '../../hooks'
+import { useAppDispatch, useAppSelector } from '../../hooks'
+import { type ProfileType } from '../../reducers/profile/types'
+import { profileInitialData } from '../../reducers/profile/Profile'
+import { type AppDispatch } from '../../store'
 
-interface CreateProfileData {
-  auth: any
-  loading?: boolean
-}
-
-const initialData: ProfileSchema = {
-  company: '',
-  website: '',
-  location: '',
-  bio: '',
-  status: '',
-  githubusername: '',
-  socialMedia: {
-    youtube: '',
-    twitter: '',
-    facebook: '',
-    linkedin: '',
-    instagram: ''
-  },
-  skills: [],
-  profileImg: ''
-}
-
-const CreateProfile: React.FC<CreateProfileData> = (
-  loading
-) => {
+const CreateProfile: React.FC = () => {
+  const dispatch: AppDispatch = useAppDispatch()
   const auth = useAppSelector((state) => state.auth)
-  const [data, setData] = useState<ProfileSchema>(initialData)
+  const [data, setData] = useState<ProfileType>(profileInitialData)
   const [displaySocialInputs, toggleSocialInputs] = useState<boolean>(false)
 
   const onChange = useCallback(
@@ -58,6 +35,10 @@ const CreateProfile: React.FC<CreateProfileData> = (
     setFile(target.files)
   }
 
+  const createProfileAction = useCallback(() => {
+    dispatch(createProfile(data))
+  }, [])
+
   const uploadFile = async () => {
     const formData = new FormData()
     formData.append('file', file)
@@ -76,9 +57,11 @@ const CreateProfile: React.FC<CreateProfileData> = (
     }
   }
 
-  return loading ? (
-    <Spinner />
-  ) : (
+  if (auth.loading) {
+    return <Spinner />
+  }
+
+  return (
     <div className='paddingSection'>
       <h1 className='large text-primary'>Create Your Profile</h1>
       <p className='lead'>
@@ -86,7 +69,7 @@ const CreateProfile: React.FC<CreateProfileData> = (
         {' Let&apos;s get some information to make your profile stand out'}
       </p>
       <small>* = required field</small>
-      <form className='form' onSubmit={() => createProfile(data)}>
+      <form className='form' onSubmit={createProfileAction}>
         <div className='form-group'>
           <select name='status' value={data.status} onChange={onChange}>
             <option value='0'>* Select Professional Status</option>
@@ -277,6 +260,4 @@ const CreateProfile: React.FC<CreateProfileData> = (
   )
 }
 
-const mapStateToProps = ({ auth }: any) => ({ auth })
-
-export default connect(mapStateToProps, { createProfile })(CreateProfile)
+export default CreateProfile
