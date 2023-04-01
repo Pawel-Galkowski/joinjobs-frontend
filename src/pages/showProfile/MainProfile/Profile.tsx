@@ -9,12 +9,13 @@ import ProfileEducation from '../Education/ProfileEdu'
 import ProfileGithub from '../Github/ProfileGithub'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import { type AppDispatch } from '../../../store'
-import type { EducationProps, ExperienceProps } from '../../../reducers/profile/types'
+import type { EducationProps, ExperienceProps, ProfileProps } from '../../../reducers/profile/types'
+import { type AuthProps } from '../../../reducers/auth/types'
 
 const Profile: React.FC = () => {
   const dispatch: AppDispatch = useAppDispatch()
-  const { isAuthenticated, loading, user } = useAppSelector((state) => state.auth)
-  const profile = useAppSelector((state) => state.profile)
+  const { isAuthenticated, loading, user }: AuthProps = useAppSelector((state) => state.auth)
+  const profile: ProfileProps = useAppSelector((state) => state.profile)
   const { id } = useParams()
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
