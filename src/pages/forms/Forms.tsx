@@ -1,26 +1,24 @@
 import { useEffect } from 'react'
-import { connect } from 'react-redux'
 import { Spinner } from '../../components'
 import { getCompanies } from '../../actions/form'
 import CompanyItem from './CompanyItem'
 import CreateCompany from './CreateCompany'
-import { type FormSchema } from '../../types'
+import { useAppSelector, useAppDispatch } from '../../hooks'
+import { type AppDispatch } from '../../store'
+import { type FormType, type FormProps } from '../../reducers/form/types'
 
-interface FormsData {
-  forms: {
-    forms: FormSchema[]
-    loading: boolean
-  }
-}
-
-const Forms = ({ forms }: FormsData) => {
+const Forms: React.FC = () => {
+  const { forms, loading }: FormProps = useAppSelector((state) => state.forms)
+  const dispatch: AppDispatch = useAppDispatch()
   useEffect(() => {
-    getCompanies()
+    dispatch(getCompanies())
   }, [getCompanies])
 
-  return forms.loading || !forms ? (
-    <Spinner />
-  ) : (
+  if (loading || !forms) {
+    return <Spinner />
+  }
+
+  return (
     <div className='paddingSection'>
       <h1 className='large text-primary'>Companies</h1>
       <p className='lead'>
@@ -30,9 +28,9 @@ const Forms = ({ forms }: FormsData) => {
       <CreateCompany />
       <h2 className='formsMainText'>All actually registered companies:</h2>
       <div className='forms'>
-        {forms.forms ? (
-          forms.forms.map((form: any) => (
-            <CompanyItem key={form._id} forms={form} />
+        {forms.length ? (
+          forms.map((form: FormType) => (
+            <CompanyItem key={form._id}/>
           ))
         ) : (
           <h2>No companies available</h2>
@@ -42,6 +40,4 @@ const Forms = ({ forms }: FormsData) => {
   )
 }
 
-const mapStateToProps = ({ forms }: any) => ({ forms })
-
-export default connect(mapStateToProps, { getCompanies })(Forms)
+export default Forms
