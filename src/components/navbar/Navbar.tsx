@@ -95,7 +95,7 @@ const Navbar: React.FC = () => {
           <div />
         </Box>
         <Box className='menu'>
-          <ResolveRole />
+            <ResolveRole />
         </Box>
       </Box>
     </Box>
