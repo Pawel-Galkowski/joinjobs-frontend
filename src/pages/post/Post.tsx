@@ -6,9 +6,9 @@ import CommentItem from './CommentItem'
 import CommentForm from './CommentForm'
 import { getPost } from '../../actions/post'
 import { getProfiles } from '../../actions/profile'
-import { type CommentSchema } from '../../types'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { type AppDispatch } from '../../store'
+import { type CommentProps } from '../../reducers/post/types'
 
 const Post: React.FC = () => {
   const dispatch: AppDispatch = useAppDispatch()
@@ -40,7 +40,7 @@ const Post: React.FC = () => {
       <hr />
       <CommentForm postId={post.post._id} />
       <div className='comments'>
-        {post.comments.map((comment: CommentSchema) => (
+        {post.comments.map((comment: CommentProps) => (
           <CommentItem
             key={comment._id}
             comment={comment}

@@ -10,5 +10,7 @@ export default (msg: string, alertType: string, timeout = 5000) =>
       payload: { msg, alertType, id }
     })
 
-    setTimeout(() => dispatch({ type: REMOVE_ALERT, payload: id }), timeout)
+    setTimeout(() => {
+      dispatch({ type: REMOVE_ALERT, payload: id })
+    }, timeout)
   }

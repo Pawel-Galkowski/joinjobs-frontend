@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { logout } from '../../actions/auth'
 import { getCurrentProfile } from '../../actions/profile'
 import { Spinner } from '..'
@@ -7,10 +6,14 @@ import { useAppDispatch, useAppSelector } from '../../hooks'
 import { type AppDispatch } from '../../store'
 import { type AuthProps } from '../../reducers/auth/types'
 import { type ProfileType } from '../../reducers/profile/types'
+import { logoLinkStyles, navbarMainStyles } from './styles'
+import { Box, Link, Typography } from '@mui/material'
 
 const Navbar: React.FC = () => {
   const dispatch: AppDispatch = useAppDispatch()
-  const { isAuthenticated, loading, user }: AuthProps = useAppSelector((state) => state.auth)
+  const { isAuthenticated, loading, user }: AuthProps = useAppSelector(
+    (state) => state.auth
+  )
   const profile: ProfileType = useAppSelector((state) => state.profile.profile)
 
   useEffect(() => {
@@ -23,7 +26,7 @@ const Navbar: React.FC = () => {
 
   const showProfile = (
     <li>
-      <Link to={`/profile/${user?._id}`}>
+      <Link href={`/profile/${user?._id}`}>
         <i className='fas fa-user' />
         {'Profile '}
       </Link>
@@ -35,7 +38,7 @@ const Navbar: React.FC = () => {
       return (
         <ul>
           <li>
-            <Link to='/admin'>Admin panel </Link>
+            <Link href='/admin'>Admin panel </Link>
           </li>
           {profile && showProfile}
           <li>
@@ -63,43 +66,39 @@ const Navbar: React.FC = () => {
     return (
       <ul>
         <li>
-          <Link to='/'> Dashboard </Link>
+          <Link href='/'> Dashboard </Link>
         </li>
         <li>
-          <Link to='/login'> Login </Link>
+          <Link href='/login'> Login </Link>
         </li>
         <li>
-          <Link to='/register'> Register </Link>
+          <Link href='/register'> Register </Link>
         </li>
       </ul>
     )
   }
 
   return (
-    <nav className='navbar bg-dark'>
-      <h1>
-        <Link to='/' className='logoLink'>
+    <Box sx={navbarMainStyles}>
+      <Link href='/' sx={logoLinkStyles}>
+        <Typography variant='h3'>
           <i className='fas fa-hashtag' />
           JoinJobs
-        </Link>
-      </h1>
-      <div className='mainNav'>
+        </Typography>
+      </Link>
+      <Box className='mainNav'>
         <ResolveRole />
-      </div>
-      <div className='menu-wrap'>
+      </Box>
+      <Box className='menu-wrap'>
         <input type='checkbox' className='toggler' />
-        <div className='hamburger'>
+        <Box className='hamburger'>
           <div />
-        </div>
-        <div className='menu'>
-          <div>
-            <div>
-              <ResolveRole />
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
+        </Box>
+        <Box className='menu'>
+          <ResolveRole />
+        </Box>
+      </Box>
+    </Box>
   )
 }
 

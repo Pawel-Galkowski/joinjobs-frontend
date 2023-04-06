@@ -4,6 +4,7 @@
   "private": true,
   "description": "JoinJobs forntend",
   "dependencies": {
+    "@mui/material": "^5.11.15",
     "@reduxjs/toolkit": "^1.8.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/user-event": "^13.5.0",
@@ -24,7 +25,6 @@
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.56.0",
-    "css-loader": "^6.7.1",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-standard-with-typescript": "^34.0.1",

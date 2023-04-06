@@ -12,22 +12,22 @@
 // }
 
 export interface EducationProps {
-  _id: string
+  _id?: string
   school: string
   degree: string
   fieldofstudy: string
-  from: Date
+  from?: Date
   description: string
   current: boolean
   to?: Date
 }
 
 export interface ExperienceProps {
-  _id: string
+  _id?: string
   title: string
   company: string
   location: string
-  from: Date
+  from?: Date
   description: string
   current: boolean
   to?: Date

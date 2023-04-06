@@ -1,3 +1,5 @@
+import { type UserType } from '../profile/types'
+
 export interface RecomendProps {
   _id: string
   user: string
@@ -9,7 +11,7 @@ export interface CommentProps {
   text: string
   name: string
   avatar: string
-  user: string
+  user: UserType
 }
 
 export interface PostProps {
