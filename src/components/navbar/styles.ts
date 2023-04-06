@@ -1,6 +1,7 @@
 import { colorsPalete } from '../../utils/colors'
+import { type SxProps } from '@mui/material'
 
-export const navbarMainStyles: React.CSSProperties = ({
+export const navbarMainStyles: SxProps = ({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
@@ -17,7 +18,7 @@ export const navbarMainStyles: React.CSSProperties = ({
   opacity: 0.9
 })
 
-export const logoLinkStyles = ({
+export const logoLinkStyles: SxProps = ({
   display: 'flex',
   flexWrap: 'nowrap',
   alignItems: 'center',

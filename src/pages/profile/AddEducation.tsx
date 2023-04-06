@@ -2,32 +2,30 @@ import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { addEducation } from '../../actions/profile'
 import { Spinner } from '../../components'
-import { type EducationSchema } from '../../types'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { type AppDispatch } from '../../store'
+import { type EducationProps } from '../../reducers/profile/types'
 
-const initialData: EducationSchema = {
+const initialData: EducationProps = {
   school: '',
   degree: '',
   fieldofstudy: '',
-  from: '',
-  to: '',
   current: false,
   description: ''
 }
 
 const AddEducation: React.FC = () => {
   const { loading } = useAppSelector((state) => state.profile)
-  const [formData, setFormData] = useState<EducationSchema>(initialData)
+  const [formData, setFormData] = useState<EducationProps>(initialData)
   const [toDateDisabled, toggleDisabled] = useState<boolean>(false)
   const dispatch: AppDispatch = useAppDispatch()
 
-  const onChange = ({ target }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChange = useCallback(({ target }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [target.name]: target.value
     })
-  }
+  }, [])
 
   const onCurrentChange = useCallback(() => {
     setFormData((prevValue) => ({
@@ -88,7 +86,7 @@ const AddEducation: React.FC = () => {
           <input
             type='date'
             name='from'
-            value={formData.from}
+            value={formData.from?.toString()}
             onChange={onChange}
             required
           />
@@ -110,7 +108,7 @@ const AddEducation: React.FC = () => {
           <input
             type='date'
             name='to'
-            value={formData.to}
+            value={formData.to?.toString()}
             onChange={onChange}
             disabled={toDateDisabled}
           />

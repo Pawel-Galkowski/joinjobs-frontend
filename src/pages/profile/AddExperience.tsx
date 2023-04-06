@@ -3,25 +3,21 @@ import { Link } from 'react-router-dom'
 import { addExperience } from '../../actions/profile'
 import { Spinner } from '../../components'
 import { useAppDispatch, useAppSelector } from '../../hooks'
-
-import { type ExperienceSchema } from '../../types' // TODO: remove it
 import { type AppDispatch } from '../../store'
+import { type ExperienceProps } from '../../reducers/profile/types'
 // import { type ExperienceProps } from '../../reducers/profile/types'
 
-const initialData: ExperienceSchema = {
+const initialData: ExperienceProps = {
   current: true,
   title: '',
   company: '',
   location: '',
-  from: '',
-  to: '',
   description: ''
-  // _id: ''
 }
 
 const AddExperience: React.FC = () => {
   const { loading } = useAppSelector((state) => state.profile)
-  const [formData, setFormData] = useState<ExperienceSchema>(initialData)
+  const [formData, setFormData] = useState<ExperienceProps>(initialData)
   const { title, company, location, from, to, current, description } = formData
 
   const dispatch: AppDispatch = useAppDispatch()
@@ -98,7 +94,7 @@ const AddExperience: React.FC = () => {
           <input
             type='date'
             name='from'
-            value={from}
+            value={from?.toString()}
             onChange={onChange}
             required
           />
@@ -119,7 +115,7 @@ const AddExperience: React.FC = () => {
           <input
             type='date'
             name='to'
-            value={to}
+            value={to?.toString()}
             onChange={onChange}
             disabled={current}
           />
