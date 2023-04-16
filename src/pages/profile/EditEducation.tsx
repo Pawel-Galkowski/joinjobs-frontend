@@ -20,7 +20,6 @@ const EditEducation: React.FC = () => {
     formData
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dispatch(getCurrentEducation(id!))
   }, [])
 
@@ -37,7 +36,6 @@ const EditEducation: React.FC = () => {
   }, [])
 
   const onSubmit = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dispatch(setCurrentEducation(id!, formData))
   }, [])
 

@@ -20,7 +20,6 @@ const CreateForm: React.FC = () => {
       // eslint-disable-next-line no-alert
       alert('You need to add at least one question')
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       dispatch(addCompanyForm(company!, {
         questions: formData,
         body: {

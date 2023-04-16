@@ -17,7 +17,9 @@ const Menu: React.FC = () => {
     dispatch(getCurrentProfile())
   }, [])
 
-  if (loading || !user || !isAuthenticated) return null
+  if (loading || !user || !isAuthenticated) {
+    return null
+  }
 
   const mobileMenu = () => {
     if (arrow === '>') {
