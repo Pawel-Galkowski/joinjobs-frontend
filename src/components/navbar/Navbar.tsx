@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { logout } from '../../actions/auth'
 import { getCurrentProfile } from '../../actions/profile'
 import { Spinner } from '..'
@@ -6,98 +6,112 @@ import { useAppDispatch, useAppSelector } from '../../hooks'
 import { type AppDispatch } from '../../store'
 import { type AuthProps } from '../../reducers/auth/types'
 import { type ProfileType } from '../../reducers/profile/types'
-import { logoLinkStyles, navbarMainStyles } from './styles'
-import { Box, Link, Typography } from '@mui/material'
+import { burgerMenuStyles, logoLinkStyles, menuStyles, navbarMainStyles, visibilityStyles } from './styles'
+import {
+  Box,
+  Link,
+  Menu,
+  Typography,
+  IconButton,
+  MenuItem,
+  useMediaQuery,
+  useTheme
+} from '@mui/material'
+import { PersonIcon, LogoutIcon, MenuIcon } from '../../utils/icons'
 
 const Navbar: React.FC = () => {
+  const theme = useTheme()
   const dispatch: AppDispatch = useAppDispatch()
   const { isAuthenticated, loading, user }: AuthProps = useAppSelector(
     (state) => state.auth
   )
   const profile: ProfileType = useAppSelector((state) => state.profile.profile)
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+  const isSmallScreen: boolean = useMediaQuery(theme.breakpoints.down('md'))
+  const isBigScreen: boolean = useMediaQuery(theme.breakpoints.up('md'))
+
   useEffect(() => {
     dispatch(getCurrentProfile())
   }, [])
 
-  if (loading) {
-    return <Spinner />
-  }
-
-  const showProfile = (
-    <li>
-      <Link href={`/profile/${user?._id}`}>
-        <i className='fas fa-user' />
-        {'Profile '}
-      </Link>
-    </li>
-  )
-
-  const ResolveRole = (): JSX.Element => {
-    if (user?.role === 'admin' && isAuthenticated) {
-      return (
-        <ul>
-          <li>
-            <Link href='/admin'>Admin panel </Link>
-          </li>
-          {profile && showProfile}
-          <li>
-            <a onClick={logout} href='#!'>
-              <i className='fas fa-sign-out-alt' />
-              <span> Logout</span>
-            </a>
-          </li>
-        </ul>
-      )
-    }
-    if (isAuthenticated) {
-      return (
-        <ul>
-          {profile && showProfile}
-          <li>
-            <a onClick={logout} href='#!'>
-              <i className='fas fa-sign-out-alt' />
-              <span>Logout</span>
-            </a>
-          </li>
-        </ul>
-      )
-    }
-    return (
-      <ul>
-        <li>
+  const ResolveRole = (): JSX.Element =>
+    isAuthenticated ? (
+      <Box sx={isSmallScreen ? burgerMenuStyles : menuStyles}>
+        {user?.role === 'admin' && (
+          <MenuItem>
+            <Link href='/admin'>Admin panel</Link>
+          </MenuItem>
+        )}
+        {profile && (
+          <MenuItem>
+            <Link href={`/profile/${user?._id}`}>
+              <PersonIcon />
+              Profile
+            </Link>
+          </MenuItem>
+        )}
+        <MenuItem onClick={logout}>
+          <LogoutIcon />
+          Logout
+        </MenuItem>
+      </Box>
+    ) : (
+      <Box sx={isSmallScreen ? burgerMenuStyles : menuStyles}>
+        <MenuItem>
           <Link href='/'> Dashboard </Link>
-        </li>
-        <li>
+        </MenuItem>
+        <MenuItem>
           <Link href='/login'> Login </Link>
-        </li>
-        <li>
+        </MenuItem>
+        <MenuItem>
           <Link href='/register'> Register </Link>
-        </li>
-      </ul>
+        </MenuItem>
+      </Box>
     )
-  }
 
   return (
     <Box sx={navbarMainStyles}>
       <Link href='/' sx={logoLinkStyles}>
-        <Typography variant='h3'>
-          <i className='fas fa-hashtag' />
-          JoinJobs
-        </Typography>
+        <Typography variant='h3'>#JoinJobs</Typography>
       </Link>
-      <Box className='mainNav'>
-        <ResolveRole />
-      </Box>
-      <Box className='menu-wrap'>
-        <input type='checkbox' className='toggler' />
-        <Box className='hamburger'>
-          <div />
-        </Box>
-        <Box className='menu'>
-          <ResolveRole />
-        </Box>
-      </Box>
+      {loading ? (
+        <Spinner small />
+      ) : (
+        <>
+          <Box sx={visibilityStyles(isSmallScreen)}>
+            <ResolveRole />
+          </Box>
+          <Box sx={visibilityStyles(isBigScreen)}>
+            <IconButton
+              aria-label='more'
+              id='long-button'
+              aria-controls={open ? 'long-menu' : undefined}
+              aria-expanded={open ? 'true' : undefined}
+              aria-haspopup='true'
+              onClick={handleClick}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id='long-menu'
+              MenuListProps={{ 'aria-labelledby': 'long-button' }}
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+            >
+              <ResolveRole />
+            </Menu>
+          </Box>
+        </>
+      )}
     </Box>
   )
 }

@@ -4,6 +4,7 @@
   "private": true,
   "description": "JoinJobs forntend",
   "dependencies": {
+    "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.11.15",
     "@reduxjs/toolkit": "^1.8.2",
     "@testing-library/jest-dom": "^5.16.4",

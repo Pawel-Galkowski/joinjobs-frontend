@@ -18,7 +18,6 @@ const EditExperience: React.FC = () => {
   const [toDateDisabled, toggleDisabled] = useState(false)
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dispatch(getCurrentExperience(id!))
   }, [])
 
@@ -37,7 +36,6 @@ const EditExperience: React.FC = () => {
   }, [])
 
   const onSubmit = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dispatch(setCurrentExperience(id!, formData))
   }, [])
 

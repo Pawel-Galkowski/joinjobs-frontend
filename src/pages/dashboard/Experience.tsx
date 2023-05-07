@@ -28,7 +28,7 @@ const Experience: React.FC = () => {
       </td>
       <td>
         <Link
-          to={{ pathname: `/edit-experience/${exp._id}` }}
+          to={{ pathname: `/edit-experience/${exp._id!}` }}
           className='btn btn-light'
         >
           <i className='far fa-edit fa-2x' />
@@ -37,7 +37,7 @@ const Experience: React.FC = () => {
       <td>
         <i
           className='far fa-window-close fa-2x'
-          onClick={() => { submitOperation(exp._id) }}
+          onClick={() => { exp._id && submitOperation(exp._id) }}
         />
       </td>
     </tr>
@@ -60,7 +60,7 @@ const Experience: React.FC = () => {
         <th>Edit</th>
         <td>
           <Link
-            to={{ pathname: `/edit-experience/${exp._id}` }}
+            to={{ pathname: `/edit-experience/${exp._id!}` }}
             className='btn btn-light'
           >
             <i className='far fa-edit fa-2x' />
@@ -72,7 +72,7 @@ const Experience: React.FC = () => {
         <td>
           <i
             className='far fa-window-close fa-2x'
-            onClick={() => { submitOperation(exp._id) }}
+            onClick={() => { submitOperation(exp._id!) }}
           />
         </td>
       </tr>

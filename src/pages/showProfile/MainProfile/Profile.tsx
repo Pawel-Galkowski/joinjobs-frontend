@@ -18,7 +18,6 @@ const Profile: React.FC = () => {
   const profile: ProfileProps = useAppSelector((state) => state.profile)
   const { id } = useParams()
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dispatch(getProfileById(id!))
   }, [])
 
