@@ -9,7 +9,7 @@ import Admin from '../dashboard/Admin'
 import ReMailer from '../auth/ReMailer'
 import Authorize from '../auth/Authorize'
 import ChangePassword from '../auth/ChangePassword'
-import { Landing } from '../layout/Landing'
+import { LandingPage } from '../layout/LandingPage/LandingPage'
 import Dashboard from '../dashboard/Dashboard'
 import CompanyForm from '../form/CompanyForm'
 import CreateForm from '../form/CreateForm'
@@ -31,7 +31,7 @@ import PrivateRoute from './routeTypes/PrivateRoute'
 const ApplicationRoutes = () => (
   <>
     <Routes>
-      <Route path='/' element={<Landing />} />
+      <Route path='/' element={<LandingPage />} />
       <Route path='/register' element={<Register />} />
       <Route path='/login' element={<Login />} />
       <Route path='/api/users/confirmation/:token' element={<Authorize />} />

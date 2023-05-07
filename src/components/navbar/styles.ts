@@ -33,3 +33,11 @@ export const logoLinkStyles: SxProps<Theme> = (theme) => ({
 export const visibilityStyles = (isHidden: boolean): SxProps<Theme> => (theme) => ({
   display: isHidden ? 'none' : 'block'
 })
+
+export const burgerMenuStyles: SxProps<Theme> = (theme: Theme) => ({
+  display: 'flex'
+})
+
+export const menuStyles: SxProps<Theme> = (theme: Theme) => ({
+  display: 'flex'
+})

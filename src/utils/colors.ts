@@ -1,4 +1,4 @@
-import { type PaletteOptions } from '@mui/material'
+import type { PaletteOptions } from '@mui/material'
 
 export const colorsPalete: PaletteOptions = {
   primary: {
@@ -6,8 +6,8 @@ export const colorsPalete: PaletteOptions = {
     dark: '#343a40'
   },
   secondary: {
-    light: '#f4f4f4',
     main: '#ccc',
+    light: '#f4f4f4',
     dark: '#87929e',
     contrastText: '#000'
   },
@@ -19,7 +19,8 @@ export const colorsPalete: PaletteOptions = {
   },
   divider: '#697481',
   common: {
-    white: '#fff'
+    white: '#fff',
+    black: '#000'
   }
 }
 

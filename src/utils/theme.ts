@@ -5,7 +5,7 @@ export const defaultScalingFactor = 8
 
 const theme = createTheme({
   spacing: defaultScalingFactor,
-  palette: { ...colorsPalete },
+  palette: colorsPalete,
   typography: {
     fontFamily: 'Raleway, sans-serif',
     fontSize: 12

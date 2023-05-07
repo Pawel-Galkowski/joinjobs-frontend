@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks'
 import { type AppDispatch } from '../../store'
 import { type AuthProps } from '../../reducers/auth/types'
 import { type ProfileType } from '../../reducers/profile/types'
-import { logoLinkStyles, navbarMainStyles, visibilityStyles } from './styles'
+import { burgerMenuStyles, logoLinkStyles, menuStyles, navbarMainStyles, visibilityStyles } from './styles'
 import {
   Box,
   Link,
@@ -17,7 +17,7 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material'
-import { PersonIcon, LogoutIcon, TagIcon, MenuIcon } from '../../utils/icons'
+import { PersonIcon, LogoutIcon, MenuIcon } from '../../utils/icons'
 
 const Navbar: React.FC = () => {
   const theme = useTheme()
@@ -44,27 +44,27 @@ const Navbar: React.FC = () => {
 
   const ResolveRole = (): JSX.Element =>
     isAuthenticated ? (
-      <>
+      <Box sx={isSmallScreen ? burgerMenuStyles : menuStyles}>
         {user?.role === 'admin' && (
           <MenuItem>
-            <Link href='/admin'>Admin panel </Link>
+            <Link href='/admin'>Admin panel</Link>
           </MenuItem>
         )}
         {profile && (
           <MenuItem>
             <Link href={`/profile/${user?._id}`}>
               <PersonIcon />
-              {'Profile '}
+              Profile
             </Link>
           </MenuItem>
         )}
         <MenuItem onClick={logout}>
           <LogoutIcon />
-          <span> Logout</span>
+          Logout
         </MenuItem>
-      </>
+      </Box>
     ) : (
-      <>
+      <Box sx={isSmallScreen ? burgerMenuStyles : menuStyles}>
         <MenuItem>
           <Link href='/'> Dashboard </Link>
         </MenuItem>
@@ -74,16 +74,13 @@ const Navbar: React.FC = () => {
         <MenuItem>
           <Link href='/register'> Register </Link>
         </MenuItem>
-      </>
+      </Box>
     )
 
   return (
     <Box sx={navbarMainStyles}>
       <Link href='/' sx={logoLinkStyles}>
-        <Typography variant='h3'>
-          <TagIcon />
-          JoinJobs
-        </Typography>
+        <Typography variant='h3'>#JoinJobs</Typography>
       </Link>
       {loading ? (
         <Spinner small />
