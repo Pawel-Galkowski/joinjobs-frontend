@@ -1,23 +1,18 @@
-import { useState, useCallback, type ChangeEvent } from 'react'
+import { useState, useCallback } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { postLogin } from '../../../actions/auth'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import { type AppDispatch } from '../../../store'
 import { type LoginData, initialData } from './types'
+import { Input, Button } from '../../../components'
+import { Box } from '@mui/material'
 
 const Login: React.FC = () => {
   const dispatch: AppDispatch = useAppDispatch()
   const isAuthenticated = useAppSelector((state) => state.auth?.isAuthenticated)
-  const [formData, setFormData] = useState<LoginData>(initialData)
+  const [formData] = useState<LoginData>(initialData)
 
   const { email, password }: LoginData = formData
-
-  const onchange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }, [])
 
   const onSubmit = useCallback(() => {
     dispatch(postLogin({ email, password }))
@@ -28,36 +23,29 @@ const Login: React.FC = () => {
   }
 
   return (
-    <div className='center-box'>
-      <div className='flex-box'>
-        <div className='additionalBG'>&nbsp;</div>
-        <div className='user bg-dark'>
-          <div className='form-wrap'>
-            <div className='tabs-content'>
-              <div id='login-tab-content' className='active'>
+    <Box className='center-box'>
+      <Box className='flex-box'>
+        <Box className='additionalBG'>&nbsp;</Box>
+        <Box className='user bg-dark'>
+          <Box className='form-wrap'>
+            <Box className='tabs-content'>
+              <Box id='login-tab-content' className='active'>
                 <form className='login-form'>
-                  <div className='input-box'>
-                    <input
-                      type='email'
-                      placeholder='Email Address'
-                      className='input'
-                      id='user_login'
-                      name='email'
+                  <Box className='input-box'>
+                    <Input
                       value={email}
-                      onChange={onchange}
+                      placeholder='Email Address'
+                      type='email'
                       required
                     />
-                    <input
-                      type='password'
-                      placeholder='Password'
-                      className='input'
-                      id='user_pass'
-                      name='password'
+                    <Input
                       value={password}
-                      onChange={onchange}
+                      placeholder='Password'
+                      type='password'
                       required
                     />
-                  </div>
+                  </Box>
+                  <Button>Login</Button>
                   <input
                     type='button'
                     className='button'
@@ -65,7 +53,7 @@ const Login: React.FC = () => {
                     onClick={onSubmit}
                   />
                 </form>
-                <div className='help-action'>
+                <Box className='help-action'>
                   <p>&nbsp;</p>
                   <p className='forgot'>
                     {'Do not have account yet? '}
@@ -81,13 +69,13 @@ const Login: React.FC = () => {
                       {' Forgot your password?'}
                     </Link>
                   </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   )
 }
 

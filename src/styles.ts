@@ -4,8 +4,9 @@ export const appStyles: SxProps = {
   boxSizing: 'border-box',
   margin: 0,
   padding: 0,
-  height: '100vh',
-  width: '100vw'
+  height: '100%',
+  width: '100%',
+  overflow: 'hidden'
 }
 
 export const mainStyles: SxProps = {

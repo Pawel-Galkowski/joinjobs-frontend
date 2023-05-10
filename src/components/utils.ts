@@ -12,22 +12,24 @@ export type ColorTypes =
   | 'divider'
   | 'white'
   | 'black'
+  | 'transparent'
 
 export const getValidColor =
   (color: ColorTypes): string => {
-    const themeColor = (theme: Theme) => {
+    const themeColor = ({ palette }: Theme) => {
       const colorsTable: Record<string, string> = {
-        primary: theme.palette.primary.main,
-        primaryDark: theme.palette.primary.dark,
-        secondary: theme.palette.secondary.main,
-        secondaryLight: theme.palette.secondary.light,
-        secondaryDark: theme.palette.secondary.dark,
-        secondaryText: theme.palette.secondary.contrastText,
-        error: theme.palette.error.main,
-        success: theme.palette.success.main,
-        divider: theme.palette.divider,
-        white: theme.palette.common.white,
-        black: theme.palette.common.black
+        primary: palette.primary.main,
+        primaryDark: palette.primary.dark,
+        secondary: palette.secondary.main,
+        secondaryLight: palette.secondary.light,
+        secondaryDark: palette.secondary.dark,
+        secondaryText: palette.secondary.contrastText,
+        error: palette.error.main,
+        success: palette.success.main,
+        divider: palette.divider,
+        white: palette.common.white,
+        black: palette.common.black,
+        transparent: 'transparent'
       }
 
       return colorsTable[color] as unknown as string

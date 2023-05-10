@@ -1,43 +1,77 @@
-import type { Theme, SxProps } from '@mui/material'
+import { type Theme, type SxProps, popoverClasses, menuClasses, svgIconClasses } from '@mui/material'
+import { getValidColor } from '../utils'
 
 export const navbarMainStyles: SxProps<Theme> = (theme) => ({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  padding: '0.7rem 1rem',
+  padding: theme.spacing(2, 4),
   zIndex: 1,
   width: '100%',
   top: 0,
-  borderBottom: `solid 1px ${theme.palette.primary.main}`,
-  maxHeight: '80px',
-  minHeight: '60px',
-  background: theme.palette.primary.dark,
-  color: theme.palette.common.white,
+  borderBottom: `solid ${theme.spacing(0.125)} ${getValidColor('primary')}`,
+  maxHeight: theme.spacing(10),
+  minHeight: theme.spacing(7.5),
+  background: getValidColor('primaryDark'),
+  color: getValidColor('white'),
   position: 'fixed',
-  opacity: 0.9
+  opacity: 0.9,
+  boxSizing: 'border-box'
 })
 
-export const logoLinkStyles: SxProps<Theme> = (theme) => ({
+export const logoLinkStyles: SxProps<Theme> = ({
   display: 'flex',
   flexWrap: 'nowrap',
   alignItems: 'center',
   justifyContent: 'flex-start',
-  color: theme.palette.common.white,
-  padding: '0.45rem',
-  margin: '0 0.25rem',
+  color: getValidColor('white'),
+  borderColor: getValidColor('white'),
+  textDecoration: 'none',
   '&:hover': {
-    color: theme.palette.primary.main
+    color: getValidColor('primary'),
+    borderColor: getValidColor('primary')
   }
 })
 
 export const visibilityStyles = (isHidden: boolean): SxProps<Theme> => (theme) => ({
-  display: isHidden ? 'none' : 'block'
+  display: isHidden ? 'none' : 'block',
+  [`& .${svgIconClasses.root}`]: {
+    fill: getValidColor('white')
+  }
 })
 
 export const burgerMenuStyles: SxProps<Theme> = (theme: Theme) => ({
-  display: 'flex'
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(1),
+  backgroundColor: getValidColor('primaryDark'),
+  '& a': {
+    textDecoration: 'none',
+    color: getValidColor('white'),
+    '&:hover': {
+      color: getValidColor('primary')
+    }
+  }
 })
 
+export const menuItemStyles: SxProps = {
+  [`& .${popoverClasses.paper}`]: {
+    padding: 0,
+    borderRadius: 0
+  },
+  [`& .${menuClasses.list}`]: {
+    padding: 0,
+    borderRadius: 0
+  }
+}
+
 export const menuStyles: SxProps<Theme> = (theme: Theme) => ({
-  display: 'flex'
+  display: 'flex',
+  '& a': {
+    textDecoration: 'none',
+    color: getValidColor('white'),
+    '&:hover': {
+      color: getValidColor('primary')
+    }
+  }
 })

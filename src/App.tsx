@@ -20,15 +20,15 @@ const App: React.FC = () => {
   }, [])
 
   return (
-    <Box sx={appStyles}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <Box sx={appStyles}>
         <Navbar />
         <Box sx={mainStyles}>
           <Menu />
           <ApplicationRoutes />
         </Box>
-      </BrowserRouter>
-    </Box>
+      </Box>
+    </BrowserRouter>
   )
 }
 
