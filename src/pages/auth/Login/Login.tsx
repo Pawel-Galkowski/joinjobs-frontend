@@ -1,11 +1,24 @@
 import { useState, useCallback } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { postLogin } from '../../../actions/auth'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import { type AppDispatch } from '../../../store'
 import { type LoginData, initialData } from './types'
 import { Input, Button } from '../../../components'
-import { Box } from '@mui/material'
+import { Box, FormControl, Typography } from '@mui/material'
+import {
+  additionalBGStyles,
+  centerBoxStyles,
+  userStyles,
+  flexBoxStyles,
+  formWrapStyles,
+  tabsContentStyles,
+  tabContentStyles,
+  loginFormStyles,
+  actionHelpStyles,
+  forgotStyles
+} from './styles'
+import { ArrowForwardIcon } from '../../../utils/icons'
 
 const Login: React.FC = () => {
   const dispatch: AppDispatch = useAppDispatch()
@@ -23,52 +36,46 @@ const Login: React.FC = () => {
   }
 
   return (
-    <Box className='center-box'>
-      <Box className='flex-box'>
-        <Box className='additionalBG'>&nbsp;</Box>
-        <Box className='user bg-dark'>
-          <Box className='form-wrap'>
-            <Box className='tabs-content'>
-              <Box id='login-tab-content' className='active'>
-                <form className='login-form'>
-                  <Box className='input-box'>
-                    <Input
-                      value={email}
-                      placeholder='Email Address'
-                      type='email'
-                      required
-                    />
-                    <Input
-                      value={password}
-                      placeholder='Password'
-                      type='password'
-                      required
-                    />
-                  </Box>
-                  <Button>Login</Button>
-                  <input
-                    type='button'
-                    className='button'
-                    value='Login'
-                    onClick={onSubmit}
+    <Box sx={centerBoxStyles}>
+      <Box sx={flexBoxStyles}>
+        <Box sx={additionalBGStyles}>&nbsp;</Box>
+        <Box sx={userStyles}>
+          <Box sx={formWrapStyles}>
+            <Box sx={tabsContentStyles}>
+              <Box sx={tabContentStyles}>
+                <FormControl sx={loginFormStyles}>
+                  <Input
+                    value={email}
+                    placeholder='Email Address'
+                    type='email'
+                    required
                   />
-                </form>
-                <Box className='help-action'>
-                  <p>&nbsp;</p>
-                  <p className='forgot'>
+                  <Input
+                    value={password}
+                    placeholder='Password'
+                    type='password'
+                    required
+                  />
+                  <Button onClick={onSubmit} textPlacement='center'>Login</Button>
+                </FormControl>
+                <Box sx={actionHelpStyles}>
+                  <Typography sx={forgotStyles}>
                     {'Do not have account yet? '}
-                    <Link to='/register'>
-                      <i className='fas fa-arrow-right' />
-                      {' Sign Up '}
-                      <i className='fas fa-arrow-left' />
-                    </Link>
-                  </p>
-                  <p className='forgot'>
-                    <Link to='/recovery'>
-                      <i className='fas fa-arrow-right' aria-hidden='true' />
-                      {' Forgot your password?'}
-                    </Link>
-                  </p>
+                    <Button
+                      internalLink='/register'
+                      icon={<ArrowForwardIcon />}
+                      iconPlacement='start'
+                      variant='text'>
+                      Sign Up
+                    </Button>
+                    <Button
+                      internalLink='/recovery'
+                      icon={<ArrowForwardIcon />}
+                      iconPlacement='start'
+                      variant='text'>
+                      Forgot your password?
+                    </Button>
+                  </Typography>
                 </Box>
               </Box>
             </Box>

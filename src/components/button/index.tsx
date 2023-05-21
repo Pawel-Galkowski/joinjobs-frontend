@@ -8,7 +8,9 @@ export const Button: React.FC<Props> = ({
   internalLink,
   children,
   icon,
-  iconPlacement
+  iconPlacement,
+  textPlacement,
+  onClick
 }) => {
   return (
     <MUIButton
@@ -16,7 +18,8 @@ export const Button: React.FC<Props> = ({
       variant={variant ?? 'contained'}
       startIcon={iconPlacement === 'start' && icon}
       endIcon={iconPlacement === 'end' && icon}
-      sx={buttonStyles({ color, variant })}>
+      onClick={onClick}
+      sx={buttonStyles({ color, variant, textPlacement })}>
       {children}
     </MUIButton>
   )

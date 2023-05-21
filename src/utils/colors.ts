@@ -11,6 +11,9 @@ export const colorsPalete: PaletteOptions = {
     dark: '#87929e',
     contrastText: '#000'
   },
+  text: {
+    primary: '#000'
+  },
   error: {
     main: '#dc3545'
   },
@@ -18,9 +21,17 @@ export const colorsPalete: PaletteOptions = {
     main: '#28a745'
   },
   divider: '#697481',
+  background: {
+    default: '#212529',
+    paper: '#2d515c'
+  },
   common: {
     white: '#fff',
     black: '#000'
+  },
+  action: {
+    hover: '#2d515c',
+    focus: '#4fc1b7'
   }
 }
 
@@ -35,4 +46,6 @@ export const colorsPalete: PaletteOptions = {
 //   lightGray: '#87929e',
 //   borderGray: '#697481',
 //   white: '#fff'
+//   backgroudColor: #212529;
+//   darkColor: #343a40;
 // }
