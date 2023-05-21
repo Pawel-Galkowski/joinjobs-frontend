@@ -4,4 +4,5 @@ export interface Props {
   placeholder?: string
   required?: boolean
   disabled?: boolean
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }

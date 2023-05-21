@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router'
-import Register from '../auth/Register'
+import Register from '../auth/Register/Register'
 import Login from '../auth/Login/Login'
 import NotFound from '../layout/NotFound'
 import Profiles from '../profiles/Profiles'
