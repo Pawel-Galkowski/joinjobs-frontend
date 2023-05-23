@@ -8,9 +8,10 @@ import {
   tabsContentStyles,
   tabContentStyles
 } from './styles'
+import Alert from '../alert/Alert'
 
 interface BasicFormProps {
-  children: JSX.Element
+  children: JSX.Element | JSX.Element[]
 }
 
 export const BasicForm: React.FC<BasicFormProps> = ({ children }) => (
@@ -20,6 +21,7 @@ export const BasicForm: React.FC<BasicFormProps> = ({ children }) => (
       <Box sx={userStyles}>
         <Box sx={formWrapStyles}>
           <Box sx={tabsContentStyles}>
+            <Alert />
             <Box sx={tabContentStyles}>{children}</Box>
           </Box>
         </Box>

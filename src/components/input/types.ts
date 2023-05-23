@@ -5,4 +5,8 @@ export interface Props {
   required?: boolean
   disabled?: boolean
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  name?: string
+  isErrored?: boolean
+  minLength?: number
+  maxLength?: number
 }
