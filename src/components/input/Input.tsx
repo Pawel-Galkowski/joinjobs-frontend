@@ -1,4 +1,4 @@
-import { Input as MUIInput } from '@mui/material'
+import { TextField } from '@mui/material'
 import { type Props } from './types'
 import setAlert from '../../actions/setAlert'
 
@@ -25,10 +25,9 @@ export const Input: React.FC<Props> = ({
   }
 
   return (
-    <MUIInput
+    <TextField
       type={type}
       placeholder={placeholder}
-      sx={{}}
       name={name}
       error={isErrored}
       value={value}

@@ -16,8 +16,10 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState<string>('')
 
   const onSubmit = useCallback(() => {
-    dispatch(postLogin({ email, password }))
-  }, [])
+    if (email && password) {
+      dispatch(postLogin({ email, password }))
+    }
+  }, [email, password])
 
   const onEmailChange = useCallback(
     ({ target }: React.ChangeEvent<HTMLInputElement>) => {

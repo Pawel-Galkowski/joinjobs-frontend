@@ -19,8 +19,8 @@ export const Recovery = () => {
   )
 
   const onSubmit = useCallback(() => {
-    dispatch(recoveryPassword(email))
-  }, [])
+    email && dispatch(recoveryPassword(email))
+  }, [email])
 
   return (
     <BasicForm>

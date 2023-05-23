@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { changePassword } from '../../../actions/auth'
 import setAlert from '../../../actions/setAlert'
 import { useAppDispatch } from '../../../hooks'
@@ -32,10 +32,14 @@ export const ChangePassword: React.FC = () => {
     []
   )
 
-  const onSubmit = useCallback(() => {
+  useEffect(() => {
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger')
-    } else {
+    }
+  }, [password2, password])
+
+  const onSubmit = useCallback(() => {
+    if (password && password === password2 && email) {
       dispatch(
         changePassword(
           email,

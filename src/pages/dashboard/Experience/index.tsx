@@ -1,13 +1,13 @@
 import { Fragment, useCallback } from 'react'
 import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
-import { deleteExperience } from '../../actions/profile'
-import { useAppDispatch, useAppSelector } from '../../hooks'
-import { type AppDispatch } from '../../store'
-import { Spinner } from '../../components'
-import { type ExperienceProps } from '../../reducers/profile/types'
+import { deleteExperience } from '../../../actions/profile'
+import { useAppDispatch, useAppSelector } from '../../../hooks'
+import { type AppDispatch } from '../../../store'
+import { Spinner } from '../../../components'
+import { type ExperienceProps } from '../../../reducers/profile/types'
 
-const Experience: React.FC = () => {
+export const Experience: React.FC = () => {
   const { experience, loading } = useAppSelector((state) => state.profile.profile)
   const dispatch: AppDispatch = useAppDispatch()
   const submitOperation = useCallback((id: string) => {

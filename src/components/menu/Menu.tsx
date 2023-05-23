@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import ProfileActions from '../../pages/dashboard/DashboardActions'
+import { Actions } from '../../pages/dashboard/Actions'
 import { getCurrentProfile } from '../../actions/profile'
 import { type ArrowType } from './types'
 import { useAppDispatch, useAppSelector } from '../../hooks'
@@ -54,7 +54,7 @@ const Menu: React.FC = () => {
               <div className='sidenav-menu'>
                 <div className='nav'>
                   <div className='sidenav-menu-heading'>Profile</div>
-                  <ProfileActions profile={profile} />
+                  <Actions profile={profile} />
                   <div className='sidenav-menu-heading'>Interface</div>
                   <Link className='nav-link' to='/profiles'>
                     <div className='nav-link-icon'>
