@@ -4,10 +4,12 @@ import { useAppSelector } from '../../../hooks'
 import { type AuthProps } from '../../../reducers/auth/types'
 
 const PrivateRoute: React.FC<RouteInterface> = ({ children }) => {
-  const { isAuthenticated, loading }: AuthProps = useAppSelector((state) => state.auth)
+  const { isAuthenticated, loading }: AuthProps = useAppSelector(
+    ({ auth }) => auth
+  )
 
   if (!isAuthenticated || !loading) {
-    <Navigate to='/login' />
+    ;<Navigate to='/login' />
   }
 
   return children

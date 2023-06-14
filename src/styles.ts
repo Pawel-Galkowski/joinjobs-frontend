@@ -20,11 +20,4 @@ export const mainStyles: SxProps = {
   '&::-webkit-scrollbar, &::-webkit-scrollbar-track': {
     display: 'none'
   }
-
-  // 'div:nth-of-type(2)': {
-  //   width: '100%',
-  //   '&.profile-skills': {
-  //     width: '30%'
-  //   }
-  // }
 }

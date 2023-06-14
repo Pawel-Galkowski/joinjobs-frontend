@@ -1,24 +1,37 @@
-import { Input as MUIInput } from '@mui/material'
+import { TextField } from '@mui/material'
 import { type Props } from './types'
-import { useCallback } from 'react'
+import setAlert from '../../actions/setAlert'
 
 export const Input: React.FC<Props> = ({
   value,
   type,
   placeholder,
   required = false,
-  disabled = false
+  disabled = false,
+  onChange,
+  name,
+  isErrored = false,
+  minLength,
+  maxLength
 }) => {
-  const onchange = useCallback(() => {}, [])
+  if (maxLength && value?.length > maxLength) {
+    setAlert(`Length limit reached (limit: ${maxLength})`, 'warning')
+    isErrored = true
+  }
+
+  if (minLength && value?.length < minLength) {
+    setAlert(`Minimal length not reached (min: ${minLength})`, 'warning')
+    isErrored = true
+  }
 
   return (
-    <MUIInput
+    <TextField
       type={type}
       placeholder={placeholder}
-      sx={{}}
-      name={value}
+      name={name}
+      error={isErrored}
       value={value}
-      onChange={onchange}
+      onChange={onChange}
       disabled={!!disabled}
       required={!!required}
     />

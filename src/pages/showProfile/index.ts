@@ -1,0 +1,6 @@
+export { ProfileMain } from './ProfileMain'
+export { ProfileEdu } from './ProfileEdu'
+export { ProfileAbout } from './ProfileAbout'
+export { ProfileExp } from './ProfileExp'
+export { ProfileGithub } from './ProfileGithub'
+export { ProfileHeader } from './ProfileHeader'

@@ -1,18 +1,17 @@
 import { Route, Routes } from 'react-router'
-import Register from '../auth/Register'
-import Login from '../auth/Login/Login'
-import NotFound from '../layout/NotFound'
+import { Register } from '../auth/Register'
+import { Login } from '../auth/Login'
+import { NotFound } from '../layout'
 import Profiles from '../profiles/Profiles'
-import Profile from '../showProfile/MainProfile/Profile'
+import { ProfileMain } from '../showProfile'
 import AdminRoute from './routeTypes/AdminRoute'
-import Admin from '../dashboard/Admin'
-import ReMailer from '../auth/ReMailer'
-import Authorize from '../auth/Authorize'
-import ChangePassword from '../auth/ChangePassword'
-import { LandingPage } from '../layout/LandingPage/LandingPage'
+import { Admin } from '../dashboard/Admin'
+import { Recovery } from '../auth/Recovery'
+import { Authorize } from '../auth/Authorize'
+import { ChangePassword } from '../auth/ChangePassword'
+import { LandingPage } from '../layout/LandingPage'
 import Dashboard from '../dashboard/Dashboard'
-import CompanyForm from '../form/CompanyForm'
-import CreateForm from '../form/CreateForm'
+import { CompanyForm, CreateForm } from '../form/'
 import Form from '../form/Form'
 import FormResponses from '../form/FormResponses'
 import SimpleForm from '../form/SimpleForm'
@@ -28,17 +27,17 @@ import EditExperience from '../profile/EditExperience'
 import EditProfile from '../profile/EditProfile'
 import PrivateRoute from './routeTypes/PrivateRoute'
 
-const ApplicationRoutes = () => (
+const ApplicationRoutes: React.FC = () => (
   <>
     <Routes>
       <Route path='/' element={<LandingPage />} />
       <Route path='/register' element={<Register />} />
       <Route path='/login' element={<Login />} />
       <Route path='/api/users/confirmation/:token' element={<Authorize />} />
-      <Route path='/recovery' element={<ReMailer />} />
+      <Route path='/recovery' element={<Recovery />} />
       <Route path='/api/users/recovery/:token' element={<ChangePassword />} />
       <Route path='/profiles' element={<Profiles />} />
-      <Route path='/profile/:id' element={<Profile />} />
+      <Route path='/profile/:id' element={<ProfileMain />} />
       <Route
         path='/admin'
         element={

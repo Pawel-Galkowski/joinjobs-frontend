@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 interface UserProps {
   _id: string
-  name: any
+  name: string
   avatar: any
 }
 
