@@ -1,11 +1,11 @@
 import { useEffect, useCallback } from 'react'
+import { Box, Typography } from '@mui/material'
 import Spinner from '../../../components/spinner/Spinner'
 import { getCurrentProfile, deleteAccount } from '../../../actions/profile'
-import { Education } from '../Education'
-import { Experience } from '../Experience'
+import { Education } from '../Education/index'
+import { Experience } from '../Experience/index'
 import { useAppDispatch, useAppSelector } from '../../../hooks'
 import { type AppDispatch } from '../../../store'
-import { Box, Typography } from '@mui/material'
 import { Button } from '../../../components'
 import {
   leadStyles,

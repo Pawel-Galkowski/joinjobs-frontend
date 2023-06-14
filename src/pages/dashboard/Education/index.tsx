@@ -14,12 +14,20 @@ import {
   Paper
 } from '@mui/material'
 import type { EducationData, EducationType } from './types'
+import { tableRowStyles, tableStyles } from './styles'
 
 export const Education: React.FC = () => {
   const { education, loading } = useAppSelector(
     ({ profile }) => profile.profile
   )
   const dispatch: AppDispatch = useAppDispatch()
+
+  const submitOperation = useCallback((id: string) => {
+    // eslint-disable-next-line no-alert
+    if (window.confirm('Do you really want to remove that experience?')) {
+      dispatch(deleteEducation(id))
+    }
+  }, [])
 
   if (loading) {
     return <Spinner />
@@ -39,18 +47,11 @@ export const Education: React.FC = () => {
     })
   }, [education])
 
-  const submitOperation = useCallback((id: string) => {
-    // eslint-disable-next-line no-alert
-    if (window.confirm('Do you really want to remove that experience?')) {
-      dispatch(deleteEducation(id))
-    }
-  }, [])
-
   return (
     <>
       <Typography variant='h2'>Education Credentials</Typography>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size='small' aria-label='a dense table'>
+        <Table sx={tableStyles} size='small' aria-label='a dense table'>
           <TableHead>
             <TableRow>
               <TableCell align='right'>School</TableCell>
@@ -60,10 +61,10 @@ export const Education: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {rows.map((row: EducationData) => (
               <TableRow
                 key={row.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                sx={tableRowStyles}>
                 <TableCell align='right'>{row.school}</TableCell>
                 <TableCell align='right'>{row.degree}</TableCell>
                 <TableCell align='right'>{row.field}</TableCell>
@@ -79,5 +80,3 @@ export const Education: React.FC = () => {
     </>
   )
 }
-
-export default Education

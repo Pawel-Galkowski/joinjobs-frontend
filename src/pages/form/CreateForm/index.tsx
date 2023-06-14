@@ -1,10 +1,10 @@
 import { useState, Fragment, useCallback } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { addCompanyForm } from '../../actions/form'
-import { useAppDispatch } from '../../hooks'
-import { type AppDispatch } from '../../store'
+import { addCompanyForm } from '../../../actions/form'
+import { useAppDispatch } from '../../../hooks'
+import { type AppDispatch } from '../../../store'
 
-const CreateForm: React.FC = () => {
+export const CreateForm: React.FC = () => {
   const { company } = useParams()
   const dispatch: AppDispatch = useAppDispatch()
   const [formData, setFormData] = useState<any>([])
@@ -150,5 +150,3 @@ const CreateForm: React.FC = () => {
     </div>
   )
 }
-
-export default CreateForm

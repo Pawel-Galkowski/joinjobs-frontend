@@ -2,8 +2,8 @@
 // import { removeForm } from '../../actions/form'
 // import { useAppSelector } from '../../hooks'
 // import { type AuthProps } from '../../reducers/auth/types'
-import { type FormTableType, type FormType } from '../../reducers/form/types'
-import SingleCompanyForm from './SingleCompanyForm'
+import type { FormTableType, FormType } from '../../../reducers/form/types'
+import SingleCompanyForm from '../SingleCompanyForm'
 
 // interface Props {
 //   company: string
@@ -71,7 +71,7 @@ import SingleCompanyForm from './SingleCompanyForm'
 //   )
 // }
 
-const CompanyForms: React.FC<{ form: FormType }> = ({ form }) => {
+export const CompanyForms: React.FC<{ form: FormType }> = ({ form }) => {
   if (!form.formTable) {
     return <>Forms not found</>
   }
@@ -91,5 +91,3 @@ const CompanyForms: React.FC<{ form: FormType }> = ({ form }) => {
     </>
   )
 }
-
-export default CompanyForms
