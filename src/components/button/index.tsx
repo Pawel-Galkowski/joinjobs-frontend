@@ -5,7 +5,7 @@ import { type Props } from './types'
 export const Button: React.FC<Props> = ({
   color,
   variant,
-  internalLink,
+  link,
   children,
   icon,
   iconPlacement,
@@ -14,7 +14,7 @@ export const Button: React.FC<Props> = ({
 }) => {
   return (
     <MUIButton
-      href={internalLink}
+      href={link}
       variant={variant ?? 'contained'}
       startIcon={iconPlacement === 'start' && icon}
       endIcon={iconPlacement === 'end' && icon}

@@ -112,7 +112,7 @@ export const Register: React.FC = () => {
         <Typography sx={forgotStyles}>
           Already have an account?
           <Button
-            internalLink='/login'
+            link='/login'
             icon={<ArrowForwardIcon />}
             iconPlacement='start'
             color='secondary'

@@ -7,6 +7,17 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import SchoolIcon from '@mui/icons-material/School'
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory'
+import WarningIcon from '@mui/icons-material/Warning'
+import LanguageIcon from '@mui/icons-material/Language'
+import TwitterIcon from '@mui/icons-material/Twitter'
+import FacebookIcon from '@mui/icons-material/Facebook'
+import YouTubeIcon from '@mui/icons-material/YouTube'
+import LinkedInIcon from '@mui/icons-material/LinkedIn'
+import InstagramIcon from '@mui/icons-material/Instagram'
+import CheckIcon from '@mui/icons-material/Check'
+import BadgeIcon from '@mui/icons-material/WorkspacePremium'
+import ShareIcon from '@mui/icons-material/Share'
+import VisibilityIcon from '@mui/icons-material/Visibility'
 
 export {
   PersonIcon,
@@ -17,5 +28,16 @@ export {
   PersonRemoveIcon,
   AccountCircleIcon,
   SchoolIcon,
-  WorkHistoryIcon
+  WorkHistoryIcon,
+  WarningIcon,
+  LanguageIcon,
+  TwitterIcon,
+  FacebookIcon,
+  YouTubeIcon,
+  LinkedInIcon,
+  InstagramIcon,
+  CheckIcon,
+  BadgeIcon,
+  ShareIcon,
+  VisibilityIcon
 }

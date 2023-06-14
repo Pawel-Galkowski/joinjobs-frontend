@@ -7,8 +7,8 @@ export interface Props {
   color?: ColorTypes
   variant?: ButtonVariants
   textPlacement?: TextPlacementVariants
-  internalLink?: string
-  children: string
+  link?: string
+  children: string | JSX.Element
   icon?: JSX.Element
   iconPlacement?: 'start' | 'end'
   onClick?: () => void

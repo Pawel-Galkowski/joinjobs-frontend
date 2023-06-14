@@ -64,7 +64,7 @@ const Dashboard: React.FC = () => {
           <Typography variant='body2'>
             You have not setup a profile yet, please add some informations
           </Typography>
-          <Button internalLink='/create-profile' textPlacement='center'>
+          <Button link='/create-profile' textPlacement='center'>
             Create profile
           </Button>
         </>

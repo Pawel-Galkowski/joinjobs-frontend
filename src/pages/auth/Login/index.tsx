@@ -64,14 +64,14 @@ export const Login: React.FC = () => {
         <Typography sx={forgotStyles}>
           Do not have account yet?
           <Button
-            internalLink='/register'
+            link='/register'
             icon={<ArrowForwardIcon />}
             iconPlacement='start'
             variant='text'>
             Sign Up
           </Button>
           <Button
-            internalLink='/recovery'
+            link='/recovery'
             icon={<ArrowForwardIcon />}
             iconPlacement='start'
             variant='text'>

@@ -13,7 +13,7 @@ export const Actions: React.FC<{
   <Box sx={dashButtonsStyles}>
     {profile && (
       <Button
-        internalLink='/edit-profile'
+        link='/edit-profile'
         textPlacement='center'
         icon={<AccountCircleIcon />}
         iconPlacement='start'>
@@ -21,14 +21,14 @@ export const Actions: React.FC<{
       </Button>
     )}
     <Button
-      internalLink='/education'
+      link='/education'
       textPlacement='center'
       icon={<SchoolIcon />}
       iconPlacement='start'>
       Add Education
     </Button>
     <Button
-      internalLink='/experience'
+      link='/experience'
       textPlacement='center'
       icon={<WorkHistoryIcon />}
       iconPlacement='start'>

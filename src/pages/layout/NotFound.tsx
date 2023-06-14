@@ -1,11 +1,12 @@
-const NotFound = () => (
+import { Typography } from '@mui/material'
+import { WarningIcon } from '../../utils/icons'
+
+export const NotFound: React.FC = () => (
   <>
-    <h1 className="x-large text-primary">
-      <i className="fas fa-exclamation-triangle" />
-      {' Page Not Found'}
-    </h1>
-    <p className="large">Sorry, this page that not exist</p>
+    <Typography variant='h1'>
+      <WarningIcon />
+      Page Not Found
+    </Typography>
+    <Typography variant='subtitle1'>Sorry, this page that not exist</Typography>
   </>
 )
-
-export default NotFound

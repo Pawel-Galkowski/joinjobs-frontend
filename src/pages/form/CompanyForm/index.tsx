@@ -32,7 +32,7 @@ export const CompanyForm: React.FC = () => {
   return (
     <Box sx={paddingSectionStyles}>
       {forms[0].admins?.includes(user._id) && (
-        <Button internalLink={`/api/forms/create/${company}`} color='primary'>
+        <Button link={`/api/forms/create/${company}`} color='primary'>
           Create new form
         </Button>
       )}

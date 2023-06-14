@@ -1,15 +1,15 @@
 import { Route, Routes } from 'react-router'
 import { Register } from '../auth/Register'
 import { Login } from '../auth/Login'
-import NotFound from '../layout/NotFound'
+import { NotFound } from '../layout'
 import Profiles from '../profiles/Profiles'
-import Profile from '../showProfile/MainProfile/Profile'
+import { ProfileMain } from '../showProfile'
 import AdminRoute from './routeTypes/AdminRoute'
 import { Admin } from '../dashboard/Admin'
 import { Recovery } from '../auth/Recovery'
 import { Authorize } from '../auth/Authorize'
 import { ChangePassword } from '../auth/ChangePassword'
-import { LandingPage } from '../layout/LandingPage/LandingPage'
+import { LandingPage } from '../layout/LandingPage'
 import Dashboard from '../dashboard/Dashboard'
 import { CompanyForm, CreateForm } from '../form/'
 import Form from '../form/Form'
@@ -27,7 +27,7 @@ import EditExperience from '../profile/EditExperience'
 import EditProfile from '../profile/EditProfile'
 import PrivateRoute from './routeTypes/PrivateRoute'
 
-const ApplicationRoutes = () => (
+const ApplicationRoutes: React.FC = () => (
   <>
     <Routes>
       <Route path='/' element={<LandingPage />} />
@@ -37,7 +37,7 @@ const ApplicationRoutes = () => (
       <Route path='/recovery' element={<Recovery />} />
       <Route path='/api/users/recovery/:token' element={<ChangePassword />} />
       <Route path='/profiles' element={<Profiles />} />
-      <Route path='/profile/:id' element={<Profile />} />
+      <Route path='/profile/:id' element={<ProfileMain />} />
       <Route
         path='/admin'
         element={

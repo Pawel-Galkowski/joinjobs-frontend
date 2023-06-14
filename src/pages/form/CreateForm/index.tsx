@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { addCompanyForm } from '../../../actions/form'
 import { useAppDispatch } from '../../../hooks'
 import { type AppDispatch } from '../../../store'
+import { Box } from '@mui/material'
 
 export const CreateForm: React.FC = () => {
   const { company } = useParams()
@@ -53,7 +54,7 @@ export const CreateForm: React.FC = () => {
   }, [])
 
   return (
-    <div className='paddingSection'>
+    <Box className='paddingSection'>
       <Link
         to={`/api/forms/${company ?? ''}`}
         className='btn btn-light'
@@ -147,6 +148,6 @@ export const CreateForm: React.FC = () => {
           </form>
         </div>
       </div>
-    </div>
+    </Box>
   )
 }

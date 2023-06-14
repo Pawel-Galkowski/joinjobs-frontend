@@ -23,8 +23,8 @@ export const LandingPage: React.FC = () => {
               <u>your dream job</u>
             </Typography>
             <Box>
-              <Button internalLink='/register' color='primary'>Sign Up</Button>
-              <Button internalLink='/login' color='secondary'>Login</Button>
+              <Button link='/register' color='primary'>Sign Up</Button>
+              <Button link='/login' color='secondary'>Login</Button>
             </Box>
           </Box>
         </Box>
