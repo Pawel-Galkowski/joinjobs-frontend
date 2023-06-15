@@ -1,7 +1,18 @@
-import { type ColorTypes } from '../utils'
-
 export type ButtonVariants = 'text' | 'contained' | 'outlined'
 export type TextPlacementVariants = 'start' | 'end' | 'center'
+export type ColorTypes =
+  | 'primary'
+  | 'primaryDark'
+  | 'secondary'
+  | 'secondaryLight'
+  | 'secondaryDark'
+  | 'secondaryText'
+  | 'error'
+  | 'success'
+  | 'divider'
+  | 'white'
+  | 'black'
+  | 'transparent'
 
 export interface Props {
   color?: ColorTypes

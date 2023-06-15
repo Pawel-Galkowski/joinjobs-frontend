@@ -9,26 +9,29 @@ interface Params {
   email: string
   password: string
   password2: string
-  role: string
 }
 
 const initialState = {
   name: '',
   email: '',
   password: '',
-  password2: '',
-  role: ''
+  password2: ''
 }
 
 const AddUsers: React.FC = () => {
   const dispatch: AppDispatch = useAppDispatch()
   const [formData, setFormData] = useState<Params>(initialState)
+  const [role, setRole] = useState<'user' | 'admin'>('user')
 
-  const onchange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const onchange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [event.target.name]: event.target.value })
   }
 
-  const { name, email, password, password2, role } = formData
+  const onRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setRole(event.target.value === 'admin' ? 'admin' : 'user')
+  }
+
+  const { name, email, password, password2 } = formData
 
   const onSubmit = useCallback(() => {
     if (password !== password2) {
@@ -51,7 +54,7 @@ const AddUsers: React.FC = () => {
         />
       </div>
       <div className='form-group'>
-        <select name='role' value={role} onChange={onchange} required>
+        <select name='role' value={role} onChange={onRoleChange} required>
           <option value='user'>User</option>
           <option value='admin'>Admin</option>
         </select>

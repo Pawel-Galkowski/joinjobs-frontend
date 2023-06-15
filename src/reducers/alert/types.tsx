@@ -1,4 +1,7 @@
-import { type Action } from '../reducers';
+export interface Action {
+  type: string
+  payload: any
+}
 
 export interface Props {
   state: any

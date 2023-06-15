@@ -1,4 +1,4 @@
-import { type SxProps } from '@mui/material'
+import type { Theme, SxProps } from '@mui/material'
 
 export const appStyles: SxProps = {
   boxSizing: 'border-box',
@@ -9,15 +9,16 @@ export const appStyles: SxProps = {
   overflow: 'hidden'
 }
 
-export const mainStyles: SxProps = {
+export const mainStyles: SxProps<Theme> = (theme: Theme) => ({
   display: 'flex',
   flexDirection: 'row',
   flexWrap: 'nowrap',
   overflowX: 'hidden',
   height: '100%',
+  margin: theme.spacing(10, 0, 0),
   width: '100%',
 
   '&::-webkit-scrollbar, &::-webkit-scrollbar-track': {
     display: 'none'
   }
-}
+})

@@ -49,7 +49,8 @@ export const Register: React.FC = () => {
         register({
           password,
           name,
-          email
+          email,
+          role: 'user'
         })
       )
     } else {

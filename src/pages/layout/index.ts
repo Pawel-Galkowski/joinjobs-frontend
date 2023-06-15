@@ -1,3 +1,3 @@
 export { NotFound } from './NotFound'
-export { LandingPage } from './LandingPage'
-export { Confirmation } from './Confirmation/Confirmation'
+export { LandingPage } from './landingPage'
+export { Confirmation } from './confirmation/Confirmation'

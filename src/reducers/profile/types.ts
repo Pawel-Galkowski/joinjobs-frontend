@@ -12,25 +12,25 @@
 // }
 
 export interface EducationProps {
-  _id?: string
+  _id: string
   school: string
   degree: string
   fieldofstudy: string
-  from?: Date
+  from: string
   description: string
   current: boolean
-  to?: Date
+  to?: string
 }
 
 export interface ExperienceProps {
-  _id?: string
+  _id: string
   title: string
   company: string
   location: string
-  from?: Date
+  from: string
   description: string
   current: boolean
-  to?: Date
+  to?: string
 }
 
 export interface UserType {
@@ -38,7 +38,7 @@ export interface UserType {
   name: string
   avatar: string
   confirmed: boolean
-  date: Date | string
+  date: string | string
   role: 'admin' | 'user'
   email: string
 }
@@ -82,6 +82,6 @@ export interface GithubRepositoryProps {
 export interface ProfileProps {
   profile?: ProfileType
   profiles?: ProfileType[]
-  loading?: boolean
+  loading: boolean
   repos?: GithubRepositoryProps[]
 }
