@@ -1,18 +1,7 @@
+import { authActions, profileActions } from '../reducers'
 import setHeaderAuthToken from '../utils/setAuthToken'
 import axios from './axios'
 import setAlert from './setAlert'
-import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  USER_LOADED,
-  AUTH_ERROR,
-  LOGIN_FAIL,
-  LOGIN_SUCCESS,
-  LOGOUT,
-  CLEAR_PROFILE,
-  ACCOUNT_CONFIRMED,
-  RECOVERY_SEND
-} from './types'
 import { type Dispatch } from 'redux'
 
 const defaultHeaderConfig = {
@@ -25,17 +14,14 @@ export const loadUser = () => async (dispatch: Dispatch) => {
   if (localStorage.token) {
     setHeaderAuthToken(localStorage.token)
   } else {
-    return dispatch({ type: AUTH_ERROR })
+    return dispatch(authActions.removeToken())
   }
 
   try {
     const res = await axios.get('/api/auth')
-    dispatch({
-      type: USER_LOADED,
-      payload: res.data
-    })
+    dispatch(authActions.userLoaded(res.data))
   } catch (err) {
-    dispatch({ type: AUTH_ERROR })
+    dispatch(authActions.removeToken())
   }
 }
 
@@ -43,7 +29,7 @@ export interface Register {
   name: string
   email: string
   password: string
-  role?: string
+  role: 'user' | 'admin'
 }
 
 // register user
@@ -55,20 +41,10 @@ export const register = (reg: Register) => async (dispatch: Dispatch) => {
       defaultHeaderConfig
     )
 
-    dispatch({
-      type: REGISTER_SUCCESS,
-      payload: res.data
-    })
-  } catch (err: any) {
-    const errors = err.response
-
-    if (errors) {
-      setAlert('Email is in use', 'danger')
-    }
-
-    dispatch({
-      type: REGISTER_FAIL
-    })
+    dispatch(authActions.createToken(res.data))
+  } catch ({ response }) {
+    response && setAlert('Email is in use', 'danger')
+    dispatch(authActions.removeToken())
   }
 }
 
@@ -88,13 +64,10 @@ export const postLogin =
           body,
           defaultHeaderConfig
         )
-        dispatch({
-          type: LOGIN_SUCCESS,
-          payload: res.data
-        })
-      } catch (err: any) {
-        setAlert(err.response.data, 'danger')
-        dispatch({ type: LOGIN_FAIL })
+        dispatch(authActions.createToken(res.data))
+      } catch ({ response }) {
+        response && setAlert(response.data, 'danger')
+        dispatch(authActions.removeToken())
       }
     }
 
@@ -105,27 +78,17 @@ interface Authorization {
 
 // Authorize User
 export const authorize =
-  (items: Authorization) => async (dispatch: Dispatch) => {
+  ({ email, token }: Authorization) => async (dispatch: Dispatch) => {
     try {
       const res = await axios.post(
-        `/api/users/confirmation/${items.token}`,
-        JSON.stringify(items.email),
+        `/api/users/confirmation/${token}`,
+        JSON.stringify(email),
         defaultHeaderConfig
       )
-      dispatch({
-        type: ACCOUNT_CONFIRMED,
-        payload: res.data
-      })
-    } catch (err: any) {
-      const { errors } = err.response.data
-
-      if (errors) {
-        errors.forEach((error: any) => setAlert(error.msg, 'danger'))
-      }
-
-      dispatch({
-        type: AUTH_ERROR
-      })
+      dispatch(authActions.success(res.data))
+    } catch ({ response }) {
+      response && setAlert(response.data, 'danger')
+      dispatch(authActions.removeToken())
     }
   }
 
@@ -138,21 +101,11 @@ export const recoveryPassword =
         JSON.stringify({ email }),
         defaultHeaderConfig
       )
-      dispatch({
-        type: RECOVERY_SEND,
-        payload: res.data
-      })
+      dispatch(authActions.success(res.data))
       setAlert('Email send', 'success')
-    } catch (err: any) {
-      const { errors } = err.response.data
-
-      if (errors) {
-        errors.forEach((error: any) => setAlert(error.msg, 'danger'))
-      }
-
-      dispatch({
-        type: AUTH_ERROR
-      })
+    } catch ({ response }) {
+      response && setAlert(response.data, 'danger')
+      dispatch(authActions.removeToken())
     }
   }
 
@@ -166,27 +119,16 @@ export const changePassword =
         JSON.stringify({ email, password }),
         defaultHeaderConfig
         )
-        dispatch({
-          type: ACCOUNT_CONFIRMED,
-          payload: res.data
-        })
-
+        dispatch(authActions.success(res.data))
         setAlert('Password Changed', 'success')
-      } catch (err: any) {
-        const { errors } = err.response.data
-
-        if (errors) {
-          errors.forEach((error: any) => setAlert(error.msg, 'danger'))
-        }
-
-        dispatch({
-          type: AUTH_ERROR
-        })
+      } catch ({ response }) {
+        response && setAlert(response.data, 'danger')
+        dispatch(authActions.removeToken())
       }
     }
 
 // Log user out
 export const logout = () => async (dispatch: Dispatch) => {
-  dispatch({ type: LOGOUT })
-  dispatch({ type: CLEAR_PROFILE })
+  dispatch(authActions.removeToken())
+  dispatch(profileActions.clearProfile())
 }

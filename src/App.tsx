@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { Menu, Navbar } from './components'
-import ApplicationRoutes from './pages/routing/routes'
+import ApplicationRoutes from './routing/routes'
 import { loadUser } from './actions/auth'
 import { useAppDispatch } from './hooks'
 import { type AppDispatch } from './store'

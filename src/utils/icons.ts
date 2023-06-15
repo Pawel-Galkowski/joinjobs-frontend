@@ -18,6 +18,10 @@ import CheckIcon from '@mui/icons-material/Check'
 import BadgeIcon from '@mui/icons-material/WorkspacePremium'
 import ShareIcon from '@mui/icons-material/Share'
 import VisibilityIcon from '@mui/icons-material/Visibility'
+import ViewColumnIcon from '@mui/icons-material/ViewColumn'
+import MenuBookIcon from '@mui/icons-material/MenuBook'
+import ChatIcon from '@mui/icons-material/Chat'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 export {
   PersonIcon,
@@ -39,5 +43,9 @@ export {
   CheckIcon,
   BadgeIcon,
   ShareIcon,
-  VisibilityIcon
+  VisibilityIcon,
+  ViewColumnIcon,
+  MenuBookIcon,
+  ChatIcon,
+  DeleteIcon
 }

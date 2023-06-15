@@ -1,5 +1,4 @@
-import type { SxProps } from '@mui/material'
-import { getValidColor } from '../../../components/utils'
+import type { SxProps, Theme } from '@mui/material'
 
 export const landingStyles: SxProps = {
   backgroundImage: `url('${window.location.origin}/images/showcase.jpg')`,
@@ -10,8 +9,8 @@ export const landingStyles: SxProps = {
   width: '100%'
 }
 
-export const landingInnerStyles: SxProps = {
-  color: getValidColor('white'),
+export const landingInnerStyles: SxProps<Theme> = (theme) => ({
+  color: theme.palette.common.white,
   height: '100vh',
   width: '80%',
   margin: 'auto',
@@ -20,7 +19,7 @@ export const landingInnerStyles: SxProps = {
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center'
-}
+})
 
 export const darkOverlayStyles: SxProps = {
   backgroundColor: 'rgba(0, 0, 0, 0.7)',

@@ -17,6 +17,7 @@ const initialState: AuthProps = {
   isAuthenticated: false,
   loading: false,
   token: '',
+  isAdmin: false,
   user: {
     _id: '',
     name: '',
@@ -25,8 +26,7 @@ const initialState: AuthProps = {
     date: '',
     role: 'user',
     email: ''
-  },
-  isAdmin: false
+  }
 }
 
 const authReducer = (state: AuthProps = initialState, action: any) => {
