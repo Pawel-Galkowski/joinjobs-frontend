@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { Box } from '@mui/material'
+import { Navbar, Alert } from './components'
+import AppRoutes from './pages/routing/AppRoutes'
+import { useAppDispatch } from './hooks'
+import { authActions } from './store/slices/authSlice'
 
-function App() {
+const App: React.FC = () => {
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    // Load user from token on app initialization
+    const token = localStorage.getItem('token')
+    if (token) {
+      // TODO: Implement loadUser action to verify token
+      // dispatch(loadUser())
+    }
+  }, [dispatch])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Navbar />
+        <Box sx={{ flex: 1 }}>
+          <AppRoutes />
+        </Box>
+        <Alert />
+      </Box>
+    </Router>
+  )
 }
 
-export default App;
+export default App
