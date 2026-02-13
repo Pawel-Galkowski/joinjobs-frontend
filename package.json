@@ -1,7 +1,10 @@
 {
   "name": "frontend",
-  "version": "0.1.0",
+  "version": "2.0.1",
+  "description": "JoinJobs - frontend application for job board platform",
+  "author": "Pawel Galkowski, ITGalkowski",
   "private": true,
+  "license": "MIT",
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.4",
